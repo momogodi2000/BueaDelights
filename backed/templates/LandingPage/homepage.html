@@ -1,0 +1,1600 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BueaDelights - Des saveurs locales à portée de clic</title>
+    <meta name="description" content="BueaDelights vous propose des produits alimentaires locaux de Buea, Cameroun. Chips, jus naturels, yaourts et spécialités locales livrés à votre porte.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #007749;
+            --secondary-color: #CE1126;
+            --accent-color: #FCD116;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --dark-bg: #1a1a1a;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(0, 119, 73, 0.1) 0%, rgba(206, 17, 38, 0.1) 100%);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .tilt-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .card-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        #threeD-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+        }
+        
+        .theme-toggle:checked ~ .dark-theme {
+            display: block;
+        }
+        
+        .theme-toggle:checked ~ .light-theme {
+            display: none;
+        }
+        
+        .rotate-icon {
+            animation: rotate 10s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        /* Dark mode */
+        .dark {
+            --text-color: #e2e8f0;
+            --bg-color: #121212;
+        }
+        
+        .dark body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+        }
+        
+        /* For the 3D product animation */
+        .product-container {
+            perspective: 1000px;
+        }
+        
+        .product-card {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .product-container:hover .product-card {
+            transform: rotateY(180deg);
+        }
+        
+        .product-front, .product-back {
+            backface-visibility: hidden;
+        }
+        
+        .product-back {
+            transform: rotateY(180deg);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Loader animation */
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--primary-color);
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        
+        /* Count-up animation */
+        .count-up {
+            transition: all 0.5s ease;
+        }
+
+        /* Language switch button */
+        .lang-switch {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .lang-switch:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 overflow-x-hidden">
+    <!-- Page loader -->
+    <div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
+        <span class="loader"></span>
+    </div>
+
+    <!-- Language switch button -->
+    <button id="langSwitch" class="lang-switch" title="Switch language">
+        <i class="fas fa-language text-xl"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-40 transition-all duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-yellow-500 flex items-center justify-center transform transition hover:scale-110">
+                    <span class="text-white font-bold text-xl">BD</span>
+                </div>
+                <div>
+                    <span class="font-bold text-xl text-green-600">Buea<span class="text-yellow-500">Delights</span></span>
+                </div>
+            </a>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#about" class="hover:text-green-600 transition" data-i18n="about">À propos</a>
+                <a href="#products" class="hover:text-green-600 transition" data-i18n="products">Produits</a>
+                <a href="#services" class="hover:text-green-600 transition" data-i18n="services">Services</a>
+                <a href="#testimonials" class="hover:text-green-600 transition" data-i18n="testimonials">Témoignages</a>
+                <a href="#contact" class="hover:text-green-600 transition" data-i18n="contact">Contact</a>
+                <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 dark-theme hidden" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z" />
+                        <path fill-rule="evenodd" d="M10 4a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8z" clip-rule="evenodd" />
+                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 light-theme" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Mobile Navigation Button -->
+            <button id="mobileMenuBtn" class="md:hidden p-2 rounded-md hover:bg-gray-200 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 w-64 h-full bg-white z-50 shadow-lg p-5">
+            <div class="flex justify-end">
+                <button id="closeMenu" class="p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="flex flex-col space-y-4 mt-8">
+                <a href="#about" class="hover:text-green-600 transition py-2" data-i18n="about">À propos</a>
+                <a href="#products" class="hover:text-green-600 transition py-2" data-i18n="products">Produits</a>
+                <a href="#services" class="hover:text-green-600 transition py-2" data-i18n="services">Services</a>
+                <a href="#testimonials" class="hover:text-green-600 transition py-2" data-i18n="testimonials">Témoignages</a>
+                <a href="#contact" class="hover:text-green-600 transition py-2" data-i18n="contact">Contact</a>
+                <button id="mobileThemeToggle" class="flex items-center space-x-2 py-2">
+                    <span data-i18n="theme">Thème</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="min-h-screen flex items-center pt-20 hero-gradient relative overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden">
+            <div id="particles-container" class="absolute inset-0"></div>
+        </div>
+        <div class="container mx-auto px-4 py-16 flex flex-col md:flex-row items-center justify-between relative z-10">
+            <div class="md:w-1/2 mb-10 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gradient" data-i18n="heroTitle">Des saveurs locales à portée de clic</h1>
+                <p class="text-lg mb-8 max-w-lg" data-i18n="heroSubtitle">BueaDelights vous propose les meilleurs produits alimentaires artisanaux du Cameroun, préparés avec passion dans la ville de Buea.</p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#products" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full transition transform hover:scale-105 shadow-lg" data-i18n="discoverProducts">
+                        Découvrir nos produits
+                    </a>
+                    <a href="#contact" class="inline-block bg-white hover:bg-gray-100 text-green-600 font-bold py-3 px-6 rounded-full border-2 border-green-600 transition transform hover:scale-105 shadow-lg" data-i18n="contactUs">
+                        Nous contacter
+                    </a>
+                </div>
+                <div class="mt-8 flex items-center space-x-4">
+                    <div class="flex">
+                        <img src="{% static 'image/om.png' %}" alt="Orange Money" class="w-10 h-10 rounded-full border-2 border-white shadow-md" />
+                        <img src="{% static 'image/mtn.jpeg' %}" alt="Mobile Money" class="w-10 h-10 rounded-full border-2 border-white shadow-md -ml-2" />
+                    </div>
+                    <span class="text-sm" data-i18n="mobilePayment">Paiement mobile accepté</span>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center">
+                <div class="relative w-80 h-80">
+                    <div id="threeD-container" class="floating"></div>
+                    <div class="absolute top-0 right-0 bg-yellow-500 text-white text-sm font-bold py-1 px-3 rounded-full" data-i18n="new">
+                        Nouveau
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-0 right-0 flex justify-center">
+            <a href="#about" class="animate-bounce p-2 bg-white rounded-full shadow-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <div class="relative">
+                        <img src="{% static 'image/caro3.jpeg' %}" alt="Notre histoire" class="rounded-lg shadow-2xl max-w-md mx-auto" />
+                        <div class="absolute -bottom-10 -right-10 bg-green-600 p-4 rounded-lg shadow-lg hidden md:block">
+                            <div id="cameroonMap" class="w-20 h-20"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 md:pl-12">
+                    <h2 class="text-3xl font-bold mb-6 text-gradient" data-i18n="ourStory">Notre Histoire</h2>
+                    <p class="mb-6" data-i18n="storyText1">
+                        Né au cœur de Buea, au pied du majestueux Mont Cameroun, BueaDelights est le fruit de la passion d'un jeune entrepreneur camerounais déterminé à valoriser les saveurs locales et à les rendre accessibles à tous.
+                    </p>
+                    <p class="mb-8" data-i18n="storyText2">
+                        Notre mission est de promouvoir l'artisanat culinaire camerounais tout en créant une expérience d'achat moderne et pratique pour nos clients.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-green-600 count-up" data-count="50">0</div>
+                            <div class="text-sm" data-i18n="productsCount">Produits</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-green-600 count-up" data-count="1500">0</div>
+                            <div class="text-sm" data-i18n="customersCount">Clients</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-green-600 count-up" data-count="12">0</div>
+                            <div class="text-sm" data-i18n="employeesCount">Employés</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-green-600 count-up" data-count="6">0</div>
+                            <div class="text-sm" data-i18n="experienceCount">Années d'expérience</div>
+                        </div>
+                    </div>
+                    
+                    <a href="#products" class="inline-block bg-gradient-to-r from-green-600 to-green-700 text-white font-bold py-3 px-6 rounded-lg transition transform hover:scale-105 shadow-lg" data-i18n="discoverProducts">
+                        Découvrir nos produits <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-gradient" data-i18n="localDelights">Nos Délices Locaux</h2>
+                <p class="max-w-xl mx-auto" data-i18n="productsSubtitle">Découvrez notre sélection de produits artisanaux, préparés avec des ingrédients frais et selon des recettes traditionnelles camerounaises.</p>
+            </div>
+            
+            <div class="flex mb-8 justify-center">
+                <div class="inline-flex rounded-md shadow-sm" role="group">
+                    <button class="product-filter active px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:bg-green-600 focus:text-white" data-filter="all" data-i18n="all">
+                        Tous
+                    </button>
+                    <button class="product-filter px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:bg-green-600 focus:text-white" data-filter="snacks" data-i18n="snacks">
+                        Snacks
+                    </button>
+                    <button class="product-filter px-4 py-2 text-sm font-medium text-gray-900 bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:bg-green-600 focus:text-white" data-filter="boissons" data-i18n="drinks">
+                        Boissons
+                    </button>
+                    <button class="product-filter px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-r-lg hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:bg-green-600 focus:text-white" data-filter="plats" data-i18n="meals">
+                        Plats
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Product 1 -->
+                <div class="product-card card-reveal tilt-card bg-white rounded-xl overflow-hidden shadow-lg transform transition duration-300 hover:shadow-2xl hover:-translate-y-2" data-category="snacks">
+                    <div class="product-container">
+                        <div class="product-card">
+                            <div class="product-front">
+                                <img src="{% static 'image/Chips de plantain.jpeg' %}" alt="Chips de plantain" class="w-full h-48 object-cover" />
+                                <div class="p-4">
+                                    <h3 class="text-xl font-bold mb-2" data-i18n="product1Title">Chips de plantain</h3>
+                                    <p class="text-gray-600 mb-4" data-i18n="product1Desc">Chips croustillantes de plantain mûr, légèrement sucrées et irrésistibles.</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-lg font-bold text-green-600">1500 FCFA</span>
+                                        <button class="bg-green-600 hover:bg-green-700 text-white rounded-full p-2 transition transform hover:scale-110">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-back bg-green-600 text-white p-6 flex flex-col justify-center items-center">
+                                <h4 class="text-xl font-bold mb-4" data-i18n="productDetails">Détails du produit</h4>
+                                <ul class="list-disc list-inside space-y-2 mb-4">
+                                    <li data-i18n="product1Detail1">Plantain local de Buea</li>
+                                    <li data-i18n="product1Detail2">Sans conservateurs</li>
+                                    <li data-i18n="product1Detail3">Emballage écologique</li>
+                                    <li data-i18n="product1Detail4">Se conserve 2 semaines</li>
+                                </ul>
+                                <button class="mt-4 bg-white text-green-600 px-4 py-2 rounded-lg font-medium" data-i18n="order">
+                                    Commander
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 2 -->
+                <div class="product-card card-reveal tilt-card bg-white rounded-xl overflow-hidden shadow-lg transform transition duration-300 hover:shadow-2xl hover:-translate-y-2" data-category="boissons">
+                    <div class="product-container">
+                        <div class="product-card">
+                            <div class="product-front">
+                                <img src="{% static 'image/jus.jpeg' %}" alt="Jus de gingembre" class="w-full h-48 object-cover" />
+                                <div class="p-4">
+                                    <h3 class="text-xl font-bold mb-2" data-i18n="product2Title">Jus de gingembre</h3>
+                                    <p class="text-gray-600 mb-4" data-i18n="product2Desc">Jus naturel de gingembre fraîchement pressé, épicé et rafraîchissant.</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-lg font-bold text-green-600">1000 FCFA</span>
+                                        <button class="bg-green-600 hover:bg-green-700 text-white rounded-full p-2 transition transform hover:scale-110">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-back bg-green-600 text-white p-6 flex flex-col justify-center items-center">
+                                <h4 class="text-xl font-bold mb-4" data-i18n="productDetails">Détails du produit</h4>
+                                <ul class="list-disc list-inside space-y-2 mb-4">
+                                    <li data-i18n="product2Detail1">Gingembre frais local</li>
+                                    <li data-i18n="product2Detail2">Sans sucre ajouté</li>
+                                    <li data-i18n="product2Detail3">Bouteille en verre réutilisable</li>
+                                    <li data-i18n="product2Detail4">À consommer sous 5 jours</li>
+                                </ul>
+                                <button class="mt-4 bg-white text-green-600 px-4 py-2 rounded-lg font-medium" data-i18n="order">
+                                    Commander
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+             <!-- Product 3 - Fufu and Eru -->
+                <div class="product-card card-reveal tilt-card bg-white rounded-xl overflow-hidden shadow-lg transform transition duration-300 hover:shadow-2xl hover:-translate-y-2" data-category="plats">
+                    <div class="product-container">
+                        <div class="product-card">
+                            <div class="product-front">
+                                <img src="{% static 'image/fufu.jpeg' %}" alt="Fufu et Eru" class="w-full h-48 object-cover" />
+                                <div class="p-4">
+                                    <h3 class="text-xl font-bold mb-2" data-i18n="product3Title">Fufu et Eru</h3>
+                                    <p class="text-gray-600 mb-4" data-i18n="product3Desc">Plat traditionnel camerounais à base de fufu (pâte de manioc) accompagné d'une sauce eru (feuilles de eru) avec poisson ou viande.</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-lg font-bold text-green-600">3000 FCFA</span>
+                                        <button class="bg-green-600 hover:bg-green-700 text-white rounded-full p-2 transition transform hover:scale-110">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-back bg-green-600 text-white p-6 flex flex-col justify-center items-center">
+                                <h4 class="text-xl font-bold mb-4" data-i18n="productDetails">Détails du produit</h4>
+                                <ul class="list-disc list-inside space-y-2 mb-4">
+                                    <li data-i18n="product3Detail1">Fufu frais préparé quotidiennement</li>
+                                    <li data-i18n="product3Detail2">Sauce eru faite avec des feuilles fraîches</li>
+                                    <li data-i18n="product3Detail3">Accompagnement au choix: poisson, viande ou crevette</li>
+                                    <li data-i18n="product3Detail4">Portion généreuse pour 2-3 personnes</li>
+                                </ul>
+                                <button class="mt-4 bg-white text-green-600 px-4 py-2 rounded-lg font-medium" data-i18n="order">
+                                    Commander
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product 4 -->
+                <div class="product-card card-reveal tilt-card bg-white rounded-xl overflow-hidden shadow-lg transform transition duration-300 hover:shadow-2xl hover:-translate-y-2" data-category="snacks">
+                    <div class="product-container">
+                        <div class="product-card">
+                            <div class="product-front">
+                                <img src="{% static 'image/kossam.jpeg' %}" alt="Yaourt aux fruits locaux" class="w-full h-48 object-cover" />
+                                <div class="p-4">
+                                    <h3 class="text-xl font-bold mb-2" data-i18n="product4Title">Yaourt aux fruits</h3>
+                                    <p class="text-gray-600 mb-4" data-i18n="product4Desc">Yaourt crémeux aux fruits tropicaux de saison, parfait pour une collation saine.</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-lg font-bold text-green-600">1200 FCFA</span>
+                                        <button class="bg-green-600 hover:bg-green-700 text-white rounded-full p-2 transition transform hover:scale-110">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="product-back bg-green-600 text-white p-6 flex flex-col justify-center items-center">
+                                <h4 class="text-xl font-bold mb-4" data-i18n="productDetails">Détails du produit</h4>
+                                <ul class="list-disc list-inside space-y-2 mb-4">
+                                    <li data-i18n="product4Detail1">Lait frais local</li>
+                                    <li data-i18n="product4Detail2">Fruits de saison</li>
+                                    <li data-i18n="product4Detail3">Fermentation naturelle</li>
+                                    <li data-i18n="product4Detail4">Conservation 3 jours au frais</li>
+                                </ul>
+                                <button class="mt-4 bg-white text-green-600 px-4 py-2 rounded-lg font-medium" data-i18n="order">
+                                    Commander
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full transition transform hover:scale-105 shadow-lg" data-i18n="viewAllProducts">
+                    Voir tous nos produits <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-gradient" data-i18n="ourServices">Nos Services</h2>
+                <p class="max-w-xl mx-auto" data-i18n="servicesSubtitle">BueaDelights propose plusieurs services pour répondre à vos besoins et vous offrir une expérience culinaire exceptionnelle.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="card-reveal bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-600 transform transition duration-300 hover:-translate-y-2">
+                    <div class="flex items-center justify-center mb-6">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-4" data-i18n="service1Title">Livraison à domicile</h3>
+                    <p class="text-gray-600 text-center" data-i18n="service1Desc">Nous livrons vos produits préférés directement chez vous dans un délai de 30 minutes à Buea et ses environs.</p>
+                    <div class="flex justify-center mt-6">
+                        <a href="#contact" class="text-green-600 font-medium hover:text-green-700 transition" data-i18n="learnMore">En savoir plus <i class="fas fa-chevron-right ml-1"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="card-reveal bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-600 transform transition duration-300 hover:-translate-y-2">
+                    <div class="flex items-center justify-center mb-6">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-4" data-i18n="service2Title">Événements et catering</h3>
+                    <p class="text-gray-600 text-center" data-i18n="service2Desc">Des solutions sur mesure pour vos événements professionnels ou personnels avec des menus adaptés à vos besoins.</p>
+                    <div class="flex justify-center mt-6">
+                        <a href="#contact" class="text-green-600 font-medium hover:text-green-700 transition" data-i18n="learnMore">En savoir plus <i class="fas fa-chevron-right ml-1"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Service 3 -->
+                <div class="card-reveal bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-600 transform transition duration-300 hover:-translate-y-2">
+                    <div class="flex items-center justify-center mb-6">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-4" data-i18n="service3Title">Commande sur mesure</h3>
+                    <p class="text-gray-600 text-center" data-i18n="service3Desc">Vous avez des besoins spécifiques? Nous préparons des produits sur mesure selon vos préférences et contraintes alimentaires.</p>
+                    <div class="flex justify-center mt-6">
+                        <a href="#contact" class="text-green-600 font-medium hover:text-green-700 transition" data-i18n="learnMore">En savoir plus <i class="fas fa-chevron-right ml-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-gradient" data-i18n="howItWorks">Comment ça marche?</h2>
+                <p class="max-w-xl mx-auto" data-i18n="howItWorksSubtitle">Commander vos délices locaux n'a jamais été aussi simple. Suivez ces étapes faciles pour recevoir vos produits BueaDelights.</p>
+            </div>
+            
+            <div class="relative">
+                <div class="hidden md:block absolute top-1/2 left-0 right-0 h-1 bg-green-200 transform -translate-y-1/2 z-0"></div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+                    <!-- Step 1 -->
+                    <div class="card-reveal flex flex-col items-center">
+                        <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl mb-4 shadow-lg">1</div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg text-center w-full">
+                            <h3 class="text-xl font-bold mb-2" data-i18n="step1">Parcourez</h3>
+                            <p class="text-gray-600" data-i18n="step1Desc">Explorez notre catalogue de produits frais et artisanaux.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2 -->
+                    <div class="card-reveal flex flex-col items-center">
+                        <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl mb-4 shadow-lg">2</div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg text-center w-full">
+                            <h3 class="text-xl font-bold mb-2" data-i18n="step2">Commandez</h3>
+                            <p class="text-gray-600" data-i18n="step2Desc">Sélectionnez vos produits et passez votre commande en quelques clics.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3 -->
+                    <div class="card-reveal flex flex-col items-center">
+                        <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl mb-4 shadow-lg">3</div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg text-center w-full">
+                            <h3 class="text-xl font-bold mb-2" data-i18n="step3">Payez</h3>
+                            <p class="text-gray-600" data-i18n="step3Desc">Réglez facilement avec Mobile Money ou à la livraison.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 4 -->
+                    <div class="card-reveal flex flex-col items-center">
+                        <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl mb-4 shadow-lg">4</div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg text-center w-full">
+                            <h3 class="text-xl font-bold mb-2" data-i18n="step4">Dégustez</h3>
+                            <p class="text-gray-600" data-i18n="step4Desc">Recevez votre commande et savourez les délices de Buea!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#products" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full transition transform hover:scale-105 shadow-lg" data-i18n="orderNow">
+                    Commander maintenant <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-gradient" data-i18n="testimonialsTitle">Ce que disent nos clients</h2>
+                <p class="max-w-xl mx-auto" data-i18n="testimonialsSubtitle">Découvrez les avis de nos clients satisfaits qui ont déjà goûté aux délices de BueaDelights.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="card-reveal bg-white p-6 rounded-xl shadow-lg transform transition duration-300 hover:-translate-y-2">
+                    <div class="flex justify-center mb-4">
+                        <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-green-600">
+                            <img src="{% static 'avatars/girls.jpeg' %}" alt="Client" class="w-full h-full object-cover" />
+                        </div>
+                    </div>
+                    <div class="text-center mb-4">
+                        <div class="flex justify-center text-yellow-400 mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3 class="font-bold">Marie Njoh</h3>
+                        <p class="text-sm text-gray-500" data-i18n="testimonial1Role">Enseignante, Buea</p>
+                    </div>
+                    <p class="text-gray-600 italic" data-i18n="testimonial1Text">"Les chips de plantain sont absolument délicieuses! Je les commande chaque semaine pour mes pauses au travail. La livraison est toujours ponctuelle et le service clientèle est excellent."</p>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="card-reveal bg-white p-6 rounded-xl shadow-lg transform transition duration-300 hover:-translate-y-2">
+                    <div class="flex justify-center mb-4">
+                        <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-green-600">
+                            <img src="{% static 'avatars/avartar.jpeg' %}" alt="Client" class="w-full h-full object-cover" />
+                        </div>
+                    </div>
+                    <div class="text-center mb-4">
+                        <div class="flex justify-center text-yellow-400 mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <h3 class="font-bold">Jean Tabi</h3>
+                        <p class="text-sm text-gray-500" data-i18n="testimonial2Role">Étudiant, Université de Buea</p>
+                    </div>
+                    <p class="text-gray-600 italic" data-i18n="testimonial2Text">"Le jus de gingembre est parfait pour mes sessions d'étude! Naturel et énergisant. J'apprécie aussi beaucoup la possibilité de payer via Mobile Money. Pratique pour nous les étudiants!"</p>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="card-reveal bg-white p-6 rounded-xl shadow-lg transform transition duration-300 hover:-translate-y-2">
+                    <div class="flex justify-center mb-4">
+                        <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-green-600">
+                            <img src="{% static 'avatars/girls.jpeg' %}" alt="Client" class="w-full h-full object-cover" />
+                        </div>
+                    </div>
+                    <div class="text-center mb-4">
+                        <div class="flex justify-center text-yellow-400 mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <h3 class="font-bold">Sophie Ekonde</h3>
+                        <p class="text-sm text-gray-500" data-i18n="testimonial3Role">Entrepreneuse, Limbe</p>
+                    </div>
+                    <p class="text-gray-600 italic" data-i18n="testimonial3Text">"J'ai fait appel à BueaDelights pour le catering de mon événement d'entreprise. Tous mes invités ont adoré la qualité des produits et le professionnalisme du service. Je recommande vivement!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-gradient" data-i18n="contactUs">Contactez-nous</h2>
+                <p class="max-w-xl mx-auto" data-i18n="contactSubtitle">Vous avez des questions ou des demandes spéciales? N'hésitez pas à nous contacter, nous sommes là pour vous aider!</p>
+            </div>
+            
+            <div class="flex flex-col md:flex-row md:space-x-8">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <div class="bg-white rounded-xl shadow-lg p-6 h-full">
+                        <h3 class="text-2xl font-bold mb-6" data-i18n="sendMessage">Envoyez-nous un message</h3>
+                        <form>
+                            <div class="mb-4">
+                                <label for="name" class="block text-gray-700 mb-2" data-i18n="fullName">Nom complet</label>
+                                <input type="text" id="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Votre nom" data-i18n="namePlaceholder">
+                            </div>
+                            <div class="mb-4">
+                                <label for="email" class="block text-gray-700 mb-2">Email</label>
+                                <input type="email" id="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="votre@email.com">
+                            </div>
+                            <div class="mb-4">
+                                <label for="phone" class="block text-gray-700 mb-2" data-i18n="phone">Téléphone</label>
+                                <input type="tel" id="phone" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="6XX XXX XXX">
+                            </div>
+                            <div class="mb-6">
+                                <label for="message" class="block text-gray-700 mb-2" data-i18n="message">Message</label>
+                                <textarea id="message" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Votre message..." data-i18n="messagePlaceholder"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition transform hover:scale-105" data-i18n="sendMessageBtn">
+                                Envoyer le message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="md:w-1/2">
+                    <div class="bg-white rounded-xl shadow-lg p-6 h-full">
+                        <h3 class="text-2xl font-bold mb-6" data-i18n="contactInfo">Informations de contact</h3>
+                        <div class="space-y-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-900" data-i18n="address">Adresse</h4>
+                                    <p class="text-gray-600">Molyko, Buea<br>Sud-Ouest, Cameroun</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-900" data-i18n="phone">Téléphone</h4>
+                                    <p class="text-gray-600">+237 699 80 82 60</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Email</h4>
+                                    <p class="text-gray-600">folefackvivianekokobe@gmail.com</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-4">
+                                <div class="flex-shrink-0 w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-900" data-i18n="openingHours">Heures d'ouverture</h4>
+                                    <p class="text-gray-600" data-i18n="openingHoursText">Lun - Sam: 8h00 - 18h00<br>Dim: 9h00 - 13h00</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <h4 class="font-medium text-gray-900 mb-4" data-i18n="followUs">Suivez-nous</h4>
+                            <div class="flex space-x-4">
+                                <a href="#" class="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center hover:bg-blue-700 transition">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 bg-pink-600 text-white rounded-full flex items-center justify-center hover:bg-pink-700 transition">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                                <a href="#" class="w-10 h-10 bg-blue-400 text-white rounded-full flex items-center justify-center hover:bg-blue-500 transition">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-16 bg-green-600 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h2 class="text-3xl font-bold mb-4" data-i18n="stayInformed">Restez informé</h2>
+                    <p class="text-green-100" data-i18n="newsletterText">Inscrivez-vous à notre newsletter pour recevoir nos offres spéciales et nouveautés en avant-première.</p>
+                </div>
+                <div class="md:w-1/2">
+                    <form class="flex flex-col sm:flex-row gap-4">
+                        <input type="email" placeholder="Votre adresse email" class="flex-1 py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" data-i18n="emailPlaceholder">
+                        <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-green-800 font-bold py-3 px-6 rounded-lg transition transform hover:scale-105" data-i18n="subscribe">
+                            S'inscrire
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <a href="#" class="flex items-center space-x-2 mb-6">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-yellow-500 flex items-center justify-center">
+                            <span class="text-white font-bold text-xl">BD</span>
+                        </div>
+                        <div>
+                            <span class="font-bold text-xl text-white">Buea<span class="text-yellow-500">Delights</span></span>
+                        </div>
+                    </a>
+                    <p class="text-gray-400 mb-6" data-i18n="footerDescription">Des saveurs locales à portée de clic. Nous proposons des produits frais et artisanaux, préparés avec passion au cœur de Buea.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4" data-i18n="usefulLinks">Liens utiles</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#products" class="text-gray-400 hover:text-white transition" data-i18n="products">Produits</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition" data-i18n="services">Services</a></li>
+                        <li><a href="#testimonials" class="text-gray-400 hover:text-white transition" data-i18n="testimonials">Témoignages</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition" data-i18n="contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4" data-i18n="about">À propos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition" data-i18n="ourStory">Notre histoire</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition" data-i18n="team">Équipe</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition" data-i18n="careers">Carrières</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition" data-i18n="blog">Blog</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4" data-i18n="support">Assistance</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition" data-i18n="privacyPolicy">Politique de confidentialité</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition" data-i18n="terms">Conditions d'utilisation</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition" data-i18n="returns">Retours et échanges</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center mt-12">
+                <p class="text-gray-400">© 2025 BueaDelights. Tous droits réservés.</p>
+                <p class="text-gray-400" data-i18n="developedBy">Développé avec <i class="fas fa-heart text-red-500"></i> par l'équipe BueaDelights.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Page loader
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(function() {
+                    document.getElementById('loader').style.display = 'none';
+                }, 500);
+            }, 1000);
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const closeMenu = document.getElementById('closeMenu');
+
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.add('open');
+        });
+
+        closeMenu.addEventListener('click', function() {
+            mobileMenu.classList.remove('open');
+        });
+
+        // Theme toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const mobileThemeToggle = document.getElementById('mobileThemeToggle');
+        const html = document.documentElement;
+
+        function toggleTheme() {
+            html.classList.toggle('dark');
+            localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+        mobileThemeToggle.addEventListener('click', toggleTheme);
+
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark' || 
+            (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        }
+
+        // Initialize vanilla-tilt.js for tilt cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const tiltCards = document.querySelectorAll('.tilt-card');
+            tiltCards.forEach(card => {
+                VanillaTilt.init(card, {
+                    max: 15,
+                    speed: 400,
+                    glare: true,
+                    'max-glare': 0.2,
+                });
+            });
+        });
+
+        // Scroll reveal animation
+        gsap.utils.toArray('.card-reveal').forEach(card => {
+            ScrollTrigger.create({
+                trigger: card,
+                start: "top 80%",
+                onEnter: () => card.classList.add('reveal'),
+                onLeaveBack: () => card.classList.remove('reveal')
+            });
+        });
+
+        // Count-up animation
+        const counters = document.querySelectorAll('.count-up');
+        const speed = 200;
+
+        function animateCounters() {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-count');
+                const count = +counter.innerText;
+                const increment = target / speed;
+
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + increment);
+                    setTimeout(animateCounters, 1);
+                } else {
+                    counter.innerText = target;
+                }
+            });
+        }
+
+        // Run count-up when section is in view
+        const aboutSection = document.getElementById('about');
+        const observer = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                animateCounters();
+                observer.unobserve(aboutSection);
+            }
+        }, { threshold: 0.5 });
+
+        observer.observe(aboutSection);
+
+        // Product filter
+        const filterButtons = document.querySelectorAll('.product-filter');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active', 'bg-green-600', 'text-white'));
+                // Add active class to clicked button
+                this.classList.add('active', 'bg-green-600', 'text-white');
+                
+                const filterValue = this.getAttribute('data-filter');
+                const products = document.querySelectorAll('.product-card');
+                
+                products.forEach(product => {
+                    if (filterValue === 'all' || product.getAttribute('data-category') === filterValue) {
+                        product.style.display = 'block';
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 3D product animation
+        function initThreeDProduct() {
+            const container = document.getElementById('threeD-container');
+            if (!container || !THREE) return;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            // Product geometry
+            const geometry = new THREE.SphereGeometry(3, 32, 32);
+            const textureLoader = new THREE.TextureLoader();
+            textureLoader.load('/api/placeholder/512/512', function(texture) {
+                const material = new THREE.MeshBasicMaterial({ map: texture });
+                const product = new THREE.Mesh(geometry, material);
+                scene.add(product);
+
+                camera.position.z = 5;
+
+                // Animation
+                function animate() {
+                    requestAnimationFrame(animate);
+                    if (product) {
+                        product.rotation.x += 0.005;
+                        product.rotation.y += 0.01;
+                    }
+                    renderer.render(scene, camera);
+                }
+
+                animate();
+            });
+
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+
+        // Initialize 3D product when hero section is in view
+        const heroSection = document.getElementById('hero');
+        const heroObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                initThreeDProduct();
+                heroObserver.unobserve(heroSection);
+            }
+        });
+
+        heroObserver.observe(heroSection);
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    mobileMenu.classList.remove('open');
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-white', 'shadow-md', 'dark:bg-gray-800');
+            } else {
+                navbar.classList.remove('bg-white', 'shadow-md', 'dark:bg-gray-800');
+            }
+        });
+
+        // Form submission
+        const contactForm = document.querySelector('#contact form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData);
+                
+                // Here you would typically send the data to a server
+                console.log('Form submitted:', data);
+                
+                // Show success message
+                alert('Merci pour votre message! Nous vous contacterons bientôt.');
+                this.reset();
+            });
+        }
+
+        // Newsletter form
+        const newsletterForm = document.querySelector('.bg-green-600 form');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = this.querySelector('input[type="email"]').value;
+                
+                // Here you would typically send the email to a newsletter service
+                console.log('Newsletter subscription:', email);
+                
+                // Show success message
+                alert('Merci pour votre inscription à notre newsletter!');
+                this.reset();
+            });
+        }
+
+        // Initialize particles in hero section
+        function initParticles() {
+            const container = document.getElementById('particles-container');
+            if (!container) return;
+
+            // Simple particle implementation
+            const canvas = document.createElement('canvas');
+            container.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            
+            const particles = [];
+            const particleCount = 50;
+            
+            // Create particles
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 3 + 1,
+                    speedX: Math.random() * 0.5 - 0.25,
+                    speedY: Math.random() * 0.5 - 0.25
+                });
+            }
+            
+            // Animation loop
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                for (let i = 0; i < particles.length; i++) {
+                    const p = particles[i];
+                    
+                    // Update position
+                    p.x += p.speedX;
+                    p.y += p.speedY;
+                    
+                    // Wrap around edges
+                    if (p.x > canvas.width) p.x = 0;
+                    if (p.x < 0) p.x = canvas.width;
+                    if (p.y > canvas.height) p.y = 0;
+                    if (p.y < 0) p.y = canvas.height;
+                    
+                    // Draw particle
+                    ctx.fillStyle = 'rgba(0, 119, 73, 0.2)';
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                requestAnimationFrame(animateParticles);
+            }
+            
+            animateParticles();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                canvas.width = container.clientWidth;
+                canvas.height = container.clientHeight;
+            });
+        }
+
+        // Initialize particles when hero section is in view
+        const particlesObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                initParticles();
+                particlesObserver.unobserve(heroSection);
+            }
+        });
+
+        particlesObserver.observe(heroSection);
+
+        // Initialize Lottie animation for Cameroon map
+        function initCameroonMap() {
+            const container = document.getElementById('cameroonMap');
+            if (!container) return;
+            
+            // This would be replaced with actual Lottie animation initialization
+            // For now, we'll just create a simple SVG placeholder
+            container.innerHTML = `
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 10 L90 50 L50 90 L10 50 Z" fill="#007749" stroke="#FCD116" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="10" fill="#CE1126"/>
+                </svg>
+            `;
+        }
+
+        // Initialize Cameroon map when about section is in view
+        const mapObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                initCameroonMap();
+                mapObserver.unobserve(aboutSection);
+            }
+        });
+
+        mapObserver.observe(aboutSection);
+
+        // Language switching functionality
+        const langSwitch = document.getElementById('langSwitch');
+        let currentLang = localStorage.getItem('lang') || 'fr';
+
+        // Language translations
+        const translations = {
+            en: {
+                // Navigation
+                "about": "About",
+                "products": "Products",
+                "services": "Services",
+                "testimonials": "Testimonials",
+                "contact": "Contact",
+                "theme": "Theme",
+                
+                // Hero section
+                "heroTitle": "Local flavors at your fingertips",
+                "heroSubtitle": "BueaDelights offers you the best artisanal food products from Cameroon, prepared with passion in the city of Buea.",
+                "discoverProducts": "Discover our products",
+                "contactUs": "Contact us",
+                "mobilePayment": "Mobile payment accepted",
+                "new": "New",
+                
+                // About section
+                "ourStory": "Our Story",
+                "storyText1": "Born in the heart of Buea, at the foot of the majestic Mount Cameroon, BueaDelights is the fruit of the passion of a young Cameroonian entrepreneur determined to promote local flavors and make them accessible to all.",
+                "storyText2": "Our mission is to promote Cameroonian culinary craftsmanship while creating a modern and convenient shopping experience for our customers.",
+                "productsCount": "Products",
+                "customersCount": "Customers",
+                "employeesCount": "Employees",
+                "experienceCount": "Years of experience",
+                
+                // Products section
+                "localDelights": "Our Local Delights",
+                "productsSubtitle": "Discover our selection of artisanal products, made with fresh ingredients and traditional Cameroonian recipes.",
+                "all": "All",
+                "snacks": "Snacks",
+                "drinks": "Drinks",
+                "meals": "Meals",
+                "product1Title": "Plantain chips",
+                "product1Desc": "Crispy ripe plantain chips, slightly sweet and irresistible.",
+                "product1Detail1": "Local plantain from Buea",
+                "product1Detail2": "No preservatives",
+                "product1Detail3": "Eco-friendly packaging",
+                "product1Detail4": "Keeps for 2 weeks",
+                "product2Title": "Ginger juice",
+                "product2Desc": "Natural freshly pressed ginger juice, spicy and refreshing.",
+                "product2Detail1": "Fresh local ginger",
+                "product2Detail2": "No added sugar",
+                "product2Detail3": "Reusable glass bottle",
+                "product2Detail4": "Consume within 5 days",
+                "product3Title": "Traditional pounded plantain",
+                "product3Desc": "Traditional Cameroonian dish made with pounded plantain and peanut sauce.",
+                "product3Detail1": "Authentic recipe",
+                "product3Detail2": "Prepared to order",
+                "product3Detail3": "Vegetarian options available",
+                "product3Detail4": "Hot delivery guaranteed",
+                "product4Title": "Fruit yogurt",
+                "product4Desc": "Creamy yogurt with seasonal tropical fruits, perfect for a healthy snack.",
+                "product4Detail1": "Fresh local milk",
+                "product4Detail2": "Seasonal fruits",
+                "product4Detail3": "Natural fermentation",
+                "product4Detail4": "Keeps for 3 days refrigerated",
+                "productDetails": "Product details",
+                "order": "Order",
+                "viewAllProducts": "View all our products",
+                "product3Title": "Fufu and Eru",
+                "product3Desc": "Traditional Cameroonian dish made with fufu (cassava dough) served with eru sauce (wild spinach) and fish or meat.",
+                "product3Detail1": "Fresh fufu prepared daily",
+                "product3Detail2": "Eru sauce made with fresh leaves",
+                "product3Detail3": "Choice of accompaniment: fish, meat or shrimp",
+                "product3Detail4": "Generous portion for 2-3 people",
+    
+                
+                // Services section
+                "ourServices": "Our Services",
+                "servicesSubtitle": "BueaDelights offers several services to meet your needs and provide you with an exceptional culinary experience.",
+                "service1Title": "Home delivery",
+                "service1Desc": "We deliver your favorite products directly to your door within 30 minutes in Buea and surrounding areas.",
+                "service2Title": "Events and catering",
+                "service2Desc": "Custom solutions for your professional or personal events with menus tailored to your needs.",
+                "service3Title": "Custom orders",
+                "service3Desc": "Have specific needs? We prepare custom products according to your preferences and dietary constraints.",
+                "learnMore": "Learn more",
+                
+                // How it works section
+                "howItWorks": "How it works",
+                "howItWorksSubtitle": "Ordering your local delights has never been easier. Follow these simple steps to receive your BueaDelights products.",
+                "step1": "Browse",
+                "step1Desc": "Explore our catalog of fresh and artisanal products.",
+                "step2": "Order",
+                "step2Desc": "Select your products and place your order in just a few clicks.",
+                "step3": "Pay",
+                "step3Desc": "Pay easily with Mobile Money or on delivery.",
+                "step4": "Enjoy",
+                "step4Desc": "Receive your order and savor the delights of Buea!",
+                "orderNow": "Order now",
+                
+                // Testimonials section
+                "testimonialsTitle": "What our customers say",
+                "testimonialsSubtitle": "Discover the reviews of our satisfied customers who have already tasted BueaDelights.",
+                "testimonial1Role": "Teacher, Buea",
+                "testimonial1Text": "\"The plantain chips are absolutely delicious! I order them every week for my work breaks. The delivery is always punctual and the customer service is excellent.\"",
+                "testimonial2Role": "Student, University of Buea",
+                "testimonial2Text": "\"The ginger juice is perfect for my study sessions! Natural and energizing. I also really appreciate the possibility to pay via Mobile Money. Practical for us students!\"",
+                "testimonial3Role": "Entrepreneur, Limbe",
+                "testimonial3Text": "\"I called on BueaDelights for the catering of my corporate event. All my guests loved the quality of the products and the professionalism of the service. I highly recommend!\"",
+                
+                // Contact section
+                "contactUs": "Contact us",
+                "contactSubtitle": "Do you have any questions or special requests? Feel free to contact us, we're here to help!",
+                "sendMessage": "Send us a message",
+                "fullName": "Full name",
+                "namePlaceholder": "Your name",
+                "phone": "Phone",
+                "message": "Message",
+                "messagePlaceholder": "Your message...",
+                "sendMessageBtn": "Send message",
+                "contactInfo": "Contact information",
+                "address": "Address",
+                "openingHours": "Opening hours",
+                "openingHoursText": "Mon - Sat: 8:00 AM - 6:00 PM<br>Sun: 9:00 AM - 1:00 PM",
+                "followUs": "Follow us",
+                
+                // Newsletter section
+                "stayInformed": "Stay informed",
+                "newsletterText": "Subscribe to our newsletter to receive our special offers and news first.",
+                "emailPlaceholder": "Your email address",
+                "subscribe": "Subscribe",
+                
+                // Footer
+                "footerDescription": "Local flavors at your fingertips. We offer fresh and artisanal products, prepared with passion in the heart of Buea.",
+                "usefulLinks": "Useful links",
+                "about": "About",
+                "ourStory": "Our story",
+                "team": "Team",
+                "careers": "Careers",
+                "blog": "Blog",
+                "support": "Support",
+                "privacyPolicy": "Privacy policy",
+                "terms": "Terms of use",
+                "returns": "Returns and exchanges",
+                "developedBy": "Developed with <i class=\"fas fa-heart text-red-500\"></i> by the BueaDelights team."
+            },
+            fr: {
+                // Navigation
+                "about": "À propos",
+                "products": "Produits",
+                "services": "Services",
+                "testimonials": "Témoignages",
+                "contact": "Contact",
+                "theme": "Thème",
+                
+                // Hero section
+                "heroTitle": "Des saveurs locales à portée de clic",
+                "heroSubtitle": "BueaDelights vous propose les meilleurs produits alimentaires artisanaux du Cameroun, préparés avec passion dans la ville de Buea.",
+                "discoverProducts": "Découvrir nos produits",
+                "contactUs": "Nous contacter",
+                "mobilePayment": "Paiement mobile accepté",
+                "new": "Nouveau",
+                
+                // About section
+                "ourStory": "Notre Histoire",
+                "storyText1": "Né au cœur de Buea, au pied du majestueux Mont Cameroun, BueaDelights est le fruit de la passion d'un jeune entrepreneur camerounais déterminé à valoriser les saveurs locales et à les rendre accessibles à tous.",
+                "storyText2": "Notre mission est de promouvoir l'artisanat culinaire camerounais tout en créant une expérience d'achat moderne et pratique pour nos clients.",
+                "productsCount": "Produits",
+                "customersCount": "Clients",
+                "employeesCount": "Employés",
+                "experienceCount": "Années d'expérience",
+                
+                // Products section
+                "localDelights": "Nos Délices Locaux",
+                "productsSubtitle": "Découvrez notre sélection de produits artisanaux, préparés avec des ingrédients frais et selon des recettes traditionnelles camerounaises.",
+                "all": "Tous",
+                "snacks": "Snacks",
+                "drinks": "Boissons",
+                "meals": "Plats",
+                "product1Title": "Chips de plantain",
+                "product1Desc": "Chips croustillantes de plantain mûr, légèrement sucrées et irrésistibles.",
+                "product1Detail1": "Plantain local de Buea",
+                "product1Detail2": "Sans conservateurs",
+                "product1Detail3": "Emballage écologique",
+                "product1Detail4": "Se conserve 2 semaines",
+                "product2Title": "Jus de gingembre",
+                "product2Desc": "Jus naturel de gingembre fraîchement pressé, épicé et rafraîchissant.",
+                "product2Detail1": "Gingembre frais local",
+                "product2Detail2": "Sans sucre ajouté",
+                "product2Detail3": "Bouteille en verre réutilisable",
+                "product2Detail4": "À consommer sous 5 jours",
+                "product3Title": "Pilé traditionnel",
+                "product3Desc": "Plat traditionnel camerounais à base de plantain pilé et de sauce arachide.",
+                "product3Detail1": "Recette authentique",
+                "product3Detail2": "Préparé sur commande",
+                "product3Detail3": "Options végétariennes disponibles",
+                "product3Detail4": "Livraison chaude garantie",
+                "product4Title": "Yaourt aux fruits",
+                "product4Desc": "Yaourt crémeux aux fruits tropicaux de saison, parfait pour une collation saine.",
+                "product4Detail1": "Lait frais local",
+                "product4Detail2": "Fruits de saison",
+                "product4Detail3": "Fermentation naturelle",
+                "product4Detail4": "Conservation 3 jours au frais",
+                "productDetails": "Détails du produit",
+                "order": "Commander",
+                "viewAllProducts": "Voir tous nos produits",
+                "product3Title": "Fufu et Eru",
+                "product3Desc": "Plat traditionnel camerounais à base de fufu (pâte de manioc) accompagné d'une sauce eru (feuilles de eru) avec poisson ou viande.",
+                "product3Detail1": "Fufu frais préparé quotidiennement",
+                "product3Detail2": "Sauce eru faite avec des feuilles fraîches",
+                "product3Detail3": "Accompagnement au choix: poisson, viande ou crevette",
+                "product3Detail4": "Portion généreuse pour 2-3 personnes",
+        
+                
+                // Services section
+                "ourServices": "Nos Services",
+                "servicesSubtitle": "BueaDelights propose plusieurs services pour répondre à vos besoins et vous offrir une expérience culinaire exceptionnelle.",
+                "service1Title": "Livraison à domicile",
+                "service1Desc": "Nous livrons vos produits préférés directement chez vous dans un délai de 30 minutes à Buea et ses environs.",
+                "service2Title": "Événements et catering",
+                "service2Desc": "Des solutions sur mesure pour vos événements professionnels ou personnels avec des menus adaptés à vos besoins.",
+                "service3Title": "Commande sur mesure",
+                "service3Desc": "Vous avez des besoins spécifiques? Nous préparons des produits sur mesure selon vos préférences et contraintes alimentaires.",
+                "learnMore": "En savoir plus",
+                
+                // How it works section
+                "howItWorks": "Comment ça marche?",
+                "howItWorksSubtitle": "Commander vos délices locaux n'a jamais été aussi simple. Suivez ces étapes faciles pour recevoir vos produits BueaDelights.",
+                "step1": "Parcourez",
+                "step1Desc": "Explorez notre catalogue de produits frais et artisanaux.",
+                "step2": "Commandez",
+                "step2Desc": "Sélectionnez vos produits et passez votre commande en quelques clics.",
+                "step3": "Payez",
+                "step3Desc": "Réglez facilement avec Mobile Money ou à la livraison.",
+                "step4": "Dégustez",
+                "step4Desc": "Recevez votre commande et savourez les délices de Buea!",
+                "orderNow": "Commander maintenant",
+                
+                // Testimonials section
+                "testimonialsTitle": "Ce que disent nos clients",
+                "testimonialsSubtitle": "Découvrez les avis de nos clients satisfaits qui ont déjà goûté aux délices de BueaDelights.",
+                "testimonial1Role": "Enseignante, Buea",
+                "testimonial1Text": "\"Les chips de plantain sont absolument délicieuses! Je les commande chaque semaine pour mes pauses au travail. La livraison est toujours ponctuelle et le service clientèle est excellent.\"",
+                "testimonial2Role": "Étudiant, Université de Buea",
+                "testimonial2Text": "\"Le jus de gingembre est parfait pour mes sessions d'étude! Naturel et énergisant. J'apprécie aussi beaucoup la possibilité de payer via Mobile Money. Pratique pour nous les étudiants!\"",
+                "testimonial3Role": "Entrepreneuse, Limbe",
+                "testimonial3Text": "\"J'ai fait appel à BueaDelights pour le catering de mon événement d'entreprise. Tous mes invités ont adoré la qualité des produits et le professionnalisme du service. Je recommande vivement!\"",
+                
+                // Contact section
+                "contactUs": "Contactez-nous",
+                "contactSubtitle": "Vous avez des questions ou des demandes spéciales? N'hésitez pas à nous contacter, nous sommes là pour vous aider!",
+                "sendMessage": "Envoyez-nous un message",
+                "fullName": "Nom complet",
+                "namePlaceholder": "Votre nom",
+                "phone": "Téléphone",
+                "message": "Message",
+                "messagePlaceholder": "Votre message...",
+                "sendMessageBtn": "Envoyer le message",
+                "contactInfo": "Informations de contact",
+                "address": "Adresse",
+                "openingHours": "Heures d'ouverture",
+                "openingHoursText": "Lun - Sam: 8h00 - 18h00<br>Dim: 9h00 - 13h00",
+                "followUs": "Suivez-nous",
+                
+                // Newsletter section
+                "stayInformed": "Restez informé",
+                "newsletterText": "Inscrivez-vous à notre newsletter pour recevoir nos offres spéciales et nouveautés en avant-première.",
+                "emailPlaceholder": "Votre adresse email",
+                "subscribe": "S'inscrire",
+                
+                // Footer
+                "footerDescription": "Des saveurs locales à portée de clic. Nous proposons des produits frais et artisanaux, préparés avec passion au cœur de Buea.",
+                "usefulLinks": "Liens utiles",
+                "about": "À propos",
+                "ourStory": "Notre histoire",
+                "team": "Équipe",
+                "careers": "Carrières",
+                "blog": "Blog",
+                "support": "Assistance",
+                "privacyPolicy": "Politique de confidentialité",
+                "terms": "Conditions d'utilisation",
+                "returns": "Retours et échanges",
+                "developedBy": "Développé avec <i class=\"fas fa-heart text-red-500\"></i> par l'équipe BueaDelights."
+            }
+        };
+
+        // Function to update the language
+        function updateLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.documentElement.lang = lang;
+            
+            // Update all elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = translations[lang][key];
+                    } else {
+                        element.innerHTML = translations[lang][key];
+                    }
+                }
+            });
+        }
+
+        // Language switch button event
+        langSwitch.addEventListener('click', function() {
+            const newLang = currentLang === 'fr' ? 'en' : 'fr';
+            updateLanguage(newLang);
+        });
+
+        // Initialize language on page load
+        updateLanguage(currentLang);
+    </script>
+</body>
+</html>

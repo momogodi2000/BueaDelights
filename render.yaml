@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: buea-project
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn buea.wsgi:application"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: ".onrender.com,your-custom-domain.com"
+      - key: DJANGO_SETTINGS_MODULE
+        value: "buea.settings"
+      - key: NPM_BIN_PATH
+        value: "npm"
