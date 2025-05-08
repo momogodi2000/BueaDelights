@@ -230,68 +230,85 @@
         <i class="fas fa-language text-xl"></i>
     </button>
 
-    <!-- Navigation -->
-    <nav id="navbar" class="fixed top-0 left-0 right-0 z-40 transition-all duration-300">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <a href="#" class="flex items-center space-x-2">
-                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-yellow-500 flex items-center justify-center transform transition hover:scale-110">
-                    <span class="text-white font-bold text-xl">BD</span>
-                </div>
-                <div>
-                    <span class="font-bold text-xl text-green-600">Buea<span class="text-yellow-500">Delights</span></span>
-                </div>
-            </a>
-            
-            <!-- Desktop Navigation -->
-            <div class="hidden md:flex space-x-8 items-center">
-                <a href="#about" class="hover:text-green-600 transition" data-i18n="about">À propos</a>
-                <a href="#products" class="hover:text-green-600 transition" data-i18n="products">Produits</a>
-                <a href="#services" class="hover:text-green-600 transition" data-i18n="services">Services</a>
-                <a href="#testimonials" class="hover:text-green-600 transition" data-i18n="testimonials">Témoignages</a>
-                <a href="#contact" class="hover:text-green-600 transition" data-i18n="contact">Contact</a>
-                <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 transition">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 dark-theme hidden" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z" />
-                        <path fill-rule="evenodd" d="M10 4a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8z" clip-rule="evenodd" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 light-theme" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                    </svg>
-                </button>
+   <!-- Navigation -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-40 transition-all duration-300">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <a href="#" class="flex items-center space-x-2">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-yellow-500 flex items-center justify-center transform transition hover:scale-110">
+                <span class="text-white font-bold text-xl">BD</span>
             </div>
+            <div>
+                <span class="font-bold text-xl text-green-600">Buea<span class="text-yellow-500">Delights</span></span>
+            </div>
+        </a>
+        
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex space-x-8 items-center">
+            <a href="#about" class="hover:text-green-600 transition" data-i18n="about">À propos</a>
+            <a href="#products" class="hover:text-green-600 transition" data-i18n="products">Produits</a>
+            <a href="#services" class="hover:text-green-600 transition" data-i18n="services">Services</a>
+            <a href="#testimonials" class="hover:text-green-600 transition" data-i18n="testimonials">Témoignages</a>
+            <a href="#contact" class="hover:text-green-600 transition" data-i18n="contact">Contact</a>
             
-            <!-- Mobile Navigation Button -->
-            <button id="mobileMenuBtn" class="md:hidden p-2 rounded-md hover:bg-gray-200 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            <!-- Login Button -->
+                        <!-- Login Button with Django URL redirection -->
+                <button onclick="window.location.href='{% url 'login' %}'" 
+                class="flex items-center space-x-1 bg-gradient-to-r from-green-600 to-yellow-500 text-white px-4 py-2 rounded-full hover:opacity-90 transition transform hover:scale-105"
+                id="loginButton">
+                <i class="fas fa-sign-in-alt"></i>
+                <span data-i18n="login">Connexion</span>
+                </button>
+            
+            <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-200 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 dark-theme hidden" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z" />
+                    <path fill-rule="evenodd" d="M10 4a6 6 0 100 12 6 6 0 000-12zm0 10a4 4 0 110-8 4 4 0 010 8z" clip-rule="evenodd" />
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 light-theme" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
                 </svg>
             </button>
         </div>
         
-        <!-- Mobile Menu -->
-        <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 w-64 h-full bg-white z-50 shadow-lg p-5">
-            <div class="flex justify-end">
-                <button id="closeMenu" class="p-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <div class="flex flex-col space-y-4 mt-8">
-                <a href="#about" class="hover:text-green-600 transition py-2" data-i18n="about">À propos</a>
-                <a href="#products" class="hover:text-green-600 transition py-2" data-i18n="products">Produits</a>
-                <a href="#services" class="hover:text-green-600 transition py-2" data-i18n="services">Services</a>
-                <a href="#testimonials" class="hover:text-green-600 transition py-2" data-i18n="testimonials">Témoignages</a>
-                <a href="#contact" class="hover:text-green-600 transition py-2" data-i18n="contact">Contact</a>
-                <button id="mobileThemeToggle" class="flex items-center space-x-2 py-2">
-                    <span data-i18n="theme">Thème</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                    </svg>
-                </button>
-            </div>
+        <!-- Mobile Navigation Button -->
+        <button id="mobileMenuBtn" class="md:hidden p-2 rounded-md hover:bg-gray-200 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed top-0 right-0 w-64 h-full bg-white z-50 shadow-lg p-5">
+        <div class="flex justify-end">
+            <button id="closeMenu" class="p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
         </div>
-    </nav>
+        <div class="flex flex-col space-y-4 mt-8">
+            <a href="#about" class="hover:text-green-600 transition py-2" data-i18n="about">À propos</a>
+            <a href="#products" class="hover:text-green-600 transition py-2" data-i18n="products">Produits</a>
+            <a href="#services" class="hover:text-green-600 transition py-2" data-i18n="services">Services</a>
+            <a href="#testimonials" class="hover:text-green-600 transition py-2" data-i18n="testimonials">Témoignages</a>
+            <a href="#contact" class="hover:text-green-600 transition py-2" data-i18n="contact">Contact</a>
+            
+            <!-- Mobile Login Button -->
+            <button id="mobileLoginButton" class="flex items-center justify-center space-x-2 bg-gradient-to-r from-green-600 to-yellow-500 text-white px-4 py-2 rounded-full hover:opacity-90 transition mt-4">
+                <i class="fas fa-sign-in-alt"></i>
+                <span data-i18n="login">Connexion</span>
+            </button>
+            
+            <button id="mobileThemeToggle" class="flex items-center space-x-2 py-2">
+                <span data-i18n="theme">Thème</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                </svg>
+            </button>
+        </div>
+    </div>
+</nav>
 
     <!-- Hero Section -->
     <section id="hero" class="min-h-screen flex items-center pt-20 hero-gradient relative overflow-hidden">
@@ -572,15 +589,15 @@
                 <div class="card-reveal bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-600 transform transition duration-300 hover:-translate-y-2">
                     <div class="flex items-center justify-center mb-6">
                         <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                            </svg>
+                            <i class="fas fa-motorcycle text-green-600 text-2xl"></i>
                         </div>
                     </div>
-                    <h3 class="text-xl font-bold text-center mb-4" data-i18n="service1Title">Livraison à domicile</h3>
-                    <p class="text-gray-600 text-center" data-i18n="service1Desc">Nous livrons vos produits préférés directement chez vous dans un délai de 30 minutes à Buea et ses environs.</p>
+                    <h3 class="text-xl font-bold text-center mb-4" data-i18n="service1Title">Livraison Express</h3>
+                    <p class="text-gray-600 text-center" data-i18n="service1Desc">Recevez vos plats traditionnels comme le fufu et eru en moins de 45 minutes, encore chauds et prêts à déguster.</p>
                     <div class="flex justify-center mt-6">
-                        <a href="#contact" class="text-green-600 font-medium hover:text-green-700 transition" data-i18n="learnMore">En savoir plus <i class="fas fa-chevron-right ml-1"></i></a>
+                        <button onclick="showServiceDetails(1)" class="text-green-600 font-medium hover:text-green-700 transition" data-i18n="learnMore">
+                            En savoir plus <i class="fas fa-chevron-right ml-1"></i>
+                        </button>
                     </div>
                 </div>
                 
@@ -588,15 +605,15 @@
                 <div class="card-reveal bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-600 transform transition duration-300 hover:-translate-y-2">
                     <div class="flex items-center justify-center mb-6">
                         <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z" />
-                            </svg>
+                            <i class="fas fa-utensils text-green-600 text-2xl"></i>
                         </div>
                     </div>
-                    <h3 class="text-xl font-bold text-center mb-4" data-i18n="service2Title">Événements et catering</h3>
-                    <p class="text-gray-600 text-center" data-i18n="service2Desc">Des solutions sur mesure pour vos événements professionnels ou personnels avec des menus adaptés à vos besoins.</p>
+                    <h3 class="text-xl font-bold text-center mb-4" data-i18n="service2Title">Catering Traditionnel</h3>
+                    <p class="text-gray-600 text-center" data-i18n="service2Desc">Service complet de catering pour vos événements avec des spécialités comme le ndolé, le poulet DG et bien sûr le fufu et eru.</p>
                     <div class="flex justify-center mt-6">
-                        <a href="#contact" class="text-green-600 font-medium hover:text-green-700 transition" data-i18n="learnMore">En savoir plus <i class="fas fa-chevron-right ml-1"></i></a>
+                        <button onclick="showServiceDetails(2)" class="text-green-600 font-medium hover:text-green-700 transition" data-i18n="learnMore">
+                            En savoir plus <i class="fas fa-chevron-right ml-1"></i>
+                        </button>
                     </div>
                 </div>
                 
@@ -604,15 +621,149 @@
                 <div class="card-reveal bg-white p-6 rounded-xl shadow-lg border-t-4 border-green-600 transform transition duration-300 hover:-translate-y-2">
                     <div class="flex items-center justify-center mb-6">
                         <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
+                            <i class="fas fa-calendar-check text-green-600 text-2xl"></i>
                         </div>
                     </div>
-                    <h3 class="text-xl font-bold text-center mb-4" data-i18n="service3Title">Commande sur mesure</h3>
-                    <p class="text-gray-600 text-center" data-i18n="service3Desc">Vous avez des besoins spécifiques? Nous préparons des produits sur mesure selon vos préférences et contraintes alimentaires.</p>
+                    <h3 class="text-xl font-bold text-center mb-4" data-i18n="service3Title">Abonnements Hebdomadaires</h3>
+                    <p class="text-gray-600 text-center" data-i18n="service3Desc">Recevez vos plats préférés chaque semaine selon un programme personnalisé, avec des options végétariennes disponibles.</p>
                     <div class="flex justify-center mt-6">
-                        <a href="#contact" class="text-green-600 font-medium hover:text-green-700 transition" data-i18n="learnMore">En savoir plus <i class="fas fa-chevron-right ml-1"></i></a>
+                        <button onclick="showServiceDetails(3)" class="text-green-600 font-medium hover:text-green-700 transition" data-i18n="learnMore">
+                            En savoir plus <i class="fas fa-chevron-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Service Details Modal -->
+    <div id="serviceModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 id="serviceModalTitle" class="text-2xl leading-6 font-bold text-green-600 mb-4"></h3>
+                            <div id="serviceModalContent" class="mt-2 text-gray-600">
+                                <!-- Content will be loaded here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" onclick="closeServiceModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm" data-i18n="close">
+                        Fermer
+                    </button>
+                    <a id="serviceContactBtn" href="#contact" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        Nous contacter
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Pages -->
+    <!-- Notre Histoire Page -->
+    <section id="notre-histoire" class="py-20 bg-gray-50 hidden">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <img src="{% static 'image/mtn.jpeg' %}" alt="Notre histoire" class="rounded-lg shadow-2xl w-full">
+                </div>
+                <div class="md:w-1/2 md:pl-12">
+                    <h2 class="text-3xl font-bold mb-6 text-gradient" data-i18n="ourStoryTitle">Notre Histoire</h2>
+                    <p class="mb-4" data-i18n="storyText1">Fondée en 2018 à Buea, BueaDelights est née de la passion pour la cuisine camerounaise traditionnelle et du désir de partager ces saveurs authentiques avec le monde.</p>
+                    <p class="mb-4" data-i18n="storyText2">Nous nous engageons à utiliser des ingrédients locaux et frais, préparés selon des méthodes traditionnelles tout en respectant les normes d'hygiène modernes.</p>
+                    <p class="mb-6" data-i18n="storyText3">Notre spécialité, le fufu et eru, est préparé avec amour par nos chefs expérimentés qui maîtrisent parfaitement l'art de la cuisine camerounaise.</p>
+                    <div class="bg-green-100 p-4 rounded-lg">
+                        <h4 class="font-bold text-green-800 mb-2" data-i18n="ourMission">Notre Mission</h4>
+                        <p data-i18n="missionText">Promouvoir et préserver les traditions culinaires camerounaises tout en offrant une expérience gastronomique moderne et accessible à tous.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Carrières Page -->
+    <section id="carrieres" class="py-20 bg-white hidden">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4 text-gradient" data-i18n="careersTitle">Rejoignez Notre Équipe</h2>
+                <p class="max-w-xl mx-auto" data-i18n="careersSubtitle">Nous recherchons des passionnés de cuisine camerounaise pour développer ensemble BueaDelights.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-4 text-green-600" data-i18n="whyJoin">Pourquoi nous rejoindre?</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                            <span data-i18n="benefit1">Environnement de travail dynamique et convivial</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                            <span data-i18n="benefit2">Formation continue en cuisine traditionnelle</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                            <span data-i18n="benefit3">Horaires flexibles</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check text-green-500 mt-1 mr-2"></i>
+                            <span data-i18n="benefit4">Possibilité d'évolution</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold mb-4 text-green-600" data-i18n="openPositions">Postes disponibles</h3>
+                    <div class="space-y-4">
+                        <div class="border-b pb-4">
+                            <h4 class="font-bold" data-i18n="position1">Cuisinier spécialisé en plats traditionnels</h4>
+                            <p class="text-sm text-gray-600" data-i18n="position1Desc">Expérience en cuisine camerounaise requise</p>
+                        </div>
+                        <div class="border-b pb-4">
+                            <h4 class="font-bold" data-i18n="position2">Livreur à moto</h4>
+                            <p class="text-sm text-gray-600" data-i18n="position2Desc">Permis de conduire A obligatoire</p>
+                        </div>
+                        <div>
+                            <h4 class="font-bold" data-i18n="position3">Service clientèle</h4>
+                            <p class="text-sm text-gray-600" data-i18n="position3Desc">Excellente communication et maîtrise des langues locales</p>
+                        </div>
+                    </div>
+                    <button class="mt-6 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition" data-i18n="applyNow">
+                        Postuler maintenant
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conditions d'utilisation Page -->
+    <section id="conditions" class="py-20 bg-gray-50 hidden">
+        <div class="container mx-auto px-4 max-w-3xl">
+            <div class="bg-white p-6 md:p-8 rounded-lg shadow-lg">
+                <h2 class="text-3xl font-bold mb-6 text-center text-gradient" data-i18n="termsTitle">Conditions d'utilisation</h2>
+                
+                <div class="prose max-w-none">
+                    <h3 class="text-xl font-bold mt-6 mb-3 text-green-600" data-i18n="termsSection1">1. Acceptation des conditions</h3>
+                    <p data-i18n="termsText1">En utilisant les services de BueaDelights, vous acceptez pleinement et sans réserve les présentes conditions générales d'utilisation.</p>
+                    
+                    <h3 class="text-xl font-bold mt-6 mb-3 text-green-600" data-i18n="termsSection2">2. Commandes et paiements</h3>
+                    <p data-i18n="termsText2">Les commandes sont confirmées une fois le paiement reçu. Nous acceptons les paiements mobiles (Orange Money, MTN Mobile Money) et les paiements en espèces à la livraison.</p>
+                    
+                    <h3 class="text-xl font-bold mt-6 mb-3 text-green-600" data-i18n="termsSection3">3. Livraison</h3>
+                    <p data-i18n="termsText3">Nous nous engageons à livrer dans les délais indiqués. En cas de retard, nous vous informerons dès que possible.</p>
+                    
+                    <h3 class="text-xl font-bold mt-6 mb-3 text-green-600" data-i18n="termsSection4">4. Confidentialité</h3>
+                    <p data-i18n="termsText4">Vos données personnelles sont protégées et ne seront jamais partagées avec des tiers sans votre consentement.</p>
+                    
+                    <div class="mt-8 bg-green-50 p-4 rounded-lg">
+                        <p class="text-sm" data-i18n="termsLastUpdate">Dernière mise à jour: 15 janvier 2025</p>
                     </div>
                 </div>
             </div>
@@ -925,9 +1076,9 @@
                 <div>
                     <h3 class="text-lg font-bold mb-4" data-i18n="about">À propos</h3>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition" data-i18n="ourStory">Notre histoire</a></li>
+                        <li><a href="javascript:showPage('notre-histoire')" class="text-gray-400 hover:text-white transition" data-i18n="ourStory">Notre histoire</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white transition" data-i18n="team">Équipe</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition" data-i18n="careers">Carrières</a></li>
+                        <li><a href="javascript:showPage('carrieres')" class="text-gray-400 hover:text-white transition" data-i18n="careers">Carrières</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white transition" data-i18n="blog">Blog</a></li>
                     </ul>
                 </div>
@@ -936,7 +1087,7 @@
                     <ul class="space-y-2">
                         <li><a href="#" class="text-gray-400 hover:text-white transition">FAQ</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white transition" data-i18n="privacyPolicy">Politique de confidentialité</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition" data-i18n="terms">Conditions d'utilisation</a></li>
+                        <li><a href="javascript:showPage('conditions')" class="text-gray-400 hover:text-white transition" data-i18n="terms">Conditions d'utilisation</a></li>
                         <li><a href="#" class="text-gray-400 hover:text-white transition" data-i18n="returns">Retours et échanges</a></li>
                     </ul>
                 </div>
@@ -947,9 +1098,28 @@
             </div>
         </div>
     </footer>
+<script>
+    // Main App Script
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize components
+        initLoader();
+        initMobileMenu();
+        initThemeToggle();
+        initTiltCards();
+        initScrollReveal();
+        initCounters();
+        initProductFilters();
+        initThreeDProduct();
+        initParticles();
+        initCameroonMap();
+        initLanguageSwitcher();
+        initServiceModals();
+        initPageNavigation();
+        initForms();
+    });
 
-    <script>
-        // Page loader
+    // 1. Page Loader
+    function initLoader() {
         window.addEventListener('load', function() {
             setTimeout(function() {
                 document.getElementById('loader').style.opacity = '0';
@@ -958,8 +1128,10 @@
                 }, 500);
             }, 1000);
         });
+    }
 
-        // Mobile menu toggle
+    // 2. Mobile Menu
+    function initMobileMenu() {
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         const closeMenu = document.getElementById('closeMenu');
@@ -971,8 +1143,10 @@
         closeMenu.addEventListener('click', function() {
             mobileMenu.classList.remove('open');
         });
+    }
 
-        // Theme toggle
+    // 3. Theme Toggle
+    function initThemeToggle() {
         const themeToggle = document.getElementById('themeToggle');
         const mobileThemeToggle = document.getElementById('mobileThemeToggle');
         const html = document.documentElement;
@@ -990,21 +1164,23 @@
             (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             html.classList.add('dark');
         }
+    }
 
-        // Initialize vanilla-tilt.js for tilt cards
-        document.addEventListener('DOMContentLoaded', function() {
-            const tiltCards = document.querySelectorAll('.tilt-card');
-            tiltCards.forEach(card => {
-                VanillaTilt.init(card, {
-                    max: 15,
-                    speed: 400,
-                    glare: true,
-                    'max-glare': 0.2,
-                });
+    // 4. Tilt Cards
+    function initTiltCards() {
+        const tiltCards = document.querySelectorAll('.tilt-card');
+        tiltCards.forEach(card => {
+            VanillaTilt.init(card, {
+                max: 15,
+                speed: 400,
+                glare: true,
+                'max-glare': 0.2,
             });
         });
+    }
 
-        // Scroll reveal animation
+    // 5. Scroll Reveal Animation
+    function initScrollReveal() {
         gsap.utils.toArray('.card-reveal').forEach(card => {
             ScrollTrigger.create({
                 trigger: card,
@@ -1013,27 +1189,10 @@
                 onLeaveBack: () => card.classList.remove('reveal')
             });
         });
+    }
 
-        // Count-up animation
-        const counters = document.querySelectorAll('.count-up');
-        const speed = 200;
-
-        function animateCounters() {
-            counters.forEach(counter => {
-                const target = +counter.getAttribute('data-count');
-                const count = +counter.innerText;
-                const increment = target / speed;
-
-                if (count < target) {
-                    counter.innerText = Math.ceil(count + increment);
-                    setTimeout(animateCounters, 1);
-                } else {
-                    counter.innerText = target;
-                }
-            });
-        }
-
-        // Run count-up when section is in view
+    // 6. Count-up Animation
+    function initCounters() {
         const aboutSection = document.getElementById('about');
         const observer = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
@@ -1043,8 +1202,28 @@
         }, { threshold: 0.5 });
 
         observer.observe(aboutSection);
+    }
 
-        // Product filter
+    function animateCounters() {
+        const counters = document.querySelectorAll('.count-up');
+        const speed = 200;
+
+        counters.forEach(counter => {
+            const target = +counter.getAttribute('data-count');
+            const count = +counter.innerText;
+            const increment = target / speed;
+
+            if (count < target) {
+                counter.innerText = Math.ceil(count + increment);
+                setTimeout(animateCounters, 1);
+            } else {
+                counter.innerText = target;
+            }
+        });
+    }
+
+    // 7. Product Filters
+    function initProductFilters() {
         const filterButtons = document.querySelectorAll('.product-filter');
         
         filterButtons.forEach(button => {
@@ -1066,225 +1245,167 @@
                 });
             });
         });
+    }
 
-        // 3D product animation
-        function initThreeDProduct() {
-            const container = document.getElementById('threeD-container');
-            if (!container || !THREE) return;
-
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-            
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            container.appendChild(renderer.domElement);
-
-            // Product geometry
-            const geometry = new THREE.SphereGeometry(3, 32, 32);
-            const textureLoader = new THREE.TextureLoader();
-            textureLoader.load('/api/placeholder/512/512', function(texture) {
-                const material = new THREE.MeshBasicMaterial({ map: texture });
-                const product = new THREE.Mesh(geometry, material);
-                scene.add(product);
-
-                camera.position.z = 5;
-
-                // Animation
-                function animate() {
-                    requestAnimationFrame(animate);
-                    if (product) {
-                        product.rotation.x += 0.005;
-                        product.rotation.y += 0.01;
-                    }
-                    renderer.render(scene, camera);
-                }
-
-                animate();
-            });
-
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
-            });
-        }
-
-        // Initialize 3D product when hero section is in view
+    // 8. 3D Product Animation
+    function initThreeDProduct() {
         const heroSection = document.getElementById('hero');
         const heroObserver = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
-                initThreeDProduct();
+                setupThreeDProduct();
                 heroObserver.unobserve(heroSection);
             }
         });
 
         heroObserver.observe(heroSection);
+    }
 
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                    
-                    // Close mobile menu if open
-                    mobileMenu.classList.remove('open');
+    function setupThreeDProduct() {
+        const container = document.getElementById('threeD-container');
+        if (!container || !THREE) return;
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        container.appendChild(renderer.domElement);
+
+        // Product geometry
+        const geometry = new THREE.SphereGeometry(3, 32, 32);
+        const textureLoader = new THREE.TextureLoader();
+        textureLoader.load('{% static 'logo/logo_caroline_bby.png' %}', function(texture) {
+            const material = new THREE.MeshBasicMaterial({ map: texture });
+            const product = new THREE.Mesh(geometry, material);
+            scene.add(product);
+
+            camera.position.z = 5;
+
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                if (product) {
+                    product.rotation.x += 0.005;
+                    product.rotation.y += 0.01;
                 }
-            });
+                renderer.render(scene, camera);
+            }
+
+            animate();
         });
 
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('bg-white', 'shadow-md', 'dark:bg-gray-800');
-            } else {
-                navbar.classList.remove('bg-white', 'shadow-md', 'dark:bg-gray-800');
-            }
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
         });
+    }
 
-        // Form submission
-        const contactForm = document.querySelector('#contact form');
-        if (contactForm) {
-            contactForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Get form values
-                const formData = new FormData(this);
-                const data = Object.fromEntries(formData);
-                
-                // Here you would typically send the data to a server
-                console.log('Form submitted:', data);
-                
-                // Show success message
-                alert('Merci pour votre message! Nous vous contacterons bientôt.');
-                this.reset();
-            });
-        }
-
-        // Newsletter form
-        const newsletterForm = document.querySelector('.bg-green-600 form');
-        if (newsletterForm) {
-            newsletterForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = this.querySelector('input[type="email"]').value;
-                
-                // Here you would typically send the email to a newsletter service
-                console.log('Newsletter subscription:', email);
-                
-                // Show success message
-                alert('Merci pour votre inscription à notre newsletter!');
-                this.reset();
-            });
-        }
-
-        // Initialize particles in hero section
-        function initParticles() {
-            const container = document.getElementById('particles-container');
-            if (!container) return;
-
-            // Simple particle implementation
-            const canvas = document.createElement('canvas');
-            container.appendChild(canvas);
-            
-            const ctx = canvas.getContext('2d');
-            canvas.width = container.clientWidth;
-            canvas.height = container.clientHeight;
-            
-            const particles = [];
-            const particleCount = 50;
-            
-            // Create particles
-            for (let i = 0; i < particleCount; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 3 + 1,
-                    speedX: Math.random() * 0.5 - 0.25,
-                    speedY: Math.random() * 0.5 - 0.25
-                });
-            }
-            
-            // Animation loop
-            function animateParticles() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                
-                for (let i = 0; i < particles.length; i++) {
-                    const p = particles[i];
-                    
-                    // Update position
-                    p.x += p.speedX;
-                    p.y += p.speedY;
-                    
-                    // Wrap around edges
-                    if (p.x > canvas.width) p.x = 0;
-                    if (p.x < 0) p.x = canvas.width;
-                    if (p.y > canvas.height) p.y = 0;
-                    if (p.y < 0) p.y = canvas.height;
-                    
-                    // Draw particle
-                    ctx.fillStyle = 'rgba(0, 119, 73, 0.2)';
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                
-                requestAnimationFrame(animateParticles);
-            }
-            
-            animateParticles();
-            
-            // Handle window resize
-            window.addEventListener('resize', function() {
-                canvas.width = container.clientWidth;
-                canvas.height = container.clientHeight;
-            });
-        }
-
-        // Initialize particles when hero section is in view
+    // 9. Particles Animation
+    function initParticles() {
+        const heroSection = document.getElementById('hero');
         const particlesObserver = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
-                initParticles();
+                setupParticles();
                 particlesObserver.unobserve(heroSection);
             }
         });
 
         particlesObserver.observe(heroSection);
+    }
 
-        // Initialize Lottie animation for Cameroon map
-        function initCameroonMap() {
-            const container = document.getElementById('cameroonMap');
-            if (!container) return;
-            
-            // This would be replaced with actual Lottie animation initialization
-            // For now, we'll just create a simple SVG placeholder
-            container.innerHTML = `
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M50 10 L90 50 L50 90 L10 50 Z" fill="#007749" stroke="#FCD116" stroke-width="2"/>
-                    <circle cx="50" cy="50" r="10" fill="#CE1126"/>
-                </svg>
-            `;
+    function setupParticles() {
+        const container = document.getElementById('particles-container');
+        if (!container) return;
+
+        // Simple particle implementation
+        const canvas = document.createElement('canvas');
+        container.appendChild(canvas);
+        
+        const ctx = canvas.getContext('2d');
+        canvas.width = container.clientWidth;
+        canvas.height = container.clientHeight;
+        
+        const particles = [];
+        const particleCount = 50;
+        
+        // Create particles
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 3 + 1,
+                speedX: Math.random() * 0.5 - 0.25,
+                speedY: Math.random() * 0.5 - 0.25
+            });
         }
+        
+        // Animation loop
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                const p = particles[i];
+                
+                // Update position
+                p.x += p.speedX;
+                p.y += p.speedY;
+                
+                // Wrap around edges
+                if (p.x > canvas.width) p.x = 0;
+                if (p.x < 0) p.x = canvas.width;
+                if (p.y > canvas.height) p.y = 0;
+                if (p.y < 0) p.y = canvas.height;
+                
+                // Draw particle
+                ctx.fillStyle = 'rgba(0, 119, 73, 0.2)';
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
+            requestAnimationFrame(animateParticles);
+        }
+        
+        animateParticles();
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        });
+    }
 
-        // Initialize Cameroon map when about section is in view
+    // 10. Cameroon Map Animation
+    function initCameroonMap() {
+        const aboutSection = document.getElementById('about');
         const mapObserver = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
-                initCameroonMap();
+                setupCameroonMap();
                 mapObserver.unobserve(aboutSection);
             }
         });
 
         mapObserver.observe(aboutSection);
+    }
 
-        // Language switching functionality
+    function setupCameroonMap() {
+        const container = document.getElementById('cameroonMap');
+        if (!container) return;
+        
+        // This would be replaced with actual Lottie animation initialization
+        // For now, we'll just create a simple SVG placeholder
+        container.innerHTML = `
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 10 L90 50 L50 90 L10 50 Z" fill="#007749" stroke="#FCD116" stroke-width="2"/>
+                <circle cx="50" cy="50" r="10" fill="#CE1126"/>
+            </svg>
+        `;
+    }
+
+    // 11. Language Switcher
+    function initLanguageSwitcher() {
         const langSwitch = document.getElementById('langSwitch');
         let currentLang = localStorage.getItem('lang') || 'fr';
 
@@ -1298,6 +1419,7 @@
                 "testimonials": "Testimonials",
                 "contact": "Contact",
                 "theme": "Theme",
+                "login": "Login",
                 
                 // Hero section
                 "heroTitle": "Local flavors at your fingertips",
@@ -1335,12 +1457,12 @@
                 "product2Detail2": "No added sugar",
                 "product2Detail3": "Reusable glass bottle",
                 "product2Detail4": "Consume within 5 days",
-                "product3Title": "Traditional pounded plantain",
-                "product3Desc": "Traditional Cameroonian dish made with pounded plantain and peanut sauce.",
-                "product3Detail1": "Authentic recipe",
-                "product3Detail2": "Prepared to order",
-                "product3Detail3": "Vegetarian options available",
-                "product3Detail4": "Hot delivery guaranteed",
+                "product3Title": "Fufu and Eru",
+                "product3Desc": "Traditional Cameroonian dish made with fufu (cassava dough) served with eru sauce (wild spinach) and fish or meat.",
+                "product3Detail1": "Fresh fufu prepared daily",
+                "product3Detail2": "Eru sauce made with fresh leaves",
+                "product3Detail3": "Choice of accompaniment: fish, meat or shrimp",
+                "product3Detail4": "Generous portion for 2-3 people",
                 "product4Title": "Fruit yogurt",
                 "product4Desc": "Creamy yogurt with seasonal tropical fruits, perfect for a healthy snack.",
                 "product4Detail1": "Fresh local milk",
@@ -1350,24 +1472,41 @@
                 "productDetails": "Product details",
                 "order": "Order",
                 "viewAllProducts": "View all our products",
-                "product3Title": "Fufu and Eru",
-                "product3Desc": "Traditional Cameroonian dish made with fufu (cassava dough) served with eru sauce (wild spinach) and fish or meat.",
-                "product3Detail1": "Fresh fufu prepared daily",
-                "product3Detail2": "Eru sauce made with fresh leaves",
-                "product3Detail3": "Choice of accompaniment: fish, meat or shrimp",
-                "product3Detail4": "Generous portion for 2-3 people",
-    
                 
                 // Services section
                 "ourServices": "Our Services",
                 "servicesSubtitle": "BueaDelights offers several services to meet your needs and provide you with an exceptional culinary experience.",
-                "service1Title": "Home delivery",
-                "service1Desc": "We deliver your favorite products directly to your door within 30 minutes in Buea and surrounding areas.",
-                "service2Title": "Events and catering",
-                "service2Desc": "Custom solutions for your professional or personal events with menus tailored to your needs.",
-                "service3Title": "Custom orders",
-                "service3Desc": "Have specific needs? We prepare custom products according to your preferences and dietary constraints.",
+                "service1Title": "Express Delivery",
+                "service1Desc": "Get your traditional dishes like fufu and eru in less than 45 minutes, still hot and ready to enjoy.",
+                "service2Title": "Traditional Catering",
+                "service2Desc": "Complete catering service for your events with specialties like ndolé, DG chicken and of course fufu and eru.",
+                "service3Title": "Weekly Subscriptions",
+                "service3Desc": "Receive your favorite dishes every week on a customized schedule, with vegetarian options available.",
                 "learnMore": "Learn more",
+                
+                // Service Details
+                "deliveryTime": "Delivery time:",
+                "deliveryArea": "Delivery area:",
+                "deliveryFee": "Delivery fee:",
+                "deliveryDetails": "Our delivery personnel are equipped with insulated containers to ensure your meals arrive hot and in the best condition. We track your order in real-time and keep you informed at every step.",
+                "deliveryTip": "Tip: Order before 6pm for faster delivery!",
+                
+                "cateringFor": "For:",
+                "menuOptions": "Menu options:",
+                "menuOption1": "Complete Traditional Menu (fufu, eru, ndolé, DG chicken)",
+                "menuOption2": "Light Menu (without fufu)",
+                "menuOption3": "Vegetarian Menu",
+                "cateringDetails": "Our catering team takes care of everything: preparation, service and cleaning. We can adapt our menus to your specific needs and budget.",
+                
+                "subscriptionOptions": "Subscription options:",
+                "subOption1": "Twice a week (Tuesday and Friday)",
+                "subOption2": "3 times a week (Monday, Wednesday, Friday)",
+                "subOption3": "5 times a week (Monday to Friday)",
+                "subBenefits": "Benefits:",
+                "subBenefit1": "10% discount on all orders",
+                "subBenefit2": "Free delivery",
+                "subBenefit3": "Customizable menu each week",
+                "subDetails": "Pause or modify your subscription at any time via your customer account.",
                 
                 // How it works section
                 "howItWorks": "How it works",
@@ -1426,7 +1565,47 @@
                 "privacyPolicy": "Privacy policy",
                 "terms": "Terms of use",
                 "returns": "Returns and exchanges",
-                "developedBy": "Developed with <i class=\"fas fa-heart text-red-500\"></i> by the BueaDelights team."
+                "developedBy": "Developed with <i class=\"fas fa-heart text-red-500\"></i> by the BueaDelights team.",
+                
+                // Our Story Page
+                "ourStoryTitle": "Our Story",
+                "storyText1": "Founded in 2018 in Buea, BueaDelights was born from a passion for traditional Cameroonian cuisine and the desire to share these authentic flavors with the world.",
+                "storyText2": "We are committed to using local and fresh ingredients, prepared according to traditional methods while respecting modern hygiene standards.",
+                "storyText3": "Our specialty, fufu and eru, is prepared with love by our experienced chefs who perfectly master the art of Cameroonian cuisine.",
+                "ourMission": "Our Mission",
+                "missionText": "To promote and preserve Cameroonian culinary traditions while offering a modern and accessible gastronomic experience for all.",
+                
+                // Careers Page
+                "careersTitle": "Join Our Team",
+                "careersSubtitle": "We're looking for passionate people about Cameroonian cuisine to develop BueaDelights together.",
+                "whyJoin": "Why join us?",
+                "benefit1": "Dynamic and friendly work environment",
+                "benefit2": "Ongoing training in traditional cooking",
+                "benefit3": "Flexible hours",
+                "benefit4": "Career growth opportunities",
+                "openPositions": "Open positions",
+                "position1": "Chef specialized in traditional dishes",
+                "position1Desc": "Experience in Cameroonian cuisine required",
+                "position2": "Motorcycle delivery driver",
+                "position2Desc": "Category A driver's license required",
+                "position3": "Customer service",
+                "position3Desc": "Excellent communication and mastery of local languages",
+                "applyNow": "Apply now",
+                
+                // Terms Page
+                "termsTitle": "Terms of Service",
+                "termsSection1": "1. Acceptance of terms",
+                "termsText1": "By using BueaDelights services, you fully and unreservedly accept these general terms of use.",
+                "termsSection2": "2. Orders and payments",
+                "termsText2": "Orders are confirmed once payment is received. We accept mobile payments (Orange Money, MTN Mobile Money) and cash on delivery.",
+                "termsSection3": "3. Delivery",
+                "termsText3": "We are committed to delivering within the indicated time frames. In case of delay, we will inform you as soon as possible.",
+                "termsSection4": "4. Privacy",
+                "termsText4": "Your personal data is protected and will never be shared with third parties without your consent.",
+                "termsLastUpdate": "Last updated: January 15, 2025",
+                
+                // Modal
+                "close": "Close"
             },
             fr: {
                 // Navigation
@@ -1436,6 +1615,7 @@
                 "testimonials": "Témoignages",
                 "contact": "Contact",
                 "theme": "Thème",
+                "login": "Connexion",
                 
                 // Hero section
                 "heroTitle": "Des saveurs locales à portée de clic",
@@ -1473,12 +1653,12 @@
                 "product2Detail2": "Sans sucre ajouté",
                 "product2Detail3": "Bouteille en verre réutilisable",
                 "product2Detail4": "À consommer sous 5 jours",
-                "product3Title": "Pilé traditionnel",
-                "product3Desc": "Plat traditionnel camerounais à base de plantain pilé et de sauce arachide.",
-                "product3Detail1": "Recette authentique",
-                "product3Detail2": "Préparé sur commande",
-                "product3Detail3": "Options végétariennes disponibles",
-                "product3Detail4": "Livraison chaude garantie",
+                "product3Title": "Fufu et Eru",
+                "product3Desc": "Plat traditionnel camerounais à base de fufu (pâte de manioc) accompagné d'une sauce eru (feuilles de eru) avec poisson ou viande.",
+                "product3Detail1": "Fufu frais préparé quotidiennement",
+                "product3Detail2": "Sauce eru faite avec des feuilles fraîches",
+                "product3Detail3": "Accompagnement au choix: poisson, viande ou crevette",
+                "product3Detail4": "Portion généreuse pour 2-3 personnes",
                 "product4Title": "Yaourt aux fruits",
                 "product4Desc": "Yaourt crémeux aux fruits tropicaux de saison, parfait pour une collation saine.",
                 "product4Detail1": "Lait frais local",
@@ -1488,24 +1668,41 @@
                 "productDetails": "Détails du produit",
                 "order": "Commander",
                 "viewAllProducts": "Voir tous nos produits",
-                "product3Title": "Fufu et Eru",
-                "product3Desc": "Plat traditionnel camerounais à base de fufu (pâte de manioc) accompagné d'une sauce eru (feuilles de eru) avec poisson ou viande.",
-                "product3Detail1": "Fufu frais préparé quotidiennement",
-                "product3Detail2": "Sauce eru faite avec des feuilles fraîches",
-                "product3Detail3": "Accompagnement au choix: poisson, viande ou crevette",
-                "product3Detail4": "Portion généreuse pour 2-3 personnes",
-        
                 
                 // Services section
                 "ourServices": "Nos Services",
                 "servicesSubtitle": "BueaDelights propose plusieurs services pour répondre à vos besoins et vous offrir une expérience culinaire exceptionnelle.",
-                "service1Title": "Livraison à domicile",
-                "service1Desc": "Nous livrons vos produits préférés directement chez vous dans un délai de 30 minutes à Buea et ses environs.",
-                "service2Title": "Événements et catering",
-                "service2Desc": "Des solutions sur mesure pour vos événements professionnels ou personnels avec des menus adaptés à vos besoins.",
-                "service3Title": "Commande sur mesure",
-                "service3Desc": "Vous avez des besoins spécifiques? Nous préparons des produits sur mesure selon vos préférences et contraintes alimentaires.",
+                "service1Title": "Livraison Express",
+                "service1Desc": "Recevez vos plats traditionnels comme le fufu et eru en moins de 45 minutes, encore chauds et prêts à déguster.",
+                "service2Title": "Catering Traditionnel",
+                "service2Desc": "Service complet de catering pour vos événements avec des spécialités comme le ndolé, le poulet DG et bien sûr le fufu et eru.",
+                "service3Title": "Abonnements Hebdomadaires",
+                "service3Desc": "Recevez vos plats préférés chaque semaine selon un programme personnalisé, avec des options végétariennes disponibles.",
                 "learnMore": "En savoir plus",
+                
+                // Service Details
+                "deliveryTime": "Temps de livraison:",
+                "deliveryArea": "Zone de livraison:",
+                "deliveryFee": "Frais de livraison:",
+                "deliveryDetails": "Nos livreurs sont équipés de conteneurs isothermes pour garantir que vos plats arrivent chauds et dans les meilleures conditions. Nous suivons votre commande en temps réel et vous informons à chaque étape.",
+                "deliveryTip": "Astuce: Commandez avant 18h pour une livraison plus rapide!",
+                
+                "cateringFor": "Pour:",
+                "menuOptions": "Options de menu:",
+                "menuOption1": "Menu Traditionnel Complet (fufu, eru, ndolé, poulet DG)",
+                "menuOption2": "Menu Léger (sans fufu)",
+                "menuOption3": "Menu Végétarien",
+                "cateringDetails": "Notre équipe de catering s'occupe de tout: préparation, service et nettoyage. Nous pouvons adapter nos menus à vos besoins spécifiques et à votre budget.",
+                
+                "subscriptionOptions": "Options d'abonnement:",
+                "subOption1": "2 fois par semaine (Mardi et Vendredi)",
+                "subOption2": "3 fois par semaine (Lundi, Mercredi, Vendredi)",
+                "subOption3": "5 fois par semaine (Du Lundi au Vendredi)",
+                "subBenefits": "Avantages:",
+                "subBenefit1": "10% de réduction sur toutes les commandes",
+                "subBenefit2": "Livraison gratuite",
+                "subBenefit3": "Menu personnalisable chaque semaine",
+                "subDetails": "Pausez ou modifiez votre abonnement à tout moment via votre espace client.",
                 
                 // How it works section
                 "howItWorks": "Comment ça marche?",
@@ -1564,7 +1761,47 @@
                 "privacyPolicy": "Politique de confidentialité",
                 "terms": "Conditions d'utilisation",
                 "returns": "Retours et échanges",
-                "developedBy": "Développé avec <i class=\"fas fa-heart text-red-500\"></i> par l'équipe BueaDelights."
+                "developedBy": "Développé avec <i class=\"fas fa-heart text-red-500\"></i> par l'équipe BueaDelights.",
+                
+                // Our Story Page
+                "ourStoryTitle": "Notre Histoire",
+                "storyText1": "Fondée en 2018 à Buea, BueaDelights est née de la passion pour la cuisine camerounaise traditionnelle et du désir de partager ces saveurs authentiques avec le monde.",
+                "storyText2": "Nous nous engageons à utiliser des ingrédients locaux et frais, préparés selon des méthodes traditionnelles tout en respectant les normes d'hygiène modernes.",
+                "storyText3": "Notre spécialité, le fufu et eru, est préparé avec amour par nos chefs expérimentés qui maîtrisent parfaitement l'art de la cuisine camerounaise.",
+                "ourMission": "Notre Mission",
+                "missionText": "Promouvoir et préserver les traditions culinaires camerounaises tout en offrant une expérience gastronomique moderne et accessible à tous.",
+                
+                // Careers Page
+                "careersTitle": "Rejoignez Notre Équipe",
+                "careersSubtitle": "Nous recherchons des passionnés de cuisine camerounaise pour développer ensemble BueaDelights.",
+                "whyJoin": "Pourquoi nous rejoindre?",
+                "benefit1": "Environnement de travail dynamique et convivial",
+                "benefit2": "Formation continue en cuisine traditionnelle",
+                "benefit3": "Horaires flexibles",
+                "benefit4": "Possibilité d'évolution",
+                "openPositions": "Postes disponibles",
+                "position1": "Cuisinier spécialisé en plats traditionnels",
+                "position1Desc": "Expérience en cuisine camerounaise requise",
+                "position2": "Livreur à moto",
+                "position2Desc": "Permis de conduire A obligatoire",
+                "position3": "Service clientèle",
+                "position3Desc": "Excellente communication et maîtrise des langues locales",
+                "applyNow": "Postuler maintenant",
+                
+                // Terms Page
+                "termsTitle": "Conditions d'utilisation",
+                "termsSection1": "1. Acceptation des conditions",
+                "termsText1": "En utilisant les services de BueaDelights, vous acceptez pleinement et sans réserve les présentes conditions générales d'utilisation.",
+                "termsSection2": "2. Commandes et paiements",
+                "termsText2": "Les commandes sont confirmées une fois le paiement reçu. Nous acceptons les paiements mobiles (Orange Money, MTN Mobile Money) et les paiements en espèces à la livraison.",
+                "termsSection3": "3. Livraison",
+                "termsText3": "Nous nous engageons à livrer dans les délais indiqués. En cas de retard, nous vous informerons dès que possible.",
+                "termsSection4": "4. Confidentialité",
+                "termsText4": "Vos données personnelles sont protégées et ne seront jamais partagées avec des tiers sans votre consentement.",
+                "termsLastUpdate": "Dernière mise à jour: 15 janvier 2025",
+                
+                // Modal
+                "close": "Fermer"
             }
         };
 
@@ -1595,6 +1832,189 @@
 
         // Initialize language on page load
         updateLanguage(currentLang);
-    </script>
+    }
+
+    // 12. Service Modals
+    function initServiceModals() {
+        // Close modal when clicking outside
+        document.getElementById('serviceModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeServiceModal();
+            }
+        });
+    }
+
+    function showServiceDetails(serviceId) {
+        const modal = document.getElementById('serviceModal');
+        const title = document.getElementById('serviceModalTitle');
+        const content = document.getElementById('serviceModalContent');
+        const contactBtn = document.getElementById('serviceContactBtn');
+        
+        // Set service-specific content
+        if (serviceId === 1) {
+            title.textContent = document.querySelector('[data-i18n="service1Title"]').textContent;
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <p><strong data-i18n="deliveryTime">Temps de livraison:</strong> 30-45 minutes</p>
+                    <p><strong data-i18n="deliveryArea">Zone de livraison:</strong> Buea et environs</p>
+                    <p><strong data-i18n="deliveryFee">Frais de livraison:</strong> 500 FCFA</p>
+                    <p data-i18n="deliveryDetails">Nos livreurs sont équipés de conteneurs isothermes pour garantir que vos plats arrivent chauds et dans les meilleures conditions. Nous suivons votre commande en temps réel et vous informons à chaque étape.</p>
+                    <div class="bg-green-50 p-3 rounded">
+                        <p class="text-sm" data-i18n="deliveryTip">Astuce: Commandez avant 18h pour une livraison plus rapide!</p>
+                    </div>
+                </div>
+            `;
+        } else if (serviceId === 2) {
+            title.textContent = document.querySelector('[data-i18n="service2Title"]').textContent;
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <p><strong data-i18n="cateringFor">Pour:</strong> Mariages, fêtes d'entreprise, réunions familiales</p>
+                    <p><strong data-i18n="menuOptions">Options de menu:</strong></p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li data-i18n="menuOption1">Menu Traditionnel Complet (fufu, eru, ndolé, poulet DG)</li>
+                        <li data-i18n="menuOption2">Menu Léger (sans fufu)</li>
+                        <li data-i18n="menuOption3">Menu Végétarien</li>
+                    </ul>
+                    <p data-i18n="cateringDetails">Notre équipe de catering s'occupe de tout: préparation, service et nettoyage. Nous pouvons adapter nos menus à vos besoins spécifiques et à votre budget.</p>
+                </div>
+            `;
+        } else if (serviceId === 3) {
+            title.textContent = document.querySelector('[data-i18n="service3Title"]').textContent;
+            content.innerHTML = `
+                <div class="space-y-4">
+                    <p><strong data-i18n="subscriptionOptions">Options d'abonnement:</strong></p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li data-i18n="subOption1">2 fois par semaine (Mardi et Vendredi)</li>
+                        <li data-i18n="subOption2">3 fois par semaine (Lundi, Mercredi, Vendredi)</li>
+                        <li data-i18n="subOption3">5 fois par semaine (Du Lundi au Vendredi)</li>
+                    </ul>
+                    <p><strong data-i18n="subBenefits">Avantages:</strong></p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li data-i18n="subBenefit1">10% de réduction sur toutes les commandes</li>
+                        <li data-i18n="subBenefit2">Livraison gratuite</li>
+                        <li data-i18n="subBenefit3">Menu personnalisable chaque semaine</li>
+                    </ul>
+                    <p data-i18n="subDetails">Pausez ou modifiez votre abonnement à tout moment via votre espace client.</p>
+                </div>
+            `;
+        }
+        
+        // Update translations in modal
+        updateTranslationsInElement(content);
+        modal.classList.remove('hidden');
+        
+        // Scroll to top of modal
+        modal.scrollTop = 0;
+    }
+
+    function closeServiceModal() {
+        document.getElementById('serviceModal').classList.add('hidden');
+    }
+
+    // 13. Page Navigation
+    function initPageNavigation() {
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                
+                e.preventDefault();
+                
+                if (href.startsWith('#contact') || href.startsWith('#products') || 
+                    href.startsWith('#services') || href.startsWith('#testimonials') || 
+                    href.startsWith('#about') || href.startsWith('#hero')) {
+                    const targetElement = document.querySelector(href);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+                
+                // Close mobile menu if open
+                document.getElementById('mobileMenu').classList.remove('open');
+            });
+        });
+    }
+
+    function showPage(pageId) {
+        // Hide all pages
+        document.querySelectorAll('section[id$="-page"]').forEach(section => {
+            section.classList.add('hidden');
+        });
+        
+        // Show requested page
+        const page = document.getElementById(pageId);
+        if (page) {
+            page.classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+    }
+
+    // 14. Form Handling
+    function initForms() {
+        // Contact form submission
+        const contactForm = document.querySelector('#contact form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData);
+                
+                // Here you would typically send the data to a server
+                console.log('Form submitted:', data);
+                
+                // Show success message
+                alert(currentLang === 'fr' ? 'Merci pour votre message! Nous vous contacterons bientôt.' : 'Thank you for your message! We will contact you soon.');
+                this.reset();
+            });
+        }
+
+        // Newsletter form submission
+        const newsletterForm = document.querySelector('.bg-green-600 form');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = this.querySelector('input[type="email"]').value;
+                
+                // Here you would typically send the email to a newsletter service
+                console.log('Newsletter subscription:', email);
+                
+                // Show success message
+                alert(currentLang === 'fr' ? 'Merci pour votre inscription à notre newsletter!' : 'Thank you for subscribing to our newsletter!');
+                this.reset();
+            });
+        }
+    }
+
+    // Helper function to update translations in a specific element
+    function updateTranslationsInElement(element) {
+        const currentLang = localStorage.getItem('lang') || 'fr';
+        element.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[currentLang] && translations[currentLang][key]) {
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.placeholder = translations[currentLang][key];
+                } else {
+                    el.innerHTML = translations[currentLang][key];
+                }
+            }
+        });
+    }
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('navbar');
+        if (window.scrollY > 50) {
+            navbar.classList.add('bg-white', 'shadow-md', 'dark:bg-gray-800');
+        } else {
+            navbar.classList.remove('bg-white', 'shadow-md', 'dark:bg-gray-800');
+        }
+    });
+</script>
 </body>
 </html>

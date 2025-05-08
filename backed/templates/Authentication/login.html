@@ -1,0 +1,627 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BueaDelights - Connexion & Inscription</title>
+    <meta name="description" content="Connectez-vous ou créez un compte pour accéder à tous les services de BueaDelights">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Use the same styles as the main page -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #007749;
+            --secondary-color: #CE1126;
+            --accent-color: #FCD116;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --dark-bg: #1a1a1a;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(0, 119, 73, 0.1) 0%, rgba(206, 17, 38, 0.1) 100%);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        /* Dark mode */
+        .dark {
+            --text-color: #e2e8f0;
+            --bg-color: #121212;
+        }
+        
+        .dark body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+        }
+        
+        /* Language switch button */
+        .lang-switch {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .lang-switch:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Auth form styling */
+        .auth-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .auth-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #64748b;
+        }
+        
+        .auth-tab.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .auth-content {
+            padding: 2.5rem;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #334155;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 119, 73, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            color: #64748b;
+        }
+        
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .divider::before {
+            margin-right: 1rem;
+        }
+        
+        .divider::after {
+            margin-left: 1rem;
+        }
+        
+        .social-login {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .social-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .auth-image {
+            background: linear-gradient(135deg, rgba(0, 119, 73, 0.8), rgba(206, 17, 38, 0.8)), url('{% static 'image/caro3.jpeg' %}');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 3rem;
+        }
+        
+        .auth-image-content {
+            max-width: 400px;
+        }
+        
+        .auth-image h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .auth-image p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .auth-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .auth-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .auth-image {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Page loader -->
+    <div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
+        <span class="loader"></span>
+    </div>
+
+    <!-- Language switch button -->
+    <button id="langSwitch" class="lang-switch" title="Switch language">
+        <i class="fas fa-language text-xl"></i>
+    </button>
+
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-40 transition-all duration-300 bg-white shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="{% url 'homepage' %}" class="flex items-center space-x-2">
+                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-yellow-500 flex items-center justify-center transform transition hover:scale-110">
+                    <span class="text-white font-bold text-xl">BD</span>
+                </div>
+                <div>
+                    <span class="font-bold text-xl text-green-600">Buea<span class="text-yellow-500">Delights</span></span>
+                </div>
+            </a>
+            
+            <a href="{% url 'homepage' %}" class="text-green-600 hover:text-green-700 transition">
+                <i class="fas fa-arrow-left mr-2"></i>
+                <span data-i18n="backToHome">Retour à l'accueil</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-12">
+        <div class="auth-container px-4">
+            <div class="auth-card flex flex-col md:flex-row">
+                <!-- Left side - Forms -->
+                <div class="w-full md:w-1/2">
+                    <div class="auth-tabs">
+                        <div class="auth-tab active" data-tab="login">
+                            <span data-i18n="login">Connexion</span>
+                        </div>
+                        <div class="auth-tab" data-tab="register">
+                            <span data-i18n="register">Inscription</span>
+                        </div>
+                    </div>
+                    
+                    <div class="auth-content">
+                        <!-- Login Form -->
+                        <div id="login-form" class="auth-form active">
+                            <h2 class="text-2xl font-bold mb-6 text-gradient" data-i18n="welcomeBack">Bienvenue de retour</h2>
+                            
+                            <form id="loginForm">
+                                <div class="form-group">
+                                    <label for="login-email" class="form-label" data-i18n="email">Email</label>
+                                    <input type="email" id="login-email" class="form-input" placeholder="votre@email.com" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="login-password" class="form-label" data-i18n="password">Mot de passe</label>
+                                    <input type="password" id="login-password" class="form-input" placeholder="••••••••" required>
+                                </div>
+                                
+                                <div class="flex justify-between items-center mb-6">
+                                    <div class="flex items-center">
+                                        <input type="checkbox" id="remember-me" class="rounded text-green-600 focus:ring-green-500">
+                                        <label for="remember-me" class="ml-2 text-sm" data-i18n="rememberMe">Se souvenir de moi</label>
+                                    </div>
+                                    <a href="#" class="text-sm text-green-600 hover:underline" data-i18n="forgotPassword">Mot de passe oublié?</a>
+                                </div>
+                                
+                                <button type="submit" class="btn-primary mb-4" data-i18n="login">Se connecter</button>
+                                
+                                <div class="divider" data-i18n="or">Ou</div>
+                                
+                                <div class="social-login">
+                                    <button type="button" class="social-btn">
+                                        <i class="fab fa-google text-red-500 mr-2"></i>
+                                        <span data-i18n="google">Google</span>
+                                    </button>
+                                    <button type="button" class="social-btn">
+                                        <i class="fab fa-facebook-f text-blue-600 mr-2"></i>
+                                        <span data-i18n="facebook">Facebook</span>
+                                    </button>
+                                </div>
+                                
+                                <p class="text-center text-sm">
+                                    <span data-i18n="noAccount">Pas encore de compte?</span>
+                                    <a href="#" class="auth-link ml-1" id="show-register" data-i18n="registerHere">Inscrivez-vous ici</a>
+                                </p>
+                            </form>
+                        </div>
+                        
+                        <!-- Register Form -->
+                        <div id="register-form" class="auth-form">
+                            <h2 class="text-2xl font-bold mb-6 text-gradient" data-i18n="createAccount">Créer un compte</h2>
+                            
+                            <form id="registerForm">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                    <div class="form-group">
+                                        <label for="register-firstname" class="form-label" data-i18n="firstName">Prénom</label>
+                                        <input type="text" id="register-firstname" class="form-input" placeholder="Jean" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="register-lastname" class="form-label" data-i18n="lastName">Nom</label>
+                                        <input type="text" id="register-lastname" class="form-input" placeholder="Dupont" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="register-email" class="form-label" data-i18n="email">Email</label>
+                                    <input type="email" id="register-email" class="form-input" placeholder="votre@email.com" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="register-phone" class="form-label" data-i18n="phone">Téléphone</label>
+                                    <input type="tel" id="register-phone" class="form-input" placeholder="6XX XXX XXX" required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="register-password" class="form-label" data-i18n="password">Mot de passe</label>
+                                    <input type="password" id="register-password" class="form-input" placeholder="••••••••" required>
+                                    <p class="text-xs text-gray-500 mt-1" data-i18n="passwordRequirements">8 caractères minimum avec au moins un chiffre</p>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="register-confirm-password" class="form-label" data-i18n="confirmPassword">Confirmer le mot de passe</label>
+                                    <input type="password" id="register-confirm-password" class="form-input" placeholder="••••••••" required>
+                                </div>
+                                
+                                <div class="flex items-center mb-6">
+                                    <input type="checkbox" id="accept-terms" class="rounded text-green-600 focus:ring-green-500" required>
+                                    <label for="accept-terms" class="ml-2 text-sm">
+                                        <span data-i18n="acceptTerms">J'accepte les</span>
+                                        <a href="#" class="text-green-600 hover:underline" data-i18n="terms">conditions d'utilisation</a>
+                                    </label>
+                                </div>
+                                
+                                <button type="submit" class="btn-primary mb-4" data-i18n="register">S'inscrire</button>
+                                
+                                <p class="text-center text-sm">
+                                    <span data-i18n="alreadyAccount">Vous avez déjà un compte?</span>
+                                    <a href="#" class="auth-link ml-1" id="show-login" data-i18n="loginHere">Connectez-vous ici</a>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right side - Image & Welcome -->
+                <div class="w-full md:w-1/2 auth-image">
+                    <div class="auth-image-content">
+                        <h2 data-i18n="joinOurCommunity">Rejoignez notre communauté</h2>
+                        <p data-i18n="authBenefits">Créez un compte pour bénéficier de nombreux avantages : suivi des commandes, historique d'achat, offres spéciales et bien plus encore.</p>
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-shrink-0">
+                                <img src="{% static 'logo/logo_caroline_bby.png' %}" alt="BueaDelights" class="w-16 h-16 rounded-full border-2 border-white">
+                            </div>
+                            <div>
+                                <p class="font-medium" data-i18n="trustedBy">Fiable et sécurisé</p>
+                                <div class="flex text-yellow-400">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <p>© 2025 BueaDelights. <span data-i18n="allRightsReserved">Tous droits réservés</span>.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize loader
+            initLoader();
+            
+            // Initialize language switcher
+            initLanguageSwitcher();
+            
+            // Tab switching functionality
+            const tabs = document.querySelectorAll('.auth-tab');
+            const forms = document.querySelectorAll('.auth-form');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Update tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update forms
+                    forms.forEach(form => {
+                        form.classList.remove('active');
+                        if (form.id === `${tabId}-form`) {
+                            form.classList.add('active');
+                        }
+                    });
+                });
+            });
+            
+            // Switch between login and register forms
+            document.getElementById('show-register').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector('.auth-tab[data-tab="register"]').click();
+            });
+            
+            document.getElementById('show-login').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector('.auth-tab[data-tab="login"]').click();
+            });
+            
+            // Form submissions
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Add your login logic here
+                console.log('Login form submitted');
+                // Redirect to home or dashboard after successful login
+                // window.location.href = "{% url 'homepage' %}";
+            });
+            
+            document.getElementById('registerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Add your registration logic here
+                console.log('Register form submitted');
+                // Show success message and switch to login form
+                alert(currentLang === 'fr' ? 'Inscription réussie! Vous pouvez maintenant vous connecter.' : 'Registration successful! You can now login.');
+                document.querySelector('.auth-tab[data-tab="login"]').click();
+                this.reset();
+            });
+        });
+        
+        // Loader function
+        function initLoader() {
+            window.addEventListener('load', function() {
+                setTimeout(function() {
+                    document.getElementById('loader').style.opacity = '0';
+                    setTimeout(function() {
+                        document.getElementById('loader').style.display = 'none';
+                    }, 500);
+                }, 1000);
+            });
+        }
+        
+        // Language switcher (simplified version from your main page)
+        let currentLang = localStorage.getItem('lang') || 'fr';
+        
+        function initLanguageSwitcher() {
+            const langSwitch = document.getElementById('langSwitch');
+            
+            langSwitch.addEventListener('click', function() {
+                const newLang = currentLang === 'fr' ? 'en' : 'fr';
+                updateLanguage(newLang);
+            });
+            
+            // Initialize language on page load
+            updateLanguage(currentLang);
+        }
+        
+        function updateLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            document.documentElement.lang = lang;
+            
+            // Translations object (simplified version)
+            const translations = {
+                en: {
+                    "login": "Login",
+                    "register": "Register",
+                    "welcomeBack": "Welcome back",
+                    "email": "Email",
+                    "password": "Password",
+                    "rememberMe": "Remember me",
+                    "forgotPassword": "Forgot password?",
+                    "or": "Or",
+                    "google": "Google",
+                    "facebook": "Facebook",
+                    "noAccount": "Don't have an account?",
+                    "registerHere": "Register here",
+                    "createAccount": "Create account",
+                    "firstName": "First name",
+                    "lastName": "Last name",
+                    "phone": "Phone",
+                    "confirmPassword": "Confirm password",
+                    "passwordRequirements": "Minimum 8 characters with at least one number",
+                    "acceptTerms": "I accept the",
+                    "terms": "terms of service",
+                    "alreadyAccount": "Already have an account?",
+                    "loginHere": "Login here",
+                    "joinOurCommunity": "Join our community",
+                    "authBenefits": "Create an account to enjoy many benefits: order tracking, purchase history, special offers and much more.",
+                    "trustedBy": "Trusted and secure",
+                    "allRightsReserved": "All rights reserved",
+                    "backToHome": "Back to home"
+                },
+                fr: {
+                    "login": "Connexion",
+                    "register": "Inscription",
+                    "welcomeBack": "Bienvenue de retour",
+                    "email": "Email",
+                    "password": "Mot de passe",
+                    "rememberMe": "Se souvenir de moi",
+                    "forgotPassword": "Mot de passe oublié?",
+                    "or": "Ou",
+                    "google": "Google",
+                    "facebook": "Facebook",
+                    "noAccount": "Pas encore de compte?",
+                    "registerHere": "Inscrivez-vous ici",
+                    "createAccount": "Créer un compte",
+                    "firstName": "Prénom",
+                    "lastName": "Nom",
+                    "phone": "Téléphone",
+                    "confirmPassword": "Confirmer le mot de passe",
+                    "passwordRequirements": "8 caractères minimum avec au moins un chiffre",
+                    "acceptTerms": "J'accepte les",
+                    "terms": "conditions d'utilisation",
+                    "alreadyAccount": "Vous avez déjà un compte?",
+                    "loginHere": "Connectez-vous ici",
+                    "joinOurCommunity": "Rejoignez notre communauté",
+                    "authBenefits": "Créez un compte pour bénéficier de nombreux avantages : suivi des commandes, historique d'achat, offres spéciales et bien plus encore.",
+                    "trustedBy": "Fiable et sécurisé",
+                    "allRightsReserved": "Tous droits réservés",
+                    "backToHome": "Retour à l'accueil"
+                }
+            };
+            
+            // Update all elements with data-i18n attribute
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.placeholder = translations[lang][key];
+                    } else {
+                        element.innerHTML = translations[lang][key];
+                    }
+                }
+            });
+        }
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-md');
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+        });
+    </script>
+</body>
+</html>
