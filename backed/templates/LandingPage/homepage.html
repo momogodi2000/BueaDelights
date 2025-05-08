@@ -295,9 +295,11 @@
             <a href="#contact" class="hover:text-green-600 transition py-2" data-i18n="contact">Contact</a>
             
             <!-- Mobile Login Button -->
-            <button id="mobileLoginButton" class="flex items-center justify-center space-x-2 bg-gradient-to-r from-green-600 to-yellow-500 text-white px-4 py-2 rounded-full hover:opacity-90 transition mt-4">
-                <i class="fas fa-sign-in-alt"></i>
-                <span data-i18n="login">Connexion</span>
+            <button onclick="window.location.href='{% url 'login' %}'" 
+            class="flex items-center space-x-1 bg-gradient-to-r from-green-600 to-yellow-500 text-white px-4 py-2 rounded-full hover:opacity-90 transition transform hover:scale-105"
+            id="loginButton">
+            <i class="fas fa-sign-in-alt"></i>
+            <span data-i18n="login">Connexion</span>
             </button>
             
             <button id="mobileThemeToggle" class="flex items-center space-x-2 py-2">
@@ -914,22 +916,37 @@
                 <div class="md:w-1/2 mb-8 md:mb-0">
                     <div class="bg-white rounded-xl shadow-lg p-6 h-full">
                         <h3 class="text-2xl font-bold mb-6" data-i18n="sendMessage">Envoyez-nous un message</h3>
-                        <form>
+                        <form method="post" action="{% url 'homepage' %}" id="contactForm">
+                            {% csrf_token %}
+                            <input type="hidden" name="contact_submit" value="1">
+                            
                             <div class="mb-4">
-                                <label for="name" class="block text-gray-700 mb-2" data-i18n="fullName">Nom complet</label>
-                                <input type="text" id="name" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Votre nom" data-i18n="namePlaceholder">
+                                <label for="id_name" class="block text-gray-700 mb-2" data-i18n="fullName">Nom complet</label>
+                                {{ contact_form.name }}
+                                {% if contact_form.name.errors %}
+                                    <div class="text-red-500 text-sm mt-1">{{ contact_form.name.errors }}</div>
+                                {% endif %}
                             </div>
                             <div class="mb-4">
-                                <label for="email" class="block text-gray-700 mb-2">Email</label>
-                                <input type="email" id="email" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="votre@email.com">
+                                <label for="id_email" class="block text-gray-700 mb-2">Email</label>
+                                {{ contact_form.email }}
+                                {% if contact_form.email.errors %}
+                                    <div class="text-red-500 text-sm mt-1">{{ contact_form.email.errors }}</div>
+                                {% endif %}
                             </div>
                             <div class="mb-4">
-                                <label for="phone" class="block text-gray-700 mb-2" data-i18n="phone">Téléphone</label>
-                                <input type="tel" id="phone" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="6XX XXX XXX">
+                                <label for="id_phone" class="block text-gray-700 mb-2" data-i18n="phone">Téléphone</label>
+                                {{ contact_form.phone }}
+                                {% if contact_form.phone.errors %}
+                                    <div class="text-red-500 text-sm mt-1">{{ contact_form.phone.errors }}</div>
+                                {% endif %}
                             </div>
                             <div class="mb-6">
-                                <label for="message" class="block text-gray-700 mb-2" data-i18n="message">Message</label>
-                                <textarea id="message" rows="4" class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600" placeholder="Votre message..." data-i18n="messagePlaceholder"></textarea>
+                                <label for="id_message" class="block text-gray-700 mb-2" data-i18n="message">Message</label>
+                                {{ contact_form.message }}
+                                {% if contact_form.message.errors %}
+                                    <div class="text-red-500 text-sm mt-1">{{ contact_form.message.errors }}</div>
+                                {% endif %}
                             </div>
                             <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition transform hover:scale-105" data-i18n="sendMessageBtn">
                                 Envoyer le message
@@ -1024,12 +1041,18 @@
                     <p class="text-green-100" data-i18n="newsletterText">Inscrivez-vous à notre newsletter pour recevoir nos offres spéciales et nouveautés en avant-première.</p>
                 </div>
                 <div class="md:w-1/2">
-                    <form class="flex flex-col sm:flex-row gap-4">
-                        <input type="email" placeholder="Votre adresse email" class="flex-1 py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" data-i18n="emailPlaceholder">
+                    <form method="post" action="{% url 'homepage' %}" id="newsletterForm" class="flex flex-col sm:flex-row gap-4">
+                        {% csrf_token %}
+                        <input type="hidden" name="newsletter_submit" value="1">
+                        
+                        {{ newsletter_form.email }}
                         <button type="submit" class="bg-yellow-500 hover:bg-yellow-600 text-green-800 font-bold py-3 px-6 rounded-lg transition transform hover:scale-105" data-i18n="subscribe">
                             S'inscrire
                         </button>
                     </form>
+                    {% if newsletter_form.email.errors %}
+                        <div class="text-red-500 text-sm mt-2">{{ newsletter_form.email.errors }}</div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -1099,6 +1122,77 @@
         </div>
     </footer>
 <script>
+    // contact us and newLang
+    // AJAX form submissions
+    document.getElementById('newsletterForm')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const form = this;
+        const formData = new FormData(form);
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success message
+                alert(currentLang === 'fr' ? 'Merci pour votre inscription à notre newsletter!' : 'Thank you for subscribing to our newsletter!');
+                form.reset();
+            } else {
+                // Show errors
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'text-red-500 text-sm mt-2';
+                errorDiv.textContent = data.errors.email ? data.errors.email[0] : 'An error occurred';
+                
+                const existingError = form.nextElementSibling;
+                if (existingError && existingError.classList.contains('text-red-500')) {
+                    existingError.replaceWith(errorDiv);
+                } else {
+                    form.after(errorDiv);
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
+    // Display Django messages
+    document.addEventListener('DOMContentLoaded', function() {
+        const messages = document.createElement('div');
+        messages.className = 'fixed top-20 right-4 z-50 space-y-2';
+        
+        {% for message in messages %}
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'px-4 py-2 rounded shadow-lg text-white font-medium ';
+            
+            {% if message.tags == 'success' %}
+                messageDiv.className += 'bg-green-500';
+            {% elif message.tags == 'error' %}
+                messageDiv.className += 'bg-red-500';
+            {% elif message.tags == 'info' %}
+                messageDiv.className += 'bg-blue-500';
+            {% else %}
+                messageDiv.className += 'bg-gray-500';
+            {% endif %}
+            
+            messageDiv.textContent = '{{ message }}';
+            messages.appendChild(messageDiv);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        {% endfor %}
+        
+        if ({% if messages %}true{% else %}false{% endif %}) {
+            document.body.appendChild(messages);
+        }
+    });
     // Main App Script
     document.addEventListener('DOMContentLoaded', function() {
         // Initialize components
@@ -2006,6 +2100,7 @@
         });
     }
 
+    
     // Navbar scroll effect
     window.addEventListener('scroll', function() {
         const navbar = document.getElementById('navbar');

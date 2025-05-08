@@ -1,0 +1,244 @@
+{% extends 'Layout/delivery_base.html' %}
+{% load static %}
+
+{% block title %}Tableau de Bord Livreur{% endblock %}
+
+{% block page_title %}Tableau de Bord Livreur{% endblock %}
+
+{% block content %}
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div class="card bg-white rounded-lg shadow p-6 dark:bg-gray-800">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" data-i18n="today_deliveries">Livraisons Aujourd'hui</p>
+                    <h3 class="text-2xl font-bold">8</h3>
+                </div>
+                <div class="p-3 rounded-full bg-green-100 text-green-600 dark:bg-green-900 dark:text-green-200">
+                    <i class="fas fa-motorcycle"></i>
+                </div>
+            </div>
+            <p class="text-sm text-green-600 dark:text-green-400 mt-2">
+                <i class="fas fa-arrow-up mr-1"></i> 2 depuis hier
+            </p>
+        </div>
+        
+        <div class="card bg-white rounded-lg shadow p-6 dark:bg-gray-800">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" data-i18n="in_progress">En Cours</p>
+                    <h3 class="text-2xl font-bold">3</h3>
+                </div>
+                <div class="p-3 rounded-full bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-200">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </div>
+            <p class="text-sm text-blue-600 dark:text-blue-400 mt-2">
+                <i class="fas fa-arrow-down mr-1"></i> 1 depuis hier
+            </p>
+        </div>
+        
+        <div class="card bg-white rounded-lg shadow p-6 dark:bg-gray-800">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" data-i18n="today_earnings">Gains Aujourd'hui</p>
+                    <h3 class="text-2xl font-bold">12,500 FCFA</h3>
+                </div>
+                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600 dark:bg-yellow-900 dark:text-yellow-200">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+            </div>
+            <p class="text-sm text-yellow-600 dark:text-yellow-400 mt-2">
+                <i class="fas fa-arrow-up mr-1"></i> 1,500 FCFA depuis hier
+            </p>
+        </div>
+        
+        <div class="card bg-white rounded-lg shadow p-6 dark:bg-gray-800">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400" data-i18n="delays">Retards</p>
+                    <h3 class="text-2xl font-bold">1</h3>
+                </div>
+                <div class="p-3 rounded-full bg-red-100 text-red-600 dark:bg-red-900 dark:text-red-200">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+            </div>
+            <p class="text-sm text-red-600 dark:text-red-400 mt-2">
+                <i class="fas fa-arrow-down mr-1"></i> 0 depuis hier
+            </p>
+        </div>
+    </div>
+    
+    <!-- Current Deliveries -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Active Deliveries -->
+        <div class="lg:col-span-2">
+            <div class="card bg-white rounded-lg shadow dark:bg-gray-800">
+                <div class="p-4 border-b dark:border-gray-700 flex justify-between items-center">
+                    <h2 class="font-bold text-lg" data-i18n="active_deliveries">Livraisons Actives</h2>
+                    <a href="#" class="text-sm text-green-600 hover:underline" data-i18n="see_all">Voir Tout</a>
+                </div>
+                <div class="p-4">
+                    <div class="space-y-4">
+                        <!-- Delivery 1 -->
+                        <div class="order-card border rounded-lg p-4 hover:shadow-md transition dark:border-gray-700">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-medium">#BD-1005 - Fufu et Eru</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">M. Jean Dupont</p>
+                                    <p class="text-sm mt-2">
+                                        <i class="fas fa-map-marker-alt text-green-600 mr-2"></i>
+                                        <span>Rue de l'Université, Buea</span>
+                                    </p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium status-in-progress" data-i18n="in_progress">
+                                    En Cours
+                                </span>
+                            </div>
+                            <div class="mt-4 flex justify-between items-center">
+                                <div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400" data-i18n="delivery_time">Heure de livraison</p>
+                                    <p class="text-sm">12:30 - 13:00</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700">
+                                        <i class="fas fa-phone-alt mr-1"></i> <span data-i18n="call">Appeler</span>
+                                    </button>
+                                    <button class="px-3 py-1 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">
+                                        <i class="fas fa-check mr-1"></i> <span data-i18n="complete">Terminer</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Delivery 2 -->
+                        <div class="order-card border rounded-lg p-4 hover:shadow-md transition dark:border-gray-700">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-medium">#BD-1006 - Chips de plantain</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Mme. Sophie Ekonde</p>
+                                    <p class="text-sm mt-2">
+                                        <i class="fas fa-map-marker-alt text-green-600 mr-2"></i>
+                                        <span>Quartier Molyko, Buea</span>
+                                    </p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium status-pending" data-i18n="pending">
+                                    En Attente
+                                </span>
+                            </div>
+                            <div class="mt-4 flex justify-between items-center">
+                                <div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400" data-i18n="delivery_time">Heure de livraison</p>
+                                    <p class="text-sm">13:30 - 14:00</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700">
+                                        <i class="fas fa-phone-alt mr-1"></i> <span data-i18n="call">Appeler</span>
+                                    </button>
+                                    <button class="px-3 py-1 bg-yellow-500 text-white rounded-lg text-sm hover:bg-yellow-600">
+                                        <i class="fas fa-play mr-1"></i> <span data-i18n="start">Commencer</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Delivery 3 -->
+                        <div class="order-card border rounded-lg p-4 hover:shadow-md transition dark:border-gray-700">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-medium">#BD-1004 - Jus de gingembre</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">M. Pierre Mbarga</p>
+                                    <p class="text-sm mt-2">
+                                        <i class="fas fa-map-marker-alt text-green-600 mr-2"></i>
+                                        <span>Bonakanda, Buea</span>
+                                    </p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium status-pending" data-i18n="late">
+                                    En Retard
+                                </span>
+                            </div>
+                            <div class="mt-4 flex justify-between items-center">
+                                <div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400" data-i18n="delivery_time">Heure de livraison</p>
+                                    <p class="text-sm">11:30 - 12:00</p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700">
+                                        <i class="fas fa-phone-alt mr-1"></i> <span data-i18n="call">Appeler</span>
+                                    </button>
+                                    <button class="px-3 py-1 bg-yellow-500 text-white rounded-lg text-sm hover:bg-yellow-600">
+                                        <i class="fas fa-play mr-1"></i> <span data-i18n="start">Commencer</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Delivery Map and Info -->
+        <div>
+            <!-- Delivery Zone Map -->
+            <div class="card bg-white rounded-lg shadow mb-6 dark:bg-gray-800">
+                <div class="p-4 border-b dark:border-gray-700">
+                    <h2 class="font-bold text-lg" data-i18n="delivery_zone">Ma Zone de Livraison</h2>
+                </div>
+                <div class="p-4">
+                    <div class="bg-gray-200 rounded-lg h-48 flex items-center justify-center dark:bg-gray-700">
+                        <i class="fas fa-map-marked-alt text-4xl text-gray-400"></i>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-sm">
+                            <i class="fas fa-info-circle text-green-600 mr-2"></i>
+                            <span data-i18n="zone">Zone</span>: Molyko, Bonakanda, Bonduma
+                        </p>
+                        <p class="text-sm mt-2">
+                            <i class="fas fa-clock text-green-600 mr-2"></i>
+                            <span data-i18n="hours">Heures</span>: 8h - 18h (Lun-Sam)
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Delivery Tips -->
+            <div class="card bg-white rounded-lg shadow dark:bg-gray-800">
+                <div class="p-4 border-b dark:border-gray-700">
+                    <h2 class="font-bold text-lg" data-i18n="delivery_tips">Conseils de Livraison</h2>
+                </div>
+                <div class="p-4">
+                    <div class="flex items-start mb-3">
+                        <div class="flex-shrink-0 text-green-600 mt-1 mr-3">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium" data-i18n="always_check">Vérifiez toujours l'adresse avant de partir</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start mb-3">
+                        <div class="flex-shrink-0 text-green-600 mt-1 mr-3">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium" data-i18n="call_customer">Appelez le client si vous êtes en retard</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 text-green-600 mt-1 mr-3">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium" data-i18n="customer_satisfaction">Vérifiez que le client est satisfait avant de partir</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Additional delivery dashboard-specific scripts can go here
+</script>
+{% endblock %}

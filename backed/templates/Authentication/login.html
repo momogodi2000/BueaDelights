@@ -329,7 +329,7 @@
                                         <input type="checkbox" id="remember-me" class="rounded text-green-600 focus:ring-green-500">
                                         <label for="remember-me" class="ml-2 text-sm" data-i18n="rememberMe">Se souvenir de moi</label>
                                     </div>
-                                    <a href="#" class="text-sm text-green-600 hover:underline" data-i18n="forgotPassword">Mot de passe oublié?</a>
+                                    <a href="{% url 'forgot_password' %}" class="text-sm text-green-600 hover:underline" data-i18n="forgotPassword">Mot de passe oublié?</a>
                                 </div>
                                 
                                 <button type="submit" class="btn-primary mb-4" data-i18n="login">Se connecter</button>

@@ -1,0 +1,318 @@
+{% extends 'Layout/admin_base.html' %}
+{% load static %}
+
+{% block title %}Tableau de Bord Admin{% endblock %}
+
+{% block page_title %}Tableau de Bord{% endblock %}
+
+{% block content %}
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <div class="card bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500" data-i18n="today_orders">Commandes Aujourd'hui</p>
+                    <h3 class="text-2xl font-bold">24</h3>
+                </div>
+                <div class="p-3 rounded-full bg-green-100 text-green-600">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+            </div>
+            <p class="text-sm text-green-600 mt-2">
+                <i class="fas fa-arrow-up mr-1"></i> 12% depuis hier
+            </p>
+        </div>
+        
+        <div class="card bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500" data-i18n="total_revenue">Revenu Total</p>
+                    <h3 class="text-2xl font-bold">156,500 FCFA</h3>
+                </div>
+                <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+            </div>
+            <p class="text-sm text-green-600 mt-2">
+                <i class="fas fa-arrow-up mr-1"></i> 8% depuis hier
+            </p>
+        </div>
+        
+        <div class="card bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500" data-i18n="new_customers">Nouveaux Clients</p>
+                    <h3 class="text-2xl font-bold">7</h3>
+                </div>
+                <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
+            <p class="text-sm text-green-600 mt-2">
+                <i class="fas fa-arrow-up mr-1"></i> 5% depuis hier
+            </p>
+        </div>
+        
+        <div class="card bg-white rounded-lg shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500" data-i18n="out_of_stock">Produits en Rupture</p>
+                    <h3 class="text-2xl font-bold">3</h3>
+                </div>
+                <div class="p-3 rounded-full bg-red-100 text-red-600">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+            </div>
+            <p class="text-sm text-red-600 mt-2">
+                <i class="fas fa-arrow-down mr-1"></i> 2 <span data-i18n="products">produits</span> depuis hier
+            </p>
+        </div>
+    </div>
+    
+    <!-- Recent Orders and Stats -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Recent Orders -->
+        <div class="lg:col-span-2">
+            <div class="card bg-white rounded-lg shadow">
+                <div class="p-4 border-b flex justify-between items-center">
+                    <h2 class="font-bold text-lg" data-i18n="recent_orders">Commandes Récentes</h2>
+                    <a href="#" class="text-sm text-green-600 hover:underline" data-i18n="see_all">Voir Tout</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="customers">Client</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="amount">Montant</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="status">Statut</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="date">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#BD-1001</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-10 w-10">
+                                            <img class="h-10 w-10 rounded-full" src="{% static 'avatars/avartar.jpeg' %}" alt="">
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900">Jean Dupont</div>
+                                            <div class="text-sm text-gray-500">jean@example.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15,000 FCFA</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800" data-i18n="delivered">
+                                        Livré
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">08/05/2025</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#BD-1000</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-10 w-10">
+                                            <img class="h-10 w-10 rounded-full" src="{% static 'avatars/girls.jpeg' %}" alt="">
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900">Marie Njoh</div>
+                                            <div class="text-sm text-gray-500">marie@example.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">12,500 FCFA</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800" data-i18n="in_progress">
+                                        En cours
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">07/05/2025</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#BD-999</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-10 w-10">
+                                            <img class="h-10 w-10 rounded-full" src="{% static 'avatars/avartar.jpeg' %}" alt="">
+                                        </div>
+                                        <div class="ml-4">
+                                            <div class="text-sm font-medium text-gray-900">Pierre Mbarga</div>
+                                            <div class="text-sm text-gray-500">pierre@example.com</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">8,000 FCFA</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800" data-i18n="confirmed">
+                                        Confirmé
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">07/05/2025</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Stats -->
+        <div>
+            <div class="card bg-white rounded-lg shadow mb-6">
+                <div class="p-4 border-b">
+                    <h2 class="font-bold text-lg" data-i18n="quick_stats">Statistiques Rapides</h2>
+                </div>
+                <div class="p-4">
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-500 mb-1" data-i18n="orders_this_month">Commandes ce mois</p>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-green-600 h-2.5 rounded-full" style="width: 75%"></div>
+                        </div>
+                        <p class="text-right text-sm mt-1">75% (150/200)</p>
+                    </div>
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-500 mb-1" data-i18n="new_customers">Nouveaux clients</p>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
+                        </div>
+                        <p class="text-right text-sm mt-1">45% (45/100)</p>
+                    </div>
+                    <div class="mb-4">
+                        <p class="text-sm text-gray-500 mb-1" data-i18n="conversion_rate">Taux de conversion</p>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-yellow-500 h-2.5 rounded-full" style="width: 30%"></div>
+                        </div>
+                        <p class="text-right text-sm mt-1">30% (150/500)</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product Alerts -->
+            <div class="card bg-white rounded-lg shadow">
+                <div class="p-4 border-b">
+                    <h2 class="font-bold text-lg" data-i18n="product_alerts">Alertes Produits</h2>
+                </div>
+                <div class="p-4">
+                    <div class="flex items-start mb-3">
+                        <div class="flex-shrink-0 text-red-500 mt-1 mr-3">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium">Chips de plantain <span data-i18n="out_of_stock_alert">en rupture</span></p>
+                            <p class="text-xs text-gray-500"><span data-i18n="stock">Stock</span>: 0 <span data-i18n="units">unités</span></p>
+                        </div>
+                    </div>
+                    <div class="flex items-start mb-3">
+                        <div class="flex-shrink-0 text-yellow-500 mt-1 mr-3">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium">Jus de gingembre <span data-i18n="low_stock_alert">stock faible</span></p>
+                            <p class="text-xs text-gray-500"><span data-i18n="stock">Stock</span>: 5 <span data-i18n="units">unités</span></p>
+                        </div>
+                    </div>
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 text-yellow-500 mt-1 mr-3">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium">Yaourt aux fruits <span data-i18n="low_stock_alert">stock faible</span></p>
+                            <p class="text-xs text-gray-500"><span data-i18n="stock">Stock</span>: 3 <span data-i18n="units">unités</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Products -->
+    <div class="mt-6">
+        <div class="card bg-white rounded-lg shadow">
+            <div class="p-4 border-b flex justify-between items-center">
+                <h2 class="font-bold text-lg" data-i18n="popular_products">Produits Populaires</h2>
+                <a href="#" class="text-sm text-green-600 hover:underline" data-i18n="see_all">Voir Tout</a>
+            </div>
+            <div class="p-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="border rounded-lg overflow-hidden hover:shadow-md transition">
+                        <img src="{% static 'image/Chips de plantain.jpeg' %}" alt="Chips de plantain" class="w-full h-40 object-cover">
+                        <div class="p-3">
+                            <h3 class="font-medium">Chips de plantain</h3>
+                            <p class="text-sm text-gray-500">1500 FCFA</p>
+                            <div class="flex items-center mt-2">
+                                <div class="flex text-yellow-400 text-sm">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span class="text-xs text-gray-500 ml-1">(24)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border rounded-lg overflow-hidden hover:shadow-md transition">
+                        <img src="{% static 'image/jus.jpeg' %}" alt="Jus de gingembre" class="w-full h-40 object-cover">
+                        <div class="p-3">
+                            <h3 class="font-medium">Jus de gingembre</h3>
+                            <p class="text-sm text-gray-500">1000 FCFA</p>
+                            <div class="flex items-center mt-2">
+                                <div class="flex text-yellow-400 text-sm">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <span class="text-xs text-gray-500 ml-1">(18)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border rounded-lg overflow-hidden hover:shadow-md transition">
+                        <img src="{% static 'image/fufu.jpeg' %}" alt="Fufu et Eru" class="w-full h-40 object-cover">
+                        <div class="p-3">
+                            <h3 class="font-medium">Fufu et Eru</h3>
+                            <p class="text-sm text-gray-500">3000 FCFA</p>
+                            <div class="flex items-center mt-2">
+                                <div class="flex text-yellow-400 text-sm">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="text-xs text-gray-500 ml-1">(32)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border rounded-lg overflow-hidden hover:shadow-md transition">
+                        <img src="{% static 'image/kossam.jpeg' %}" alt="Yaourt aux fruits" class="w-full h-40 object-cover">
+                        <div class="p-3">
+                            <h3 class="font-medium">Yaourt aux fruits</h3>
+                            <p class="text-sm text-gray-500">1200 FCFA</p>
+                            <div class="flex items-center mt-2">
+                                <div class="flex text-yellow-400 text-sm">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span class="text-xs text-gray-500 ml-1">(21)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Additional dashboard-specific scripts can go here
+</script>
+{% endblock %}

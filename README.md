@@ -180,4 +180,9 @@ BueaDelights est un projet développé pour soutenir les entrepreneurs locaux à
 
 ---
 
+ngrok http 8000
+
+
+
+
 Développé avec ❤️ pour l'entreprenariat camerounais

@@ -1,0 +1,377 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BueaDelights - {% block title %}Tableau de Bord Admin{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #007749;
+            --secondary-color: #CE1126;
+            --accent-color: #FCD116;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --dark-bg: #1a1a1a;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-item:hover {
+            background-color: rgba(0, 119, 73, 0.1);
+        }
+        
+        .sidebar-item.active {
+            background-color: rgba(0, 119, 73, 0.2);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .card {
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Dark mode */
+        .dark {
+            --text-color: #e2e8f0;
+            --bg-color: #121212;
+        }
+        
+        .dark body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+        }
+        
+        .dark .sidebar {
+            background-color: #1e293b;
+        }
+        
+        .dark .card {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+
+        /* Mobile sidebar */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                z-index: 50;
+                transform: translateX(-100%);
+            }
+            .sidebar.mobile-show {
+                transform: translateX(0);
+            }
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 40;
+            }
+            .sidebar-overlay.mobile-show {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex h-screen overflow-hidden">
+    <!-- Sidebar Overlay (Mobile only) -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+    
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar w-64 bg-white shadow-md flex flex-col">
+        <!-- Logo -->
+        <div class="p-4 flex items-center space-x-2 border-b">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-yellow-500 flex items-center justify-center">
+                <span class="text-white font-bold text-xl">BD</span>
+            </div>
+            <div>
+                <span class="font-bold text-xl text-green-600">Buea<span class="text-yellow-500">Delights</span></span>
+                <p class="text-xs text-gray-500" data-i18n="admin_panel">Admin Panel</p>
+            </div>
+        </div>
+        
+        <!-- User Profile -->
+        <div class="p-4 border-b flex items-center space-x-3">
+            <img src="{% static 'avatars/admin-avatar.jpg' %}" alt="Admin" class="w-10 h-10 rounded-full border-2 border-green-500">
+            <div>
+                <p class="font-medium" data-i18n="admin_user">Admin User</p>
+                <p class="text-xs text-gray-500" data-i18n="super_admin">Super Admin</p>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="flex-1 overflow-y-auto">
+            <ul class="py-2">
+                <li>
+                    <a href="#" class="sidebar-item active flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-tachometer-alt mr-3 text-green-600"></i>
+                        <span data-i18n="dashboard">Tableau de Bord</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-box-open mr-3 text-green-600"></i>
+                        <span data-i18n="products">Produits</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-list-alt mr-3 text-green-600"></i>
+                        <span data-i18n="categories">Catégories</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-shopping-cart mr-3 text-green-600"></i>
+                        <span data-i18n="orders">Commandes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-calendar-check mr-3 text-green-600"></i>
+                        <span data-i18n="reservations">Réservations</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-users mr-3 text-green-600"></i>
+                        <span data-i18n="customers">Clients</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-chart-line mr-3 text-green-600"></i>
+                        <span data-i18n="statistics">Statistiques</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-cog mr-3 text-green-600"></i>
+                        <span data-i18n="settings">Paramètres</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Bottom Section -->
+        <div class="p-4 border-t">
+            <button id="themeToggle" class="flex items-center justify-center w-full py-2 rounded-lg bg-gray-100 hover:bg-gray-200">
+                <i class="fas fa-moon mr-2"></i>
+                <span data-i18n="dark_mode">Mode Sombre</span>
+            </button>
+            <div class="flex items-center justify-between mt-2">
+                <button id="languageToggle" class="flex items-center justify-center w-full py-2 rounded-lg bg-gray-100 hover:bg-gray-200 mr-2">
+                    <i class="fas fa-language mr-2"></i>
+                    <span data-i18n="language">English</span>
+                </button>
+                <a href="#" class="flex items-center justify-center w-full py-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 ml-2">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    <span data-i18n="logout">Déconnexion</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Navigation -->
+        <header class="bg-white shadow-sm z-10">
+            <div class="flex items-center justify-between px-6 py-3">
+                <div class="flex items-center">
+                    <button id="sidebarToggle" class="mr-4 text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="text-xl font-bold text-gradient">{% block page_title %}<span data-i18n="dashboard">Tableau de Bord</span>{% endblock %}</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-bell"></i>
+                            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <button class="text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-envelope"></i>
+                            <span class="absolute top-0 right-0 w-2 h-2 bg-blue-500 rounded-full"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script>
+        // Translation dictionary
+        const translations = {
+            'en': {
+                'dashboard': 'Dashboard',
+                'products': 'Products',
+                'categories': 'Categories',
+                'orders': 'Orders',
+                'reservations': 'Reservations',
+                'customers': 'Customers',
+                'statistics': 'Statistics',
+                'settings': 'Settings',
+                'admin_panel': 'Admin Panel',
+                'admin_user': 'Admin User',
+                'super_admin': 'Super Admin',
+                'dark_mode': 'Dark Mode',
+                'light_mode': 'Light Mode',
+                'language': 'Français',
+                'logout': 'Logout',
+                'see_all': 'See All',
+                'today_orders': 'Today Orders',
+                'total_revenue': 'Total Revenue',
+                'new_customers': 'New Customers',
+                'out_of_stock': 'Out of Stock',
+                'recent_orders': 'Recent Orders',
+                'quick_stats': 'Quick Stats',
+                'product_alerts': 'Product Alerts',
+                'popular_products': 'Popular Products',
+                'delivered': 'Delivered',
+                'in_progress': 'In Progress',
+                'confirmed': 'Confirmed',
+                'orders_this_month': 'Orders this month',
+                'conversion_rate': 'Conversion rate',
+                'out_of_stock_alert': 'out of stock',
+                'low_stock_alert': 'low stock',
+                'units': 'units'
+            },
+            'fr': {
+                'dashboard': 'Tableau de Bord',
+                'products': 'Produits',
+                'categories': 'Catégories',
+                'orders': 'Commandes',
+                'reservations': 'Réservations',
+                'customers': 'Clients',
+                'statistics': 'Statistiques',
+                'settings': 'Paramètres',
+                'admin_panel': 'Admin Panel',
+                'admin_user': 'Admin User',
+                'super_admin': 'Super Admin',
+                'dark_mode': 'Mode Sombre',
+                'light_mode': 'Mode Clair',
+                'language': 'English',
+                'logout': 'Déconnexion',
+                'see_all': 'Voir Tout',
+                'today_orders': 'Commandes Aujourd\'hui',
+                'total_revenue': 'Revenu Total',
+                'new_customers': 'Nouveaux Clients',
+                'out_of_stock': 'Produits en Rupture',
+                'recent_orders': 'Commandes Récentes',
+                'quick_stats': 'Statistiques Rapides',
+                'product_alerts': 'Alertes Produits',
+                'popular_products': 'Produits Populaires',
+                'delivered': 'Livré',
+                'in_progress': 'En cours',
+                'confirmed': 'Confirmé',
+                'orders_this_month': 'Commandes ce mois',
+                'conversion_rate': 'Taux de conversion',
+                'out_of_stock_alert': 'en rupture',
+                'low_stock_alert': 'stock faible',
+                'units': 'unités'
+            }
+        };
+
+        // Apply translations
+        function applyTranslations(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        // Toggle sidebar on mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('mobile-show');
+            document.getElementById('sidebarOverlay').classList.toggle('mobile-show');
+        });
+
+        // Close sidebar when clicking overlay
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('mobile-show');
+            this.classList.remove('mobile-show');
+        });
+        
+        // Toggle dark mode
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.documentElement.classList.toggle('dark');
+            
+            // Save preference to localStorage
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+                this.querySelector('span').setAttribute('data-i18n', 'light_mode');
+            } else {
+                localStorage.setItem('theme', 'light');
+                this.querySelector('span').setAttribute('data-i18n', 'dark_mode');
+            }
+            applyTranslations(currentLang);
+        });
+        
+        // Toggle language
+        let currentLang = localStorage.getItem('language') || 'fr';
+        document.getElementById('languageToggle').addEventListener('click', function() {
+            currentLang = currentLang === 'fr' ? 'en' : 'fr';
+            localStorage.setItem('language', currentLang);
+            applyTranslations(currentLang);
+        });
+
+        // Initialize theme and language
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for saved theme preference
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.querySelector('#themeToggle span').setAttribute('data-i18n', 'light_mode');
+            } else {
+                document.querySelector('#themeToggle span').setAttribute('data-i18n', 'dark_mode');
+            }
+            
+            // Apply translations
+            applyTranslations(currentLang);
+            
+            // Set active sidebar item
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,380 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BueaDelights - {% block title %}Tableau de Bord Livreur{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #007749;
+            --secondary-color: #CE1126;
+            --accent-color: #FCD116;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --dark-bg: #1a1a1a;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-item:hover {
+            background-color: rgba(0, 119, 73, 0.1);
+        }
+        
+        .sidebar-item.active {
+            background-color: rgba(0, 119, 73, 0.2);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .order-card {
+            transition: all 0.3s ease;
+        }
+        
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Status badges */
+        .status-pending {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+        
+        .status-in-progress {
+            background-color: #DBEAFE;
+            color: #1E40AF;
+        }
+        
+        .status-delivered {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+        
+        .status-cancelled {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+        
+        /* Dark mode */
+        .dark {
+            --text-color: #e2e8f0;
+            --bg-color: #121212;
+        }
+        
+        .dark body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+        }
+        
+        .dark .sidebar {
+            background-color: #1e293b;
+        }
+        
+        .dark .card {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+
+        /* Mobile sidebar */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                z-index: 50;
+                transform: translateX(-100%);
+            }
+            .sidebar.mobile-show {
+                transform: translateX(0);
+            }
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 40;
+            }
+            .sidebar-overlay.mobile-show {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex h-screen overflow-hidden">
+    <!-- Sidebar Overlay (Mobile only) -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+    
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar w-64 bg-white shadow-md flex flex-col">
+        <!-- Logo -->
+        <div class="p-4 flex items-center space-x-2 border-b">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-yellow-500 flex items-center justify-center">
+                <span class="text-white font-bold text-xl">BD</span>
+            </div>
+            <div>
+                <span class="font-bold text-xl text-green-600">Buea<span class="text-yellow-500">Delights</span></span>
+                <p class="text-xs text-gray-500" data-i18n="delivery_panel">Livreur Panel</p>
+            </div>
+        </div>
+        
+        <!-- User Profile -->
+        <div class="p-4 border-b flex items-center space-x-3">
+            <img src="{% static 'avatars/delivery-avatar.jpg' %}" alt="Livreur" class="w-10 h-10 rounded-full border-2 border-green-500">
+            <div>
+                <p class="font-medium" data-i18n="delivery_user">Jean Mbarga</p>
+                <p class="text-xs text-gray-500" data-i18n="delivery_role">Livreur</p>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="flex-1 overflow-y-auto">
+            <ul class="py-2">
+                <li>
+                    <a href="#" class="sidebar-item active flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-tachometer-alt mr-3 text-green-600"></i>
+                        <span data-i18n="dashboard">Tableau de Bord</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-motorcycle mr-3 text-green-600"></i>
+                        <span data-i18n="my_deliveries">Mes Livraisons</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-history mr-3 text-green-600"></i>
+                        <span data-i18n="history">Historique</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-map-marker-alt mr-3 text-green-600"></i>
+                        <span data-i18n="delivery_zones">Zones de Livraison</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-wallet mr-3 text-green-600"></i>
+                        <span data-i18n="earnings">Gains</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Bottom Section -->
+        <div class="p-4 border-t">
+            <button id="themeToggle" class="flex items-center justify-center w-full py-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600">
+                <i class="fas fa-moon mr-2"></i>
+                <span data-i18n="dark_mode">Mode Sombre</span>
+            </button>
+            <div class="flex items-center justify-between mt-2">
+                <button id="languageToggle" class="flex items-center justify-center w-full py-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 mr-2">
+                    <i class="fas fa-language mr-2"></i>
+                    <span data-i18n="language">English</span>
+                </button>
+                <a href="{% url 'logout' %}" class="flex items-center justify-center w-full py-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900 dark:text-red-100 dark:hover:bg-red-800 ml-2">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    <span data-i18n="logout">Déconnexion</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Navigation -->
+        <header class="bg-white shadow-sm z-10 dark:bg-gray-800">
+            <div class="flex items-center justify-between px-6 py-3">
+                <div class="flex items-center">
+                    <button id="sidebarToggle" class="mr-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="text-xl font-bold text-gradient">{% block page_title %}<span data-i18n="delivery_dashboard">Tableau de Bord Livreur</span>{% endblock %}</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                            <i class="fas fa-bell"></i>
+                            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <button class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                            <i class="fas fa-envelope"></i>
+                            <span class="absolute top-0 right-0 w-2 h-2 bg-blue-500 rounded-full"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-gray-900">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <script>
+        // Translation dictionary
+        const translations = {
+            'en': {
+                'dashboard': 'Dashboard',
+                'my_deliveries': 'My Deliveries',
+                'history': 'History',
+                'delivery_zones': 'Delivery Zones',
+                'earnings': 'Earnings',
+                'delivery_panel': 'Delivery Panel',
+                'delivery_user': 'John Doe',
+                'delivery_role': 'Delivery Person',
+                'delivery_dashboard': 'Delivery Dashboard',
+                'dark_mode': 'Dark Mode',
+                'light_mode': 'Light Mode',
+                'language': 'Français',
+                'logout': 'Logout',
+                'see_all': 'See All',
+                'today_deliveries': 'Today Deliveries',
+                'in_progress': 'In Progress',
+                'today_earnings': 'Today Earnings',
+                'delays': 'Delays',
+                'active_deliveries': 'Active Deliveries',
+                'delivery_zone': 'My Delivery Zone',
+                'delivery_tips': 'Delivery Tips',
+                'zone': 'Zone',
+                'hours': 'Hours',
+                'always_check': 'Always check the address before leaving',
+                'call_customer': 'Call the customer if you are late',
+                'customer_satisfaction': 'Verify customer satisfaction before leaving',
+                'start': 'Start',
+                'complete': 'Complete',
+                'call': 'Call',
+                'pending': 'Pending',
+                'delivery_time': 'Delivery Time',
+                'late': 'Late'
+            },
+            'fr': {
+                'dashboard': 'Tableau de Bord',
+                'my_deliveries': 'Mes Livraisons',
+                'history': 'Historique',
+                'delivery_zones': 'Zones de Livraison',
+                'earnings': 'Gains',
+                'delivery_panel': 'Panel Livreur',
+                'delivery_user': 'Jean Mbarga',
+                'delivery_role': 'Livreur',
+                'delivery_dashboard': 'Tableau de Bord Livreur',
+                'dark_mode': 'Mode Sombre',
+                'light_mode': 'Mode Clair',
+                'language': 'English',
+                'logout': 'Déconnexion',
+                'see_all': 'Voir Tout',
+                'today_deliveries': 'Livraisons Aujourd\'hui',
+                'in_progress': 'En Cours',
+                'today_earnings': 'Gains Aujourd\'hui',
+                'delays': 'Retards',
+                'active_deliveries': 'Livraisons Actives',
+                'delivery_zone': 'Ma Zone de Livraison',
+                'delivery_tips': 'Conseils de Livraison',
+                'zone': 'Zone',
+                'hours': 'Heures',
+                'always_check': 'Vérifiez toujours l\'adresse avant de partir',
+                'call_customer': 'Appelez le client si vous êtes en retard',
+                'customer_satisfaction': 'Vérifiez que le client est satisfait avant de partir',
+                'start': 'Commencer',
+                'complete': 'Terminer',
+                'call': 'Appeler',
+                'pending': 'En Attente',
+                'delivery_time': 'Heure de livraison',
+                'late': 'En Retard'
+            }
+        };
+
+        // Apply translations
+        function applyTranslations(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        // Toggle sidebar on mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('mobile-show');
+            document.getElementById('sidebarOverlay').classList.toggle('mobile-show');
+        });
+
+        // Close sidebar when clicking overlay
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('mobile-show');
+            this.classList.remove('mobile-show');
+        });
+        
+        // Toggle dark mode
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.documentElement.classList.toggle('dark');
+            
+            // Save preference to localStorage
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+                this.querySelector('span').setAttribute('data-i18n', 'light_mode');
+            } else {
+                localStorage.setItem('theme', 'light');
+                this.querySelector('span').setAttribute('data-i18n', 'dark_mode');
+            }
+            applyTranslations(currentLang);
+        });
+        
+        // Toggle language
+        let currentLang = localStorage.getItem('language') || 'fr';
+        document.getElementById('languageToggle').addEventListener('click', function() {
+            currentLang = currentLang === 'fr' ? 'en' : 'fr';
+            localStorage.setItem('language', currentLang);
+            applyTranslations(currentLang);
+        });
+
+        // Initialize theme and language
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for saved theme preference
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.querySelector('#themeToggle span').setAttribute('data-i18n', 'light_mode');
+            } else {
+                document.querySelector('#themeToggle span').setAttribute('data-i18n', 'dark_mode');
+            }
+            
+            // Apply translations
+            applyTranslations(currentLang);
+            
+            // Set active sidebar item
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
