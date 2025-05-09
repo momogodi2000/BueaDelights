@@ -571,10 +571,13 @@
             </div>
             
             <div class="text-center mt-12">
-                <button class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full transition transform hover:scale-105 shadow-lg" data-i18n="viewAllProducts">
-                    Voir tous nos produits <i class="fas fa-arrow-right ml-2"></i>
-                </button>
+                <a href="{% url 'product_list' %}">
+                    <button class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full transition transform hover:scale-105 shadow-lg" data-i18n="viewAllProducts">
+                        Voir tous nos produits <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </a>
             </div>
+            
         </div>
     </section>
 

@@ -1,0 +1,323 @@
+{% extends "Layout/admin_base.html" %}
+{% load static %}
+
+{% block title %}Ajouter un Produit{% endblock %}
+{% block page_title %}<span data-i18n="add_product">Ajouter un Produit</span>{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow rounded-lg p-6">
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        
+        <!-- Product Information -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <h3 class="text-lg font-medium mb-4" data-i18n="product_info">Informations du Produit</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Product Name -->
+                <div>
+                    <label for="{{ form.name.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="product_name">
+                        Nom du Produit
+                    </label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.name.errors }}</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Price -->
+                <div>
+                    <label for="{{ form.price.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="product_price">
+                        Prix (FCFA)
+                    </label>
+                    {{ form.price }}
+                    {% if form.price.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.price.errors }}</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Category Selection -->
+                <div>
+                    <label for="{{ form.category.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="product_category">
+                        Catégorie
+                    </label>
+                    {{ form.category }}
+                    {% if form.category.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.category.errors }}</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Stock Quantity -->
+                <div>
+                    <label for="{{ form.stock_quantity.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="product_stock">
+                        Quantité en Stock
+                    </label>
+                    {{ form.stock_quantity }}
+                    {% if form.stock_quantity.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.stock_quantity.errors }}</p>
+                    {% endif %}
+                </div>
+                
+                <!-- New Category -->
+                <div>
+                    <label for="{{ form.new_category.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="new_category">
+                        Nouvelle Catégorie
+                    </label>
+                    {{ form.new_category }}
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="new_category_help">
+                        Laissez vide si vous sélectionnez une catégorie existante
+                    </p>
+                </div>
+                
+                <!-- Category Type -->
+                <div>
+                    <label for="{{ form.category_type.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="category_type">
+                        Type de Catégorie
+                    </label>
+                    {{ form.category_type }}
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="category_type_help">
+                        Pour les nouvelles catégories uniquement
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Details -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <h3 class="text-lg font-medium mb-4" data-i18n="product_details">Détails du Produit</h3>
+            
+            <div class="space-y-4">
+                <!-- Description -->
+                <div>
+                    <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="product_description">
+                        Description
+                    </label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.description.errors }}</p>
+                    {% endif %}
+                </div>
+                
+                <!-- Ingredients -->
+                <div>
+                    <label for="{{ form.ingredients.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="product_ingredients">
+                        Ingrédients
+                    </label>
+                    {{ form.ingredients }}
+                    {% if form.ingredients.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.ingredients.errors }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Images -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <h3 class="text-lg font-medium mb-4" data-i18n="product_images">Images du Produit</h3>
+            
+            <!-- Main Image -->
+            <div class="mb-4">
+                <label for="{{ form.image.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="main_image">
+                    Image Principale
+                </label>
+                {{ form.image }}
+                {% if form.image.errors %}
+                    <p class="text-red-500 text-xs mt-1">{{ form.image.errors }}</p>
+                {% endif %}
+            </div>
+            
+            <!-- Additional Images -->
+            <div>
+                <h4 class="text-sm font-medium text-gray-700 mb-2" data-i18n="additional_images">Images Additionnelles</h4>
+                
+                {{ image_formset.management_form }}
+                
+                <div class="space-y-4" id="image-formset">
+                    {% for form in image_formset.forms %}
+                        <div class="border border-gray-200 p-3 rounded-lg image-form">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <!-- Image Upload -->
+                                <div class="md:col-span-2">
+                                    <label for="{{ form.image.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="image">
+                                        Image
+                                    </label>
+                                    {{ form.image }}
+                                    {% if form.image.errors %}
+                                        <p class="text-red-500 text-xs mt-1">{{ form.image.errors }}</p>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Is Main Image -->
+                                <div>
+                                    <div class="flex items-center h-full">
+                                        <label class="inline-flex items-center cursor-pointer">
+                                            {{ form.is_main }}
+                                            <span class="ml-2 text-sm text-gray-700" data-i18n="is_main_image">Image Principale</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Alt Text -->
+                            <div class="mt-3">
+                                <label for="{{ form.alt_text.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="alt_text">
+                                    Texte Alternatif
+                                </label>
+                                {{ form.alt_text }}
+                                {% if form.alt_text.errors %}
+                                    <p class="text-red-500 text-xs mt-1">{{ form.alt_text.errors }}</p>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Hidden Fields -->
+                            {% for hidden in form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Status -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+            <h3 class="text-lg font-medium mb-4" data-i18n="product_status">Statut du Produit</h3>
+            
+            <div class="flex space-x-6">
+                <!-- Is Available -->
+                <div class="flex items-center">
+                    {{ form.is_available }}
+                    <label for="{{ form.is_available.id_for_label }}" class="ml-2 text-sm text-gray-700" data-i18n="is_available">
+                        Disponible
+                    </label>
+                </div>
+                
+                <!-- Is Featured -->
+                <div class="flex items-center">
+                    {{ form.is_featured }}
+                    <label for="{{ form.is_featured.id_for_label }}" class="ml-2 text-sm text-gray-700" data-i18n="is_featured">
+                        Mis en Avant
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Form Actions -->
+        <div class="flex justify-end space-x-3">
+            <a href="{% url 'products_list' %}" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg" data-i18n="cancel">
+                Annuler
+            </a>
+            <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg" data-i18n="save_product">
+                Enregistrer le Produit
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Update translation dictionary
+    const additionalTranslations = {
+        'en': {
+            'products_management': 'Products Management',
+            'products_list': 'Products List',
+            'add_product': 'Add Product',
+            'product_info': 'Product Information',
+            'product_name': 'Product Name',
+            'product_price': 'Price (FCFA)',
+            'product_category': 'Category',
+            'product_stock': 'Stock Quantity',
+            'new_category': 'New Category',
+            'new_category_help': 'Leave empty if you select an existing category',
+            'category_type': 'Category Type',
+            'category_type_help': 'For new categories only',
+            'product_details': 'Product Details',
+            'product_description': 'Description',
+            'product_ingredients': 'Ingredients',
+            'product_images': 'Product Images',
+            'main_image': 'Main Image',
+            'additional_images': 'Additional Images',
+            'image': 'Image',
+            'is_main_image': 'Main Image',
+            'alt_text': 'Alternative Text',
+            'product_status': 'Product Status',
+            'is_available': 'Available',
+            'is_featured': 'Featured',
+            'cancel': 'Cancel',
+            'save_product': 'Save Product'
+        },
+        'fr': {
+            'products_management': 'Gestion des Produits',
+            'products_list': 'Liste des Produits',
+            'add_product': 'Ajouter un Produit',
+            'product_info': 'Informations du Produit',
+            'product_name': 'Nom du Produit',
+            'product_price': 'Prix (FCFA)',
+            'product_category': 'Catégorie',
+            'product_stock': 'Quantité en Stock',
+            'new_category': 'Nouvelle Catégorie',
+            'new_category_help': 'Laissez vide si vous sélectionnez une catégorie existante',
+            'category_type': 'Type de Catégorie',
+            'category_type_help': 'Pour les nouvelles catégories uniquement',
+            'product_details': 'Détails du Produit',
+            'product_description': 'Description',
+            'product_ingredients': 'Ingrédients',
+            'product_images': 'Images du Produit',
+            'main_image': 'Image Principale',
+            'additional_images': 'Images Additionnelles',
+            'image': 'Image',
+            'is_main_image': 'Image Principale',
+            'alt_text': 'Texte Alternatif',
+            'product_status': 'Statut du Produit',
+            'is_available': 'Disponible',
+            'is_featured': 'Mis en Avant',
+            'cancel': 'Annuler',
+            'save_product': 'Enregistrer le Produit'
+        }
+    };
+
+    // Merge additional translations with the existing translations
+    document.addEventListener('DOMContentLoaded', function() {
+        // Merge translations
+        for (const lang in additionalTranslations) {
+            if (translations[lang]) {
+                Object.assign(translations[lang], additionalTranslations[lang]);
+            }
+        }
+        
+        // Apply translations
+        applyTranslations(currentLang);
+        
+        // Style form elements
+        styleFormElements();
+    });
+
+    // Function to apply styling to form elements
+    function styleFormElements() {
+        // Style inputs
+        const inputs = document.querySelectorAll('input[type="text"], input[type="number"], textarea, select');
+        inputs.forEach(input => {
+            if (!input.classList.contains('form-styled')) {
+                input.classList.add('form-styled', 'w-full', 'p-2', 'border', 'border-gray-300', 'rounded-md', 'focus:outline-none', 'focus:ring-2', 'focus:ring-green-500', 'focus:border-transparent');
+            }
+        });
+        
+        // Style checkboxes
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            if (!checkbox.classList.contains('form-styled')) {
+                checkbox.classList.add('form-styled', 'h-4', 'w-4', 'text-green-600', 'focus:ring-green-500', 'border-gray-300', 'rounded');
+            }
+        });
+        
+        // Style textareas
+        const textareas = document.querySelectorAll('textarea');
+        textareas.forEach(textarea => {
+            if (!textarea.classList.contains('form-styled')) {
+                textarea.classList.add('form-styled', 'w-full', 'p-2', 'border', 'border-gray-300', 'rounded-md', 'focus:outline-none', 'focus:ring-2', 'focus:ring-green-500', 'focus:border-transparent');
+            }
+        });
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BueaDelights - Options de livraison</title>
+    <meta name="description" content="BueaDelights vous propose des options de livraison flexibles pour vos produits alimentaires locaux de Buea, Cameroun.">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.2/vanilla-tilt.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #007749;
+            --secondary-color: #CE1126;
+            --accent-color: #FCD116;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --dark-bg: #1a1a1a;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(0, 119, 73, 0.1) 0%, rgba(206, 17, 38, 0.1) 100%);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .tilt-card {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .card-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        #threeD-container {
+            width: 100%;
+            height: 300px;
+            position: relative;
+        }
+        
+        .theme-toggle:checked ~ .dark-theme {
+            display: block;
+        }
+        
+        .theme-toggle:checked ~ .light-theme {
+            display: none;
+        }
+        
+        .rotate-icon {
+            animation: rotate 10s linear infinite;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .bounce {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        /* Dark mode */
+        .dark {
+            --text-color: #e2e8f0;
+            --bg-color: #121212;
+        }
+        
+        .dark body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+        }
+        
+        /* For the 3D product animation */
+        .product-container {
+            perspective: 1000px;
+        }
+        
+        .product-card {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .product-container:hover .product-card {
+            transform: rotateY(180deg);
+        }
+        
+        .product-front, .product-back {
+            backface-visibility: hidden;
+        }
+        
+        .product-back {
+            transform: rotateY(180deg);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Loader animation */
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid var(--primary-color);
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        
+        @keyframes rotation {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Mobile menu */
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .mobile-menu.open {
+            transform: translateX(0);
+        }
+        
+        /* Count-up animation */
+        .count-up {
+            transition: all 0.5s ease;
+        }
+
+        /* Language switch button */
+        .lang-switch {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .lang-switch:hover {
+            transform: scale(1.1);
+        }
+
+        /* Step progress animation */
+        .step-progress {
+            position: relative;
+        }
+
+        .step-progress:before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            height: 2px;
+            width: 100%;
+            background-color: #E5E7EB;
+            z-index: -1;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            height: 2px;
+            width: 50%;
+            background-color: #007749;
+            z-index: -1;
+            transition: width 1s ease;
+        }
+
+        /* Loading animation for payment */
+        @keyframes spinner {
+            to {transform: rotate(360deg);}
+        }
+
+        .loading-spinner:before {
+            content: '';
+            box-sizing: border-box;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin-top: -10px;
+            margin-left: -10px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: #ffffff;
+            border-bottom-color: #ffffff;
+            animation: spinner .8s ease infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Header with 3D effect -->
+    <header class="bg-white shadow-md py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div id="logo-animation" class="w-10 h-10"></div>
+                <a href="/" class="text-2xl font-bold text-gradient">BueaDelights</a>
+            </div>
+            
+            <nav class="hidden md:flex space-x-6">
+                <a href="/" class="hover:text-green-600 transition-colors" data-i18n="nav.home">Accueil</a>
+                <a href="/products" class="hover:text-green-600 transition-colors" data-i18n="nav.products">Produits</a>
+                <a href="/about" class="hover:text-green-600 transition-colors" data-i18n="nav.about">À propos</a>
+                <a href="/contact" class="hover:text-green-600 transition-colors" data-i18n="nav.contact">Contact</a>
+            </nav>
+            
+            <div class="flex items-center space-x-4">
+                <a href="/cart" class="relative">
+                    <i class="fas fa-shopping-cart text-xl hover:text-green-600 transition-colors"></i>
+                    <span class="absolute -top-2 -right-2 bg-green-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">3</span>
+                </a>
+                
+                <button id="mobile-menu-toggle" class="md:hidden focus:outline-none">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 w-64 h-full bg-white shadow-lg z-50 p-6">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-xl font-bold text-gradient">Menu</span>
+                <button id="close-menu" class="focus:outline-none">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <nav class="flex flex-col space-y-4">
+                <a href="/" class="hover:text-green-600 transition-colors" data-i18n="nav.home">Accueil</a>
+                <a href="/products" class="hover:text-green-600 transition-colors" data-i18n="nav.products">Produits</a>
+                <a href="/about" class="hover:text-green-600 transition-colors" data-i18n="nav.about">À propos</a>
+                <a href="/contact" class="hover:text-green-600 transition-colors" data-i18n="nav.contact">Contact</a>
+                <a href="/cart" class="hover:text-green-600 transition-colors" data-i18n="nav.cart">Panier</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Checkout Steps with animation -->
+            <div class="flex justify-between mb-8 step-progress">
+                <div class="progress-line"></div>
+                <div class="text-center z-10">
+                    <div class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-lg">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <span class="font-medium" data-i18n="checkout.cart">Panier</span>
+                </div>
+                <div class="text-center z-10">
+                    <div class="w-10 h-10 bg-green-600 text-white rounded-full flex items-center justify-center mx-auto mb-2 shadow-lg pulse">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <span class="font-medium" data-i18n="checkout.delivery">Livraison</span>
+                </div>
+                <div class="text-center z-10">
+                    <div class="w-10 h-10 bg-gray-200 text-gray-700 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <span class="text-gray-500" data-i18n="checkout.payment">Paiement</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8">
+                <!-- Delivery Options with 3D tilt effect -->
+                <div class="md:w-2/3">
+                    <div class="bg-white rounded-lg shadow-md p-6 mb-6 tilt-card" data-tilt data-tilt-max="5" data-tilt-speed="400" data-tilt-perspective="500">
+                        <h2 class="text-2xl font-bold mb-6" data-i18n="delivery.options">Options de livraison</h2>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-start relative overflow-hidden transition-all duration-300 p-3 rounded-lg hover:bg-green-50">
+                                <input type="radio" id="pickup" name="delivery" value="pickup" checked class="mt-1">
+                                <label for="pickup" class="ml-2 w-full">
+                                    <span class="block font-medium" data-i18n="delivery.pickup.title">Retrait sur place</span>
+                                    <span class="block text-sm text-gray-600" data-i18n="delivery.pickup.desc">Venez récupérer votre commande à notre boutique à Buea</span>
+                                    <span class="block text-sm text-green-600 mt-1" data-i18n="delivery.pickup.price">Gratuit</span>
+                                </label>
+                                <i class="fas fa-store text-green-600 absolute right-3 top-3 opacity-50"></i>
+                            </div>
+                            
+                            <div class="flex items-start relative overflow-hidden transition-all duration-300 p-3 rounded-lg hover:bg-green-50">
+                                <input type="radio" id="delivery-buea" name="delivery" value="delivery-buea" class="mt-1">
+                                <label for="delivery-buea" class="ml-2 w-full">
+                                    <span class="block font-medium" data-i18n="delivery.buea.title">Livraison à Buea</span>
+                                    <span class="block text-sm text-gray-600" data-i18n="delivery.buea.desc">Nous livrons votre commande à votre adresse à Buea</span>
+                                    <span class="block text-sm text-green-600 mt-1" data-i18n="delivery.buea.price">1,000 XAF</span>
+                                </label>
+                                <i class="fas fa-bicycle text-green-600 absolute right-3 top-3 opacity-50"></i>
+                            </div>
+                            
+                            <div class="flex items-start relative overflow-hidden transition-all duration-300 p-3 rounded-lg hover:bg-green-50">
+                                <input type="radio" id="delivery-cameroon" name="delivery" value="delivery-cameroon" class="mt-1">
+                                <label for="delivery-cameroon" class="ml-2 w-full">
+                                    <span class="block font-medium" data-i18n="delivery.cameroon.title">Livraison partout au Cameroun</span>
+                                    <span class="block text-sm text-gray-600" data-i18n="delivery.cameroon.desc">Nous organisons l'expédition de votre commande</span>
+                                    <span class="block text-sm text-green-600 mt-1" data-i18n="delivery.cameroon.price">Contactez-nous pour le tarif</span>
+                                </label>
+                                <i class="fas fa-truck text-green-600 absolute right-3 top-3 opacity-50"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Delivery Address with 3D animation -->
+                    <div class="bg-white rounded-lg shadow-md p-6 card-reveal">
+                        <h2 class="text-2xl font-bold mb-6" data-i18n="delivery.address">Adresse de livraison</h2>
+                        
+                        <div class="space-y-4">
+                            <div class="relative">
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="delivery.form.name">Nom complet</label>
+                                <input type="text" id="name" name="name" class="w-full px-4 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500 pl-10">
+                                <i class="fas fa-user absolute left-3 top-9 text-gray-400"></i>
+                            </div>
+                            
+                            <div class="relative">
+                                <label for="phone" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="delivery.form.phone">Téléphone</label>
+                                <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500 pl-10">
+                                <i class="fas fa-phone absolute left-3 top-9 text-gray-400"></i>
+                            </div>
+                            
+                            <div id="address-fields" class="hidden space-y-4">
+                                <div class="relative">
+                                    <label for="address" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="delivery.form.address">Adresse</label>
+                                    <textarea id="address" name="address" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500 pl-10"></textarea>
+                                    <i class="fas fa-map-marker-alt absolute left-3 top-9 text-gray-400"></i>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div class="relative">
+                                        <label for="city" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="delivery.form.city">Ville</label>
+                                        <input type="text" id="city" name="city" class="w-full px-4 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500 pl-10">
+                                        <i class="fas fa-city absolute left-3 top-9 text-gray-400"></i>
+                                    </div>
+                                    
+                                    <div class="relative">
+                                        <label for="region" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="delivery.form.region">Région</label>
+                                        <select id="region" name="region" class="w-full px-4 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500 pl-10">
+                                            <option value="" data-i18n="delivery.form.select">Sélectionnez...</option>
+                                            <option value="sud-ouest" data-i18n="delivery.region.southwest">Sud-Ouest</option>
+                                            <option value="littoral" data-i18n="delivery.region.littoral">Littoral</option>
+                                            <option value="centre" data-i18n="delivery.region.center">Centre</option>
+                                            <option value="ouest" data-i18n="delivery.region.west">Ouest</option>
+                                            <option value="nord-ouest" data-i18n="delivery.region.northwest">Nord-Ouest</option>
+                                            <option value="autre" data-i18n="delivery.region.other">Autre</option>
+                                        </select>
+                                        <i class="fas fa-globe-africa absolute left-3 top-9 text-gray-400"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Order Summary with 3D animation -->
+                <div class="md:w-1/3">
+                    <div id="summary-card" class="bg-white rounded-lg shadow-md p-6 sticky top-4 card-reveal">
+                        <h2 class="text-2xl font-bold mb-6" data-i18n="summary.title">Récapitulatif</h2>
+                        
+                        <div id="summary-items" class="space-y-4">
+                            <!-- Sample cart items - in a real app these would be dynamic -->
+                            <div class="flex justify-between border-b pb-2">
+                                <div>
+                                    <h4 class="font-medium">Chips de Plantain</h4>
+                                    <span class="text-sm text-gray-600">2 x 1,500 XAF</span>
+                                </div>
+                                <span class="font-medium">3,000 XAF</span>
+                            </div>
+                            <div class="flex justify-between border-b pb-2">
+                                <div>
+                                    <h4 class="font-medium">Jus de Gingembre</h4>
+                                    <span class="text-sm text-gray-600">1 x 1,200 XAF</span>
+                                </div>
+                                <span class="font-medium">1,200 XAF</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 space-y-2">
+                            <div class="flex justify-between">
+                                <span data-i18n="summary.subtotal">Sous-total:</span>
+                                <span>4,200 XAF</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span data-i18n="summary.delivery">Livraison:</span>
+                                <span id="delivery-fee">0 XAF</span>
+                            </div>
+                            <div class="flex justify-between font-bold text-lg mt-2">
+                                <span data-i18n="summary.total">Total:</span>
+                                <span id="total-price">4,200 XAF</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 space-y-3">
+                            <button id="pay-with-mobile" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-105">
+                                <i class="fas fa-mobile-alt mr-2"></i>
+                                <span data-i18n="payment.mobile">Payer par Mobile Money</span>
+                            </button>
+                            
+                            <a href="#" class="block w-full bg-green-100 hover:bg-green-200 text-green-800 py-3 px-4 rounded-lg flex items-center justify-center transition-all duration-300 transform hover:scale-105">
+                                <i class="fab fa-whatsapp mr-2"></i>
+                                <span data-i18n="payment.whatsapp">Commander via WhatsApp</span>
+                            </a>
+                        </div>
+
+                        <!-- 3D product display -->
+                        <div id="threeD-container" class="mt-6 rounded-lg overflow-hidden">
+                            <!-- 3D scene will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-green-900 text-white mt-12 py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4" data-i18n="footer.about">À propos de BueaDelights</h3>
+                    <p class="text-green-200" data-i18n="footer.about.text">Nous sommes spécialisés dans la production et la livraison de produits alimentaires locaux de qualité, fabriqués à Buea, Cameroun.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4" data-i18n="footer.links">Liens utiles</h3>
+                    <ul class="space-y-2">
+                        <li><a href="/faq" class="text-green-200 hover:text-white" data-i18n="footer.faq">FAQ</a></li>
+                        <li><a href="/terms" class="text-green-200 hover:text-white" data-i18n="footer.terms">Conditions d'utilisation</a></li>
+                        <li><a href="/privacy" class="text-green-200 hover:text-white" data-i18n="footer.privacy">Politique de confidentialité</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4" data-i18n="footer.contact">Contact</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center"><i class="fas fa-phone mr-2"></i> +237 6XX XXX XXX</li>
+                        <li class="flex items-center"><i class="fas fa-envelope mr-2"></i> info@bueadelights.com</li>
+                        <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i> <span data-i18n="footer.address">Buea, Cameroun</span></li>
+                    </ul>
+                    
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-white hover:text-green-200"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-white hover:text-green-200"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white hover:text-green-200"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white hover:text-green-200"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-green-800 mt-8 pt-4 text-center text-green-300">
+                <p>&copy; 2025 BueaDelights. <span data-i18n="footer.rights">Tous droits réservés.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+            </div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                            <h3 class="text-2xl leading-6 font-bold text-green-600 mb-4" data-i18n="payment.modal.title">Paiement par Mobile Money</h3>
+                            <div id="payment-modal-content" class="mt-2">
+                                <div class="space-y-4">
+                                    <div class="relative">
+                                        <label for="mobile-number" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="payment.modal.number">Numéro Mobile Money</label>
+                                        <input type="tel" id="mobile-number" class="w-full px-4 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500 pl-10" placeholder="6XX XXX XXX">
+                                        <i class="fas fa-mobile-alt absolute left-3 top-9 text-gray-400"></i>
+                                    </div>
+                                    
+                                    <div class="relative">
+                                        <label for="mobile-provider" class="block text-sm font-medium text-gray-700 mb-1" data-i18n="payment.modal.provider">Opérateur</label>
+                                        <select id="mobile-provider" class="w-full px-4 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500 pl-10">
+                                            <option value="mtn" data-i18n="payment.modal.mtn">MTN Mobile Money</option>
+                                            <option value="orange" data-i18n="payment.modal.orange">Orange Money</option>
+                                        </select>
+                                        <i class="fas fa-building absolute left-3 top-9 text-gray-400"></i>
+                                    </div>
+                                    
+                                    <div class="bg-gray-50 p-4 rounded-lg relative overflow-hidden">
+                                        <div class="flex justify-between mb-2">
+                                            <span class="font-medium" data-i18n="payment.modal.amount">Montant à payer:</span>
+                                            <span class="font-bold" id="payment-amount">4,200 XAF</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600" data-i18n="payment.modal.info">Vous recevrez une demande de paiement sur votre téléphone pour confirmer la transaction.</p>
+                                        <div class="absolute -right-8 -bottom-8 opacity-5">
+                                            <i class="fas fa-coins text-6xl text-green-600 rotate-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" id="confirm-payment" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm transition-all duration-300 transform hover:scale-105">
+                        <span data-i18n="payment.modal.confirm">Confirmer le paiement</span>
+                    </button>
+                    <button type="button" onclick="closePaymentModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm transition-all duration-300">
+                        <span data-i18n="payment.modal.cancel">Annuler</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-xl text-center">
+            <div class="loader mx-auto mb-4"></div>
+            <p class="text-gray-700" data-i18n="loading.message">Veuillez patienter...</p>
+        </div>
+    </div>
+
+    <!-- Language Switcher -->
+    <button id="language-toggle" class="lang-switch">
+        <i class="fas fa-language"></i>
+    </button>
+
+    <!-- Scripts -->
+    <script>
+        // Initialize animations and 3D effects after the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize card reveals on scroll
+            const revealCards = document.querySelectorAll('.card-reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal');
+                    }
+                });
+            }, {threshold: 0.1});
+            
+            revealCards.forEach(card => {
+                observer.observe(card);
+            });
+            
+            // Initialize Vanilla Tilt for 3D card effect
+            if (typeof VanillaTilt !== 'undefined') {
+                VanillaTilt.init(document.querySelectorAll('.tilt-card'), {
+                    max: 5,
+                    speed: 400,
+                    glare: true,
+                    "max-glare": 0.2
+                });
+            }
+            
+            // Initialize Three.js animation
+            initThreeJS();
+            
+            // Initialize Lottie animation for logo
+            if (typeof lottie !== 'undefined') {
+                lottie.loadAnimation({
+                    container: document.getElementById('logo-animation'),
+                    renderer: 'svg',
+                    loop: true,
+                    autoplay: true,
+                    path: 'https://assets9.lottiefiles.com/packages/lf20_jcikwtux.json'  // Sample Lottie JSON path
+                });
+            }
+        });
+        
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-toggle')?.addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.add('open');
+        });
+        
+        document.getElementById('close-menu')?.addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.remove('open');
+        });
+        
+        // Handle delivery option changes
+        document.querySelectorAll('input[name="delivery"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const addressFields = document.getElementById('address-fields');
+                const deliveryFee = document.getElementById('delivery-fee');
+                const totalPrice = document.getElementById('total-price');
+                const paymentAmount = document.getElementById('payment-amount');
+                const subtotal = 4200; // Sample value, in a real app this would be dynamic
+                
+                if (this.value === 'pickup') {
+                    addressFields.classList.add('hidden');
+                    deliveryFee.textContent = '0 XAF';
+                    totalPrice.textContent = subtotal + ' XAF';
+                    paymentAmount.textContent = subtotal + ' XAF';
+                } else if (this.value === 'delivery-buea') {
+                    addressFields.classList.remove('hidden');
+                    deliveryFee.textContent = '1,000 XAF';
+                    totalPrice.textContent = (subtotal + 1000) + ' XAF';
+                    paymentAmount.textContent = (subtotal + 1000) + ' XAF';
+                } else if (this.value === 'delivery-cameroon') {
+                    addressFields.classList.remove('hidden');
+                    deliveryFee.textContent = 'À confirmer';
+                    totalPrice.textContent = 'À confirmer';
+                    paymentAmount.textContent = 'À confirmer';
+                }
+            });
+        });
+        
+        // Payment modal functions
+        function openPaymentModal() {
+            document.getElementById('payment-modal').classList.remove('hidden');
+        }
+        
+        function closePaymentModal() {
+            document.getElementById('payment-modal').classList.add('hidden');
+        }
+        
+        document.getElementById('pay-with-mobile')?.addEventListener('click', openPaymentModal);
+        
+        // Handle payment confirmation
+        document.getElementById('confirm-payment')?.addEventListener('click', function() {
+            const mobileNumber = document.getElementById('mobile-number').value;
+            const provider = document.getElementById('mobile-provider').value;
+            
+            if (!mobileNumber || !/^6\d{8}$/.test(mobileNumber)) {
+                alert(translations[currentLanguage]['payment.error.phone']);
+                return;
+            }
+            
+            // Show loading overlay
+            document.getElementById('loading-overlay').classList.remove('hidden');
+            
+            // Simulate payment processing (in a real app this would be an API call)
+            setTimeout(() => {
+                document.getElementById('loading-overlay').classList.add('hidden');
+                closePaymentModal();
+                
+                // Show success message
+                alert(translations[currentLanguage]['payment.success']);
+                
+                // Redirect to confirmation page (in a real app)
+                // window.location.href = '/confirmation';
+            }, 2000);
+        });
+        
+        // Three.js 3D product animation
+        function initThreeJS() {
+            if (typeof THREE === 'undefined') return;
+            
+            const container = document.getElementById('threeD-container');
+            if (!container) return;
+            
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setClearColor(0x000000, 0);
+            container.appendChild(renderer.domElement);
+            
+            // Create a simple 3D object (in a real app, this would be a product model)
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            const material = new THREE.MeshPhongMaterial({
+                color: 0x007749,
+                specular: 0x333333,
+                shininess: 100
+            });
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+            
+            // Create a logo texture (in a real app, use a real logo)
+            const texture = new THREE.TextureLoader().load('https://via.placeholder.com/128?text=BD');
+            const materials = [
+                new THREE.MeshBasicMaterial({ color: 0xCE1126 }),
+                new THREE.MeshBasicMaterial({ color: 0xFCD116 }),
+                new THREE.MeshBasicMaterial({ color: 0x007749 }),
+                new THREE.MeshBasicMaterial({ color: 0x007749 }),
+                new THREE.MeshBasicMaterial({ map: texture }),
+                new THREE.MeshBasicMaterial({ color: 0xCE1126 })
+            ];
+            
+            const boxMesh = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), materials);
+            scene.add(boxMesh);
+            
+            // Add lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            
+            const pointLight = new THREE.PointLight(0xffffff, 1);
+            pointLight.position.set(5, 5, 5);
+            scene.add(pointLight);
+            
+            camera.position.z = 3;
+            
+            // Animation function
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                boxMesh.rotation.x += 0.01;
+                boxMesh.rotation.y += 0.01;
+                
+                renderer.render(scene, camera);
+            }
+            
+            // Start animation
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+        
+        // Internationalization
+        const translations = {
+            fr: {
+                'nav.home': 'Accueil',
+                'nav.products': 'Produits',
+                'nav.about': 'À propos',
+                'nav.contact': 'Contact',
+                'nav.cart': 'Panier',
+                'checkout.cart': 'Panier',
+                'checkout.delivery': 'Livraison',
+                'checkout.payment': 'Paiement',
+                'delivery.options': 'Options de livraison',
+                'delivery.pickup.title': 'Retrait sur place',
+                'delivery.pickup.desc': 'Venez récupérer votre commande à notre boutique à Buea',
+                'delivery.pickup.price': 'Gratuit',
+                'delivery.buea.title': 'Livraison à Buea',
+                'delivery.buea.desc': 'Nous livrons votre commande à votre adresse à Buea',
+                'delivery.buea.price': '1,000 XAF',
+                'delivery.cameroon.title': 'Livraison partout au Cameroun',
+                'delivery.cameroon.desc': 'Nous organisons l\'expédition de votre commande',
+                'delivery.cameroon.price': 'Contactez-nous pour le tarif',
+                'delivery.address': 'Adresse de livraison',
+                'delivery.form.name': 'Nom complet',
+                'delivery.form.phone': 'Téléphone',
+                'delivery.form.address': 'Adresse',
+                'delivery.form.city': 'Ville',
+                'delivery.form.region': 'Région',
+                'delivery.form.select': 'Sélectionnez...',
+                'delivery.region.southwest': 'Sud-Ouest',
+                'delivery.region.littoral': 'Littoral',
+                'delivery.region.center': 'Centre',
+                'delivery.region.west': 'Ouest',
+                'delivery.region.northwest': 'Nord-Ouest',
+                'delivery.region.other': 'Autre',
+                'summary.title': 'Récapitulatif',
+                'summary.subtotal': 'Sous-total:',
+                'summary.delivery': 'Livraison:',
+                'summary.total': 'Total:',
+                'payment.mobile': 'Payer par Mobile Money',
+                'payment.whatsapp': 'Commander via WhatsApp',
+                'payment.modal.title': 'Paiement par Mobile Money',
+                'payment.modal.number': 'Numéro Mobile Money',
+                'payment.modal.provider': 'Opérateur',
+                'payment.modal.mtn': 'MTN Mobile Money',
+                'payment.modal.orange': 'Orange Money',
+                'payment.modal.amount': 'Montant à payer:',
+                'payment.modal.info': 'Vous recevrez une demande de paiement sur votre téléphone pour confirmer la transaction.',
+                'payment.modal.confirm': 'Confirmer le paiement',
+                'payment.modal.cancel': 'Annuler',
+                'payment.error.phone': 'Veuillez entrer un numéro de téléphone valide (9 chiffres commençant par 6)',
+                'payment.success': 'Paiement initié avec succès! Veuillez vérifier votre téléphone pour confirmer la transaction.',
+                'footer.about': 'À propos de BueaDelights',
+                'footer.about.text': 'Nous sommes spécialisés dans la production et la livraison de produits alimentaires locaux de qualité, fabriqués à Buea, Cameroun.',
+                'footer.links': 'Liens utiles',
+                'footer.faq': 'FAQ',
+                'footer.terms': 'Conditions d\'utilisation',
+                'footer.privacy': 'Politique de confidentialité',
+                'footer.contact': 'Contact',
+                'footer.address': 'Buea, Cameroun',
+                'footer.rights': 'Tous droits réservés.',
+                'loading.message': 'Veuillez patienter...'
+            },
+            en: {
+                'nav.home': 'Home',
+                'nav.products': 'Products',
+                'nav.about': 'About',
+                'nav.contact': 'Contact',
+                'nav.cart': 'Cart',
+                'checkout.cart': 'Cart',
+                'checkout.delivery': 'Delivery',
+                'checkout.payment': 'Payment',
+                'delivery.options': 'Delivery Options',
+                'delivery.pickup.title': 'Pick-up in Store',
+                'delivery.pickup.desc': 'Come and pick up your order at our store in Buea',
+                'delivery.pickup.price': 'Free',
+                'delivery.buea.title': 'Delivery in Buea',
+                'delivery.buea.desc': 'We deliver your order to your address in Buea',
+                'delivery.buea.price': '1,000 XAF',
+                'delivery.cameroon.title': 'Delivery throughout Cameroon',
+                'delivery.cameroon.desc': 'We organize the shipment of your order',
+                'delivery.cameroon.price': 'Contact us for pricing',
+                'delivery.address': 'Delivery Address',
+                'delivery.form.name': 'Full Name',
+                'delivery.form.phone': 'Phone',
+                'delivery.form.address': 'Address',
+                'delivery.form.city': 'City',
+                'delivery.form.region': 'Region',
+                'delivery.form.select': 'Select...',
+                'delivery.region.southwest': 'South-West',
+                'delivery.region.littoral': 'Littoral',
+                'delivery.region.center': 'Center',
+                'delivery.region.west': 'West',
+                'delivery.region.northwest': 'North-West',
+                'delivery.region.other': 'Other',
+                'summary.title': 'Order Summary',
+                'summary.subtotal': 'Subtotal:',
+                'summary.delivery': 'Delivery:',
+                'summary.total': 'Total:',
+                'payment.mobile': 'Pay with Mobile Money',
+                'payment.whatsapp': 'Order via WhatsApp',
+                'payment.modal.title': 'Mobile Money Payment',
+                'payment.modal.number': 'Mobile Money Number',
+                'payment.modal.provider': 'Provider',
+                'payment.modal.mtn': 'MTN Mobile Money',
+                'payment.modal.orange': 'Orange Money',
+                'payment.modal.amount': 'Amount to pay:',
+                'payment.modal.info': 'You will receive a payment request on your phone to confirm the transaction.',
+                'payment.modal.confirm': 'Confirm Payment',
+                'payment.modal.cancel': 'Cancel',
+                'payment.error.phone': 'Please enter a valid phone number (9 digits starting with 6)',
+                'payment.success': 'Payment initiated successfully! Please check your phone to confirm the transaction.',
+                'footer.about': 'About BueaDelights',
+                'footer.about.text': 'We specialize in the production and delivery of quality local food products, made in Buea, Cameroon.',
+                'footer.links': 'Useful Links',
+                'footer.faq': 'FAQ',
+                'footer.terms': 'Terms of Use',
+                'footer.privacy': 'Privacy Policy',
+                'footer.contact': 'Contact',
+                'footer.address': 'Buea, Cameroon',
+                'footer.rights': 'All rights reserved.',
+                'loading.message': 'Please wait...'
+            }
+        };
+        
+        // Initialize language
+        let currentLanguage = localStorage.getItem('language') || 'fr';
+        
+        // Apply translations
+        function applyTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[currentLanguage][key]) {
+                    element.textContent = translations[currentLanguage][key];
+                }
+            });
+            
+            // Update HTML lang attribute
+            document.documentElement.lang = currentLanguage;
+        }
+        
+        // Toggle language
+        document.getElementById('language-toggle')?.addEventListener('click', function() {
+            currentLanguage = currentLanguage === 'fr' ? 'en' : 'fr';
+            localStorage.setItem('language', currentLanguage);
+            applyTranslations();
+        });
+        
+        // Apply translations on page load
+        applyTranslations();
+    </script>
+</body>
+</html>

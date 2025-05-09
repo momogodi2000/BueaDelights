@@ -1,722 +1,447 @@
+{% extends 'Layout/clients_base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BueaDelights - Tableau de Bord Client</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        
-        :root {
-            --primary-color: #007749;
-            --secondary-color: #CE1126;
-            --accent-color: #FCD116;
-            --text-color: #333;
-            --bg-color: #f8f9fa;
-            --dark-bg: #1a1a1a;
-        }
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            scroll-behavior: smooth;
-        }
-        
-        .sidebar {
-            transition: all 0.3s ease;
-        }
-        
-        .sidebar-item:hover {
-            background-color: rgba(0, 119, 73, 0.1);
-        }
-        
-        .sidebar-item.active {
-            background-color: rgba(0, 119, 73, 0.2);
-            border-left: 4px solid var(--primary-color);
-        }
-        
-        .product-card {
-            transition: all 0.3s ease;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .text-gradient {
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        /* Status badges */
-        .status-pending {
-            background-color: #FEF3C7;
-            color: #92400E;
-        }
-        
-        .status-in-progress {
-            background-color: #DBEAFE;
-            color: #1E40AF;
-        }
-        
-        .status-delivered {
-            background-color: #D1FAE5;
-            color: #065F46;
-        }
-        
-        .status-cancelled {
-            background-color: #FEE2E2;
-            color: #991B1B;
-        }
-        
-        /* Dark mode */
-        .dark {
-            --text-color: #e2e8f0;
-            --bg-color: #121212;
-        }
-        
-        .dark body {
-            background-color: var(--dark-bg);
-            color: var(--text-color);
-        }
-        
-        .dark .sidebar {
-            background-color: #1e293b;
-        }
-        
-        .dark .card {
-            background-color: #1e293b;
-            border-color: #334155;
-        }
+{% block title %}Tableau de Bord Client{% endblock %}
 
-        /* Food category buttons */
-        .category-btn {
-            transition: all 0.3s ease;
-        }
-        
-        .category-btn:hover, .category-btn.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
+{% block page_title %}Tableau de Bord Client{% endblock %}
 
-        /* Rating stars */
-        .star-rating i {
-            color: #d1d5db;
-        }
-        
-        .star-rating i.active {
-            color: var(--accent-color);
-        }
-    </style>
-</head>
-<body class="bg-gray-50 text-gray-800 flex h-screen overflow-hidden">
-    <!-- Sidebar -->
-    <div class="sidebar w-64 bg-white shadow-md flex flex-col">
-        <!-- Logo -->
-        <div class="p-4 flex items-center space-x-2 border-b">
-            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-yellow-500 flex items-center justify-center">
-                <span class="text-white font-bold text-xl">BD</span>
-            </div>
-            <div>
-                <span class="font-bold text-xl text-green-600">Buea<span class="text-yellow-500">Delights</span></span>
-                <p class="text-xs text-gray-500">Client Panel</p>
+{% block content %}
+    <!-- Welcome Banner -->
+    <div class="relative rounded-lg bg-gradient-to-r from-green-600 to-green-700 p-6 mb-6 text-white shadow-lg overflow-hidden">
+        <div class="relative z-10">
+            <h2 class="text-2xl font-bold mb-2" data-i18n="welcome_message">Bienvenue, Marie!</h2>
+            <p class="mb-4">Des saveurs locales à portée de clic</p>
+            <div class="flex items-center space-x-2">
+                <span class="text-xs bg-white bg-opacity-20 px-2 py-1 rounded-full">250 <span data-i18n="loyalty_points">points fidélité</span></span>
+                <span class="text-xs bg-white bg-opacity-20 px-2 py-1 rounded-full" data-i18n="premium_client">Client Premium</span>
             </div>
         </div>
-        
-        <!-- User Profile -->
-        <div class="p-4 border-b flex items-center space-x-3">
-            <img src="{% static 'avatars/client-avatar.jpg' %}" alt="Client" class="w-10 h-10 rounded-full border-2 border-green-500">
-            <div>
-                <p class="font-medium">Marie Nkeng</p>
-                <p class="text-xs text-gray-500">Client Premium</p>
-            </div>
+        <div class="absolute right-6 top-1/2 transform -translate-y-1/2 hidden md:block">
+            <i class="fas fa-gift text-8xl text-white opacity-30"></i>
+        </div>
+        <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-yellow-400 rounded-full opacity-20"></div>
+        <div class="absolute -top-6 -left-6 w-24 h-24 bg-red-500 rounded-full opacity-20"></div>
+    </div>
+
+    <!-- For You Section -->
+    <div class="mb-8">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-bold" data-i18n="for_you">Pour Vous</h2>
+            <a href="#" class="text-sm text-green-600 hover:underline" data-i18n="see_all">Voir Tout</a>
         </div>
         
-        <!-- Navigation -->
-        <div class="flex-1 overflow-y-auto">
-            <ul class="py-2">
-                <li>
-                    <a href="#" class="sidebar-item active flex items-center px-4 py-3 text-gray-700">
-                        <i class="fas fa-home mr-3 text-green-600"></i>
-                        <span>Accueil</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
-                        <i class="fas fa-search mr-3 text-green-600"></i>
-                        <span>Explorer</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
-                        <i class="fas fa-shopping-cart mr-3 text-green-600"></i>
-                        <span>Mon Panier</span>
-                        <span class="ml-auto bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">3</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
-                        <i class="fas fa-clock mr-3 text-green-600"></i>
-                        <span>Mes Commandes</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
-                        <i class="fas fa-heart mr-3 text-green-600"></i>
-                        <span>Favoris</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
-                        <i class="fas fa-star mr-3 text-green-600"></i>
-                        <span>Programme Fidélité</span>
-                        <span class="ml-auto bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded-full">250 pts</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
-                        <i class="fas fa-cog mr-3 text-green-600"></i>
-                        <span>Paramètres</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-        
-        <!-- Bottom Section -->
-        <div class="p-4 border-t">
-            <button id="themeToggle" class="flex items-center justify-center w-full py-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600">
-                <i class="fas fa-moon mr-2"></i>
-                <span>Mode Sombre</span>
+        <!-- Categories -->
+        <div class="flex space-x-2 overflow-x-auto pb-4 mb-4">
+            <button class="category-btn active px-4 py-2 rounded-full bg-green-600 text-white whitespace-nowrap" data-i18n="all">
+                Tous
             </button>
-            <a href="{% url 'logout' %}" class="flex items-center justify-center w-full py-2 mt-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900 dark:text-red-100 dark:hover:bg-red-800">
-                <i class="fas fa-sign-out-alt mr-2"></i>
-                <span>Déconnexion</span>
-            </a>
+            <button class="category-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 whitespace-nowrap" data-i18n="local_dishes">
+                Plats Locaux
+            </button>
+            <button class="category-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 whitespace-nowrap" data-i18n="desserts">
+                Desserts
+            </button>
+            <button class="category-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 whitespace-nowrap" data-i18n="drinks">
+                Boissons
+            </button>
+            <button class="category-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 whitespace-nowrap" data-i18n="snacks">
+                Snacks
+            </button>
+        </div>
+        
+        <!-- Products Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Product 1 -->
+            <div class="product-card bg-white rounded-xl shadow-sm overflow-hidden dark:bg-gray-800">
+                <div class="relative h-48 bg-gray-200 dark:bg-gray-700">
+                    <img src="{% static 'products/fufu-eru.jpg' %}" alt="Fufu et Eru" class="w-full h-full object-cover">
+                    <div class="absolute top-2 right-2">
+                        <button class="p-1.5 rounded-full bg-white text-red-500 shadow hover:bg-gray-100">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-medium">Fufu et Eru</h3>
+                        <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-lg dark:bg-green-900 dark:text-green-200" data-i18n="popular">
+                            Populaire
+                        </span>
+                    </div>
+                    <div class="flex items-center mb-3 star-rating">
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star-half-alt active"></i>
+                        <span class="text-xs text-gray-500 ml-1">(128)</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-green-600">4,500 FCFA</span>
+                        <button class="px-3 py-1 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700">
+                            <i class="fas fa-plus mr-1"></i> <span data-i18n="add">Ajouter</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 2 -->
+            <div class="product-card bg-white rounded-xl shadow-sm overflow-hidden dark:bg-gray-800">
+                <div class="relative h-48 bg-gray-200 dark:bg-gray-700">
+                    <img src="{% static 'products/jus-gingembre.jpg' %}" alt="Jus de Gingembre" class="w-full h-full object-cover">
+                    <div class="absolute top-2 right-2">
+                        <button class="p-1.5 rounded-full bg-white text-gray-400 shadow hover:bg-gray-100">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-medium">Jus de Gingembre</h3>
+                        <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-lg dark:bg-blue-900 dark:text-blue-200" data-i18n="new">
+                            Nouveau
+                        </span>
+                    </div>
+                    <div class="flex items-center mb-3 star-rating">
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star"></i>
+                        <span class="text-xs text-gray-500 ml-1">(56)</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-green-600">1,800 FCFA</span>
+                        <button class="px-3 py-1 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700">
+                            <i class="fas fa-plus mr-1"></i> <span data-i18n="add">Ajouter</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 3 -->
+            <div class="product-card bg-white rounded-xl shadow-sm overflow-hidden dark:bg-gray-800">
+                <div class="relative h-48 bg-gray-200 dark:bg-gray-700">
+                    <img src="{% static 'products/chips-plantain.jpg' %}" alt="Chips de Plantain" class="w-full h-full object-cover">
+                    <div class="absolute top-2 right-2">
+                        <button class="p-1.5 rounded-full bg-white text-red-500 shadow hover:bg-gray-100">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="absolute top-2 left-2">
+                        <span class="px-2 py-1 bg-red-500 text-white text-xs rounded-lg">
+                            -15%
+                        </span>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-medium">Chips de Plantain</h3>
+                    </div>
+                    <div class="flex items-center mb-3 star-rating">
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star"></i>
+                        <span class="text-xs text-gray-500 ml-1">(92)</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <span class="font-bold text-green-600">1,200 FCFA</span>
+                            <span class="text-xs text-gray-500 line-through ml-1">1,400 FCFA</span>
+                        </div>
+                        <button class="px-3 py-1 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700">
+                            <i class="fas fa-plus mr-1"></i> <span data-i18n="add">Ajouter</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 4 -->
+            <div class="product-card bg-white rounded-xl shadow-sm overflow-hidden dark:bg-gray-800">
+                <div class="relative h-48 bg-gray-200 dark:bg-gray-700">
+                    <img src="{% static 'products/yaourt-local.jpg' %}" alt="Yaourt Maison" class="w-full h-full object-cover">
+                    <div class="absolute top-2 right-2">
+                        <button class="p-1.5 rounded-full bg-white text-gray-400 shadow hover:bg-gray-100">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="font-medium">Yaourt Maison</h3>
+                    </div>
+                    <div class="flex items-center mb-3 star-rating">
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star active"></i>
+                        <i class="fas fa-star-half-alt active"></i>
+                        <i class="fas fa-star"></i>
+                        <span class="text-xs text-gray-500 ml-1">(74)</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-green-600">1,500 FCFA</span>
+                        <button class="px-3 py-1 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700">
+                            <i class="fas fa-plus mr-1"></i> <span data-i18n="add">Ajouter</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     
-    <!-- Main Content -->
-    <div class="flex-1 flex flex-col overflow-hidden">
-        <!-- Top Navigation -->
-        <header class="bg-white shadow-sm z-10 dark:bg-gray-800">
-            <div class="flex items-center justify-between px-6 py-3">
-                <div class="flex items-center">
-                    <button id="sidebarToggle" class="mr-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h1 class="text-xl font-bold text-gradient">Tableau de Bord Client</h1>
+    <!-- Orders and Info Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Recent Orders -->
+        <div class="lg:col-span-2">
+            <div class="card bg-white rounded-lg shadow dark:bg-gray-800">
+                <div class="p-4 border-b dark:border-gray-700 flex justify-between items-center">
+                    <h2 class="font-bold text-lg" data-i18n="recent_orders">Mes Commandes Récentes</h2>
+                    <a href="#" class="text-sm text-green-600 hover:underline" data-i18n="history">Historique</a>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <div class="relative">
-                        <button class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                            <i class="fas fa-bell"></i>
-                            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
-                        </button>
-                    </div>
-                    <div class="relative">
-                        <button class="flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                            <i class="fas fa-shopping-cart mr-1"></i>
-                            <span class="text-xs">3</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </header>
-        
-        <!-- Main Content Area -->
-        <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-gray-900">
-            <!-- Welcome Banner -->
-            <div class="relative rounded-lg bg-gradient-to-r from-green-600 to-green-700 p-6 mb-6 text-white shadow-lg overflow-hidden">
-                <div class="relative z-10">
-                    <h2 class="text-2xl font-bold mb-2">Bienvenue, Marie!</h2>
-                    <p class="mb-4">Des saveurs locales à portée de clic</p>
-                    <div class="flex items-center space-x-2">
-                        <span class="text-xs bg-white bg-opacity-20 px-2 py-1 rounded-full">250 points fidélité</span>
-                        <span class="text-xs bg-white bg-opacity-20 px-2 py-1 rounded-full">Client Premium</span>
-                    </div>
-                </div>
-                <div class="absolute right-6 top-1/2 transform -translate-y-1/2 hidden md:block">
-                    <i class="fas fa-gift text-8xl text-white opacity-30"></i>
-                </div>
-                <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-yellow-400 rounded-full opacity-20"></div>
-                <div class="absolute -top-6 -left-6 w-24 h-24 bg-red-500 rounded-full opacity-20"></div>
-            </div>
-
-            <!-- For You Section -->
-            <div class="mb-8">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg font-bold">Pour Vous</h2>
-                    <a href="#" class="text-sm text-green-600 hover:underline">Voir Tout</a>
-                </div>
-                
-                <!-- Categories -->
-                <div class="flex space-x-2 overflow-x-auto pb-4 mb-4">
-                    <button class="category-btn active px-4 py-2 rounded-full bg-green-600 text-white whitespace-nowrap">
-                        Tous
-                    </button>
-                    <button class="category-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 whitespace-nowrap">
-                        Plats Locaux
-                    </button>
-                    <button class="category-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 whitespace-nowrap">
-                        Desserts
-                    </button>
-                    <button class="category-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 whitespace-nowrap">
-                        Boissons
-                    </button>
-                    <button class="category-btn px-4 py-2 rounded-full bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300 whitespace-nowrap">
-                        Snacks
-                    </button>
-                </div>
-                
-                <!-- Products Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    <!-- Product 1 -->
-                    <div class="product-card bg-white rounded-xl shadow-sm overflow-hidden dark:bg-gray-800">
-                        <div class="relative h-48 bg-gray-200 dark:bg-gray-700">
-                            <img src="{% static 'products/fufu-eru.jpg' %}" alt="Fufu et Eru" class="w-full h-full object-cover">
-                            <div class="absolute top-2 right-2">
-                                <button class="p-1.5 rounded-full bg-white text-red-500 shadow hover:bg-gray-100">
-                                    <i class="fas fa-heart"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <div class="flex justify-between items-center mb-2">
-                                <h3 class="font-medium">Fufu et Eru</h3>
-                                <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-lg dark:bg-green-900 dark:text-green-200">
-                                    Populaire
-                                </span>
-                            </div>
-                            <div class="flex items-center mb-3 star-rating">
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star-half-alt active"></i>
-                                <span class="text-xs text-gray-500 ml-1">(128)</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="font-bold text-green-600">4,500 FCFA</span>
-                                <button class="px-3 py-1 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700">
-                                    <i class="fas fa-plus mr-1"></i> Ajouter
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Product 2 -->
-                    <div class="product-card bg-white rounded-xl shadow-sm overflow-hidden dark:bg-gray-800">
-                        <div class="relative h-48 bg-gray-200 dark:bg-gray-700">
-                            <img src="{% static 'products/jus-gingembre.jpg' %}" alt="Jus de Gingembre" class="w-full h-full object-cover">
-                            <div class="absolute top-2 right-2">
-                                <button class="p-1.5 rounded-full bg-white text-gray-400 shadow hover:bg-gray-100">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <div class="flex justify-between items-center mb-2">
-                                <h3 class="font-medium">Jus de Gingembre</h3>
-                                <span class="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-lg dark:bg-blue-900 dark:text-blue-200">
-                                    Nouveau
-                                </span>
-                            </div>
-                            <div class="flex items-center mb-3 star-rating">
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star"></i>
-                                <span class="text-xs text-gray-500 ml-1">(56)</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="font-bold text-green-600">1,800 FCFA</span>
-                                <button class="px-3 py-1 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700">
-                                    <i class="fas fa-plus mr-1"></i> Ajouter
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Product 3 -->
-                    <div class="product-card bg-white rounded-xl shadow-sm overflow-hidden dark:bg-gray-800">
-                        <div class="relative h-48 bg-gray-200 dark:bg-gray-700">
-                            <img src="{% static 'products/chips-plantain.jpg' %}" alt="Chips de Plantain" class="w-full h-full object-cover">
-                            <div class="absolute top-2 right-2">
-                                <button class="p-1.5 rounded-full bg-white text-red-500 shadow hover:bg-gray-100">
-                                    <i class="fas fa-heart"></i>
-                                </button>
-                            </div>
-                            <div class="absolute top-2 left-2">
-                                <span class="px-2 py-1 bg-red-500 text-white text-xs rounded-lg">
-                                    -15%
-                                </span>
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <div class="flex justify-between items-center mb-2">
-                                <h3 class="font-medium">Chips de Plantain</h3>
-                            </div>
-                            <div class="flex items-center mb-3 star-rating">
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star"></i>
-                                <span class="text-xs text-gray-500 ml-1">(92)</span>
-                            </div>
-                            <div class="flex justify-between items-center">
+                <div class="p-4">
+                    <div class="space-y-4">
+                        <!-- Order 1 -->
+                        <div class="border rounded-lg p-4 hover:shadow-md transition dark:border-gray-700">
+                            <div class="flex justify-between items-start">
                                 <div>
-                                    <span class="font-bold text-green-600">1,200 FCFA</span>
-                                    <span class="text-xs text-gray-500 line-through ml-1">1,400 FCFA</span>
+                                    <h3 class="font-medium">#BD-1012 - Fufu et Eru</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">08 Mai 2025 - 10:30</p>
                                 </div>
-                                <button class="px-3 py-1 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700">
-                                    <i class="fas fa-plus mr-1"></i> Ajouter
-                                </button>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium status-in-progress" data-i18n="delivery_in_progress">
+                                    En Cours de Livraison
+                                </span>
                             </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Product 4 -->
-                    <div class="product-card bg-white rounded-xl shadow-sm overflow-hidden dark:bg-gray-800">
-                        <div class="relative h-48 bg-gray-200 dark:bg-gray-700">
-                            <img src="{% static 'products/yaourt-local.jpg' %}" alt="Yaourt Maison" class="w-full h-full object-cover">
-                            <div class="absolute top-2 right-2">
-                                <button class="p-1.5 rounded-full bg-white text-gray-400 shadow hover:bg-gray-100">
-                                    <i class="far fa-heart"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <div class="flex justify-between items-center mb-2">
-                                <h3 class="font-medium">Yaourt Maison</h3>
-                            </div>
-                            <div class="flex items-center mb-3 star-rating">
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star active"></i>
-                                <i class="fas fa-star-half-alt active"></i>
-                                <i class="fas fa-star"></i>
-                                <span class="text-xs text-gray-500 ml-1">(74)</span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="font-bold text-green-600">1,500 FCFA</span>
-                                <button class="px-3 py-1 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700">
-                                    <i class="fas fa-plus mr-1"></i> Ajouter
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Orders and Info Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Recent Orders -->
-                <div class="lg:col-span-2">
-                    <div class="card bg-white rounded-lg shadow dark:bg-gray-800">
-                        <div class="p-4 border-b dark:border-gray-700 flex justify-between items-center">
-                            <h2 class="font-bold text-lg">Mes Commandes Récentes</h2>
-                            <a href="#" class="text-sm text-green-600 hover:underline">Historique</a>
-                        </div>
-                        <div class="p-4">
-                            <div class="space-y-4">
-                                <!-- Order 1 -->
-                                <div class="border rounded-lg p-4 hover:shadow-md transition dark:border-gray-700">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h3 class="font-medium">#BD-1012 - Fufu et Eru</h3>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">08 Mai 2025 - 10:30</p>
-                                        </div>
-                                        <span class="px-3 py-1 rounded-full text-xs font-medium status-in-progress">
-                                            En Cours de Livraison
-                                        </span>
-                                    </div>
-                                    <div class="mt-4 flex justify-between items-center">
-                                        <div>
-                                            <p class="text-sm font-medium">4,500 FCFA</p>
-                                            <p class="text-xs text-gray-500">Paiement: Mobile Money</p>
-                                        </div>
-                                        <div class="flex space-x-2">
-                                            <button class="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-sm hover:bg-green-200 dark:bg-green-900 dark:text-green-200 dark:hover:bg-green-800">
-                                                <i class="fas fa-location-arrow mr-1"></i> Suivre
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Order 2 -->
-                                <div class="border rounded-lg p-4 hover:shadow-md transition dark:border-gray-700">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h3 class="font-medium">#BD-1008 - Jus de Gingembre (x2)</h3>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">05 Mai 2025 - 14:15</p>
-                                        </div>
-                                        <span class="px-3 py-1 rounded-full text-xs font-medium status-delivered">
-                                            Livré
-                                        </span>
-                                    </div>
-                                    <div class="mt-4 flex justify-between items-center">
-                                        <div>
-                                            <p class="text-sm font-medium">3,600 FCFA</p>
-                                            <p class="text-xs text-gray-500">Paiement: À la livraison</p>
-                                        </div>
-                                        <div class="flex space-x-2">
-                                            <button class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:hover:bg-blue-800">
-                                                <i class="fas fa-redo mr-1"></i> Commander à nouveau
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- Order 3 -->
-                                <div class="border rounded-lg p-4 hover:shadow-md transition dark:border-gray-700">
-                                    <div class="flex justify-between items-start">
-                                        <div>
-                                            <h3 class="font-medium">#BD-1003 - Chips de Plantain & Yaourt</h3>
-                                            <p class="text-sm text-gray-500 dark:text-gray-400">01 Mai 2025 - 12:45</p>
-                                        </div>
-                                        <span class="px-3 py-1 rounded-full text-xs font-medium status-delivered">
-                                            Livré
-                                        </span>
-                                    </div>
-                                    <div class="mt-4 flex justify-between items-center">
-                                        <div>
-                                            <p class="text-sm font-medium">2,700 FCFA</p>
-                                            <p class="text-xs text-gray-500">Paiement: Orange Money</p>
-                                        </div>
-                                        <div class="flex space-x-2">
-                                            <button class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:hover:bg-blue-800">
-                                                <i class="fas fa-redo mr-1"></i> Commander à nouveau
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Loyalty and Promo Info -->
-                <div>
-                    <!-- Loyalty Card -->
-                    <div class="card bg-gradient-to-r from-green-600 to-green-700 rounded-lg shadow mb-6 text-white overflow-hidden relative">
-                        <div class="p-4 relative z-10">
-                            <h2 class="font-bold text-lg mb-4">Carte de Fidélité</h2>
-                            <div class="flex justify-between items-center mb-6">
+                            <div class="mt-4 flex justify-between items-center">
                                 <div>
-                                    <p class="text-sm opacity-80">Points accumulés</p>
-                                    <p class="text-2xl font-bold">250</p>
+                                    <p class="text-sm font-medium">4,500 FCFA</p>
+                                    <p class="text-xs text-gray-500"><span data-i18n="payment">Paiement</span>: <span data-i18n="mobile_money">Mobile Money</span></p>
                                 </div>
-                                <div class="text-right">
-                                    <p class="text-sm opacity-80">Statut</p>
-                                    <p class="font-medium">Premium</p>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-sm hover:bg-green-200 dark:bg-green-900 dark:text-green-200 dark:hover:bg-green-800">
+                                        <i class="fas fa-location-arrow mr-1"></i> <span data-i18n="track">Suivre</span>
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="w-full bg-white bg-opacity-20 rounded-full h-2 mb-2">
-                                <div class="bg-yellow-400 h-2 rounded-full" style="width: 65%"></div>
-                            </div>
-                            <p class="text-xs opacity-80 text-right">250/400 pour le niveau Platine</p>
-                        </div>
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-white opacity-10 rounded-bl-full"></div>
-                        <div class="absolute -bottom-4 -left-4 w-24 h-24 bg-yellow-400 opacity-20 rounded-full"></div>
-                    </div>
-                    
-                    <!-- Promo Offers -->
-                    <div class="card bg-white rounded-lg shadow dark:bg-gray-800">
-                        <div class="p-4 border-b dark:border-gray-700">
-                            <h2 class="font-bold text-lg">Promotions en Cours</h2>
-                        </div>
-                        <div class="p-4">
-                            <div class="space-y-4">
-                                <!-- Promo 1 -->
-                                <div class="border border-dashed border-yellow-500 rounded-lg p-3 bg-yellow-50 dark:bg-gray-800 dark:border-yellow-600">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-500 dark:bg-yellow-900">
-                                                <i class="fas fa-percentage text-xl"></i>
-                                            </div>
-                                            <div>
-                                                <h3 class="font-medium text-sm">15% de réduction sur les Chips</h3>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">Expire le 15 Mai 2025</p>
-                                            </div>
-                                        </div>
-                                        <div class="mt-2">
-                                            <button class="w-full py-1 text-xs bg-yellow-500 text-white rounded hover:bg-yellow-600">
-                                                Utiliser
-                                            </button>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Promo 2 -->
-                                    <div class="border border-dashed border-green-500 rounded-lg p-3 bg-green-50 dark:bg-gray-800 dark:border-green-600">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-500 dark:bg-green-900">
-                                                <i class="fas fa-gift text-xl"></i>
-                                            </div>
-                                            <div>
-                                                <h3 class="font-medium text-sm">Livraison gratuite</h3>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">Pour toute commande > 5,000 FCFA</p>
-                                            </div>
-                                        </div>
-                                        <div class="mt-2">
-                                            <button class="w-full py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600">
-                                                Utiliser
-                                            </button>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Promo 3 -->
-                                    <div class="border border-dashed border-blue-500 rounded-lg p-3 bg-blue-50 dark:bg-gray-800 dark:border-blue-600">
-                                        <div class="flex items-center space-x-3">
-                                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 dark:bg-blue-900">
-                                                <i class="fas fa-glass-cheers text-xl"></i>
-                                            </div>
-                                            <div>
-                                                <h3 class="font-medium text-sm">2 Jus pour le prix d'1</h3>
-                                                <p class="text-xs text-gray-500 dark:text-gray-400">Promo weekend - Expire le 10 Mai</p>
-                                            </div>
-                                        </div>
-                                        <div class="mt-2">
-                                            <button class="w-full py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">
-                                                Utiliser
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Special Offers & Recommendations -->
-                <div class="mt-8 mb-6">
-                    <h2 class="text-lg font-bold mb-4">Offres Spéciales</h2>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Special Offer 1 -->
-                        <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg overflow-hidden flex shadow-md">
-                            <div class="p-6 flex-1">
-                                <span class="inline-block px-3 py-1 bg-white text-yellow-600 rounded-full text-xs font-semibold mb-2">Offre du weekend</span>
-                                <h3 class="text-xl font-bold text-white mb-2">Festival des Jus Locaux</h3>
-                                <p class="text-white text-opacity-90 mb-4">Découvrez notre sélection de jus locaux avec 20% de réduction!</p>
-                                <button class="px-4 py-2 bg-white text-yellow-600 rounded-lg shadow hover:bg-gray-100">
-                                    En profiter
-                                </button>
-                            </div>
-                            <div class="hidden md:block w-1/3 relative">
-                                <div class="absolute inset-0 bg-black bg-opacity-20"></div>
-                                <img src="{% static 'promotions/juice-festival.jpg' %}" alt="Jus locaux" class="w-full h-full object-cover">
                             </div>
                         </div>
                         
-                        <!-- Special Offer 2 -->
-                        <div class="bg-gradient-to-r from-green-600 to-green-800 rounded-lg overflow-hidden flex shadow-md">
-                            <div class="p-6 flex-1">
-                                <span class="inline-block px-3 py-1 bg-white text-green-600 rounded-full text-xs font-semibold mb-2">Nouveauté</span>
-                                <h3 class="text-xl font-bold text-white mb-2">Box Découverte Camerounaise</h3>
-                                <p class="text-white text-opacity-90 mb-4">Une sélection de snacks et plats traditionnels à petit prix</p>
-                                <button class="px-4 py-2 bg-white text-green-600 rounded-lg shadow hover:bg-gray-100">
-                                    Commander
-                                </button>
+                        <!-- Order 2 -->
+                        <div class="border rounded-lg p-4 hover:shadow-md transition dark:border-gray-700">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-medium">#BD-1008 - Jus de Gingembre (x2)</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">05 Mai 2025 - 14:15</p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium status-delivered" data-i18n="delivered">
+                                    Livré
+                                </span>
                             </div>
-                            <div class="hidden md:block w-1/3 relative">
-                                <div class="absolute inset-0 bg-black bg-opacity-20"></div>
-                                <img src="{% static 'promotions/discovery-box.jpg' %}" alt="Box découverte" class="w-full h-full object-cover">
+                            <div class="mt-4 flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm font-medium">3,600 FCFA</p>
+                                    <p class="text-xs text-gray-500"><span data-i18n="payment">Paiement</span>: <span data-i18n="cash_on_delivery">À la livraison</span></p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:hover:bg-blue-800">
+                                        <i class="fas fa-redo mr-1"></i> <span data-i18n="order_again">Commander à nouveau</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Order 3 -->
+                        <div class="border rounded-lg p-4 hover:shadow-md transition dark:border-gray-700">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h3 class="font-medium">#BD-1003 - Chips de Plantain & Yaourt</h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">01 Mai 2025 - 12:45</p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-medium status-delivered" data-i18n="delivered">
+                                    Livré
+                                </span>
+                            </div>
+                            <div class="mt-4 flex justify-between items-center">
+                                <div>
+                                    <p class="text-sm font-medium">2,700 FCFA</p>
+                                    <p class="text-xs text-gray-500"><span data-i18n="payment">Paiement</span>: <span data-i18n="mobile_money">Orange Money</span></p>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-sm hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:hover:bg-blue-800">
+                                        <i class="fas fa-redo mr-1"></i> <span data-i18n="order_again">Commander à nouveau</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
-                <!-- App Download -->
-                <div class="bg-white rounded-lg shadow-md p-6 mt-6 dark:bg-gray-800">
-                    <div class="flex flex-col md:flex-row items-center">
-                        <div class="md:w-2/3">
-                            <h2 class="text-xl font-bold mb-2">Téléchargez notre application mobile</h2>
-                            <p class="text-gray-600 mb-4 dark:text-gray-400">Commandez plus facilement, suivez vos livraisons en temps réel et recevez des offres exclusives.</p>
-                            <div class="flex space-x-4">
-                                <button class="flex items-center bg-black text-white px-4 py-2 rounded-lg">
-                                    <i class="fab fa-apple text-2xl mr-2"></i>
-                                    <div class="text-left">
-                                        <p class="text-xs">Télécharger sur</p>
-                                        <p class="font-medium">App Store</p>
-                                    </div>
-                                </button>
-                                <button class="flex items-center bg-black text-white px-4 py-2 rounded-lg">
-                                    <i class="fab fa-google-play text-2xl mr-2"></i>
-                                    <div class="text-left">
-                                        <p class="text-xs">Télécharger sur</p>
-                                        <p class="font-medium">Google Play</p>
-                                    </div>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="md:w-1/3 mt-4 md:mt-0 flex justify-center">
-                            <img src="{% static 'graphics/app-mockup.png' %}" alt="Application Mobile" class="h-40">
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
-        
-        <!-- Mobile Cart Preview - Fixed Bottom -->
-        <div class="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg rounded-t-xl border-t md:hidden dark:bg-gray-800 dark:border-gray-700">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">3 Articles</p>
-                    <p class="font-bold text-green-600">7,500 FCFA</p>
-                </div>
-                <button class="px-4 py-2 bg-green-600 text-white rounded-lg flex items-center">
-                    <i class="fas fa-shopping-cart mr-2"></i>
-                    Voir Panier
-                </button>
             </div>
         </div>
         
-        <script>
-            // Theme toggle
-            document.getElementById('themeToggle').addEventListener('click', function() {
-                document.documentElement.classList.toggle('dark');
-                
-                // Update button text
-                const icon = this.querySelector('i');
-                const text = this.querySelector('span');
-                
-                if (document.documentElement.classList.contains('dark')) {
-                    icon.classList.remove('fa-moon');
-                    icon.classList.add('fa-sun');
-                    text.textContent = 'Mode Clair';
-                } else {
-                    icon.classList.remove('fa-sun');
-                    icon.classList.add('fa-moon');
-                    text.textContent = 'Mode Sombre';
-                }
-            });
+        <!-- Loyalty and Promo Info -->
+        <div>
+            <!-- Loyalty Card -->
+            <div class="card bg-gradient-to-r from-green-600 to-green-700 rounded-lg shadow mb-6 text-white overflow-hidden relative">
+                <div class="p-4 relative z-10">
+                    <h2 class="font-bold text-lg mb-4" data-i18n="loyalty_card">Carte de Fidélité</h2>
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <p class="text-sm opacity-80" data-i18n="accumulated_points">Points accumulés</p>
+                            <p class="text-2xl font-bold">250</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm opacity-80" data-i18n="status">Statut</p>
+                            <p class="font-medium" data-i18n="premium">Premium</p>
+                        </div>
+                    </div>
+                    <div class="w-full bg-white bg-opacity-20 rounded-full h-2 mb-2">
+                        <div class="bg-yellow-400 h-2 rounded-full" style="width: 65%"></div>
+                    </div>
+                    <p class="text-xs opacity-80 text-right">250/400 <span data-i18n="for_platinum">pour le niveau Platine</span></p>
+                </div>
+                <div class="absolute top-0 right-0 w-24 h-24 bg-white opacity-10 rounded-bl-full"></div>
+                <div class="absolute -bottom-4 -left-4 w-24 h-24 bg-yellow-400 opacity-20 rounded-full"></div>
+            </div>
             
-            // Sidebar toggle for mobile
-            document.getElementById('sidebarToggle').addEventListener('click', function() {
-                const sidebar = document.querySelector('.sidebar');
-                sidebar.classList.toggle('-translate-x-full');
-            });
+            <!-- Promo Offers -->
+            <div class="card bg-white rounded-lg shadow dark:bg-gray-800">
+                <div class="p-4 border-b dark:border-gray-700">
+                    <h2 class="font-bold text-lg" data-i18n="current_offers">Promotions en Cours</h2>
+                </div>
+                <div class="p-4">
+                    <div class="space-y-4">
+                        <!-- Promo 1 -->
+                        <div class="border border-dashed border-yellow-500 rounded-lg p-3 bg-yellow-50 dark:bg-gray-800 dark:border-yellow-600">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-500 dark:bg-yellow-900">
+                                        <i class="fas fa-percentage text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-sm">15% <span data-i18n="discount">de réduction</span> <span data-i18n="on_chips">sur les Chips</span></h3>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400"><span data-i18n="expires">Expire le</span> 15 Mai 2025</p>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <button class="w-full py-1 text-xs bg-yellow-500 text-white rounded hover:bg-yellow-600" data-i18n="use">
+                                        Utiliser
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Promo 2 -->
+                        <div class="border border-dashed border-green-500 rounded-lg p-3 bg-green-50 dark:bg-gray-800 dark:border-green-600">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-500 dark:bg-green-900">
+                                    <i class="fas fa-gift text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium text-sm" data-i18n="free_delivery">Livraison gratuite</h3>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400"><span data-i18n="for_orders">Pour toute commande</span> > 5,000 FCFA</p>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <button class="w-full py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600" data-i18n="use">
+                                    Utiliser
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Promo 3 -->
+                        <div class="border border-dashed border-blue-500 rounded-lg p-3 bg-blue-50 dark:bg-gray-800 dark:border-blue-600">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 dark:bg-blue-900">
+                                    <i class="fas fa-glass-cheers text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-medium text-sm">2 <span data-i18n="juices_for_price">Jus pour le prix d'1</span></h3>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400"><span data-i18n="weekend_promo">Promo weekend</span> - <span data-i18n="expires">Expire le</span> 10 Mai</p>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <button class="w-full py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600" data-i18n="use">
+                                    Utiliser
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Special Offers & Recommendations -->
+    <div class="mt-8 mb-6">
+        <h2 class="text-lg font-bold mb-4" data-i18n="special_offers">Offres Spéciales</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Special Offer 1 -->
+            <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg overflow-hidden flex shadow-md">
+                <div class="p-6 flex-1">
+                    <span class="inline-block px-3 py-1 bg-white text-yellow-600 rounded-full text-xs font-semibold mb-2" data-i18n="weekend_offer">Offre du weekend</span>
+                    <h3 class="text-xl font-bold text-white mb-2">Festival des Jus Locaux</h3>
+                    <p class="text-white text-opacity-90 mb-4">Découvrez notre sélection de jus locaux avec 20% de réduction!</p>
+                    <button class="px-4 py-2 bg-white text-yellow-600 rounded-lg shadow hover:bg-gray-100" data-i18n="enjoy_offer">
+                        En profiter
+                    </button>
+                </div>
+                <div class="hidden md:block w-1/3 relative">
+                    <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+                    <img src="{% static 'promotions/juice-festival.jpg' %}" alt="Jus locaux" class="w-full h-full object-cover">
+                </div>
+            </div>
             
-            // Category buttons
-            document.querySelectorAll('.category-btn').forEach(button => {
-                button.addEventListener('click', function() {
-                    document.querySelectorAll('.category-btn').forEach(btn => {
-                        btn.classList.remove('active', 'bg-green-600', 'text-white');
-                        btn.classList.add('bg-gray-200', 'text-gray-700', 'dark:bg-gray-700', 'dark:text-gray-300');
-                    });
-                    
-                    this.classList.remove('bg-gray-200', 'text-gray-700', 'dark:bg-gray-700', 'dark:text-gray-300');
-                    this.classList.add('active', 'bg-green-600', 'text-white');
-                });
-            });
-        </script>
-    </body>
-    </html>
+            <!-- Special Offer 2 -->
+            <div class="bg-gradient-to-r from-green-600 to-green-800 rounded-lg overflow-hidden flex shadow-md">
+                <div class="p-6 flex-1">
+                    <span class="inline-block px-3 py-1 bg-white text-green-600 rounded-full text-xs font-semibold mb-2" data-i18n="new_arrival">Nouveauté</span>
+                    <h3 class="text-xl font-bold text-white mb-2">Box Découverte Camerounaise</h3>
+                    <p class="text-white text-opacity-90 mb-4">Une sélection de snacks et plats traditionnels à petit prix</p>
+                    <button class="px-4 py-2 bg-white text-green-600 rounded-lg shadow hover:bg-gray-100" data-i18n="order_now">
+                        Commander
+                    </button>
+                </div>
+                <div class="hidden md:block w-1/3 relative">
+                    <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+                    <img src="{% static 'promotions/discovery-box.jpg' %}" alt="Box découverte" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- App Download -->
+    <div class="bg-white rounded-lg shadow-md p-6 mt-6 dark:bg-gray-800">
+        <div class="flex flex-col md:flex-row items-center">
+            <div class="md:w-2/3">
+                <h2 class="text-xl font-bold mb-2" data-i18n="download_app">Téléchargez notre application mobile</h2>
+                <p class="text-gray-600 mb-4 dark:text-gray-400">Commandez plus facilement, suivez vos livraisons en temps réel et recevez des offres exclusives.</p>
+                <div class="flex space-x-4">
+                    <button class="flex items-center bg-black text-white px-4 py-2 rounded-lg">
+                        <i class="fab fa-apple text-2xl mr-2"></i>
+                        <div class="text-left">
+                            <p class="text-xs" data-i18n="download_on">Télécharger sur</p>
+                            <p class="font-medium">App Store</p>
+                        </div>
+                    </button>
+                    <button class="flex items-center bg-black text-white px-4 py-2 rounded-lg">
+                        <i class="fab fa-google-play text-2xl mr-2"></i>
+                        <div class="text-left">
+                            <p class="text-xs" data-i18n="download_on">Télécharger sur</p>
+                            <p class="font-medium">Google Play</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div class="md:w-1/3 mt-4 md:mt-0 flex justify-center">
+                <img src="{% static 'graphics/app-mockup.png' %}" alt="Application Mobile" class="h-40">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Additional client dashboard-specific scripts can go here
+</script>
+{% endblock %}

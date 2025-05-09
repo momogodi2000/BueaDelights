@@ -1,0 +1,458 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BueaDelights - {% block title %}Tableau de Bord Client{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #007749;
+            --secondary-color: #CE1126;
+            --accent-color: #FCD116;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --dark-bg: #1a1a1a;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-item:hover {
+            background-color: rgba(0, 119, 73, 0.1);
+        }
+        
+        .sidebar-item.active {
+            background-color: rgba(0, 119, 73, 0.2);
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Status badges */
+        .status-pending {
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+        
+        .status-in-progress {
+            background-color: #DBEAFE;
+            color: #1E40AF;
+        }
+        
+        .status-delivered {
+            background-color: #D1FAE5;
+            color: #065F46;
+        }
+        
+        .status-cancelled {
+            background-color: #FEE2E2;
+            color: #991B1B;
+        }
+        
+        /* Dark mode */
+        .dark {
+            --text-color: #e2e8f0;
+            --bg-color: #121212;
+        }
+        
+        .dark body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+        }
+        
+        .dark .sidebar {
+            background-color: #1e293b;
+        }
+        
+        .dark .card {
+            background-color: #1e293b;
+            border-color: #334155;
+        }
+
+        /* Food category buttons */
+        .category-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .category-btn:hover, .category-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Rating stars */
+        .star-rating i {
+            color: #d1d5db;
+        }
+        
+        .star-rating i.active {
+            color: var(--accent-color);
+        }
+
+        /* Mobile sidebar */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                z-index: 50;
+                transform: translateX(-100%);
+            }
+            .sidebar.mobile-show {
+                transform: translateX(0);
+            }
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 40;
+            }
+            .sidebar-overlay.mobile-show {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex h-screen overflow-hidden">
+    <!-- Sidebar Overlay (Mobile only) -->
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+    
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar w-64 bg-white shadow-md flex flex-col">
+        <!-- Logo -->
+        <div class="p-4 flex items-center space-x-2 border-b">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-600 to-yellow-500 flex items-center justify-center">
+                <span class="text-white font-bold text-xl">BD</span>
+            </div>
+            <div>
+                <span class="font-bold text-xl text-green-600">Buea<span class="text-yellow-500">Delights</span></span>
+                <p class="text-xs text-gray-500" data-i18n="client_panel">Client Panel</p>
+            </div>
+        </div>
+        
+        <!-- User Profile -->
+        <div class="p-4 border-b flex items-center space-x-3">
+            <img src="{% static 'avatars/client-avatar.jpg' %}" alt="Client" class="w-10 h-10 rounded-full border-2 border-green-500">
+            <div>
+                <p class="font-medium" data-i18n="client_name">Marie Nkeng</p>
+                <p class="text-xs text-gray-500" data-i18n="client_status">Client Premium</p>
+            </div>
+        </div>
+        
+        <!-- Navigation -->
+        <div class="flex-1 overflow-y-auto">
+            <ul class="py-2">
+                <li>
+                    <a href="#" class="sidebar-item active flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-home mr-3 text-green-600"></i>
+                        <span data-i18n="home">Accueil</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-search mr-3 text-green-600"></i>
+                        <span data-i18n="explore">Explorer</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-shopping-cart mr-3 text-green-600"></i>
+                        <span data-i18n="my_cart">Mon Panier</span>
+                        <span class="ml-auto bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">3</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-clock mr-3 text-green-600"></i>
+                        <span data-i18n="my_orders">Mes Commandes</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-heart mr-3 text-green-600"></i>
+                        <span data-i18n="favorites">Favoris</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-star mr-3 text-green-600"></i>
+                        <span data-i18n="loyalty_program">Programme Fidélité</span>
+                        <span class="ml-auto bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded-full">250 pts</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="sidebar-item flex items-center px-4 py-3 text-gray-700">
+                        <i class="fas fa-cog mr-3 text-green-600"></i>
+                        <span data-i18n="settings">Paramètres</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Bottom Section -->
+        <div class="p-4 border-t">
+            <button id="themeToggle" class="flex items-center justify-center w-full py-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600">
+                <i class="fas fa-moon mr-2"></i>
+                <span data-i18n="dark_mode">Mode Sombre</span>
+            </button>
+            <div class="flex items-center justify-between mt-2">
+                <button id="languageToggle" class="flex items-center justify-center w-full py-2 rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 mr-2">
+                    <i class="fas fa-language mr-2"></i>
+                    <span data-i18n="language">English</span>
+                </button>
+                <a href="{% url 'logout' %}" class="flex items-center justify-center w-full py-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900 dark:text-red-100 dark:hover:bg-red-800 ml-2">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    <span data-i18n="logout">Déconnexion</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Top Navigation -->
+        <header class="bg-white shadow-sm z-10 dark:bg-gray-800">
+            <div class="flex items-center justify-between px-6 py-3">
+                <div class="flex items-center">
+                    <button id="sidebarToggle" class="mr-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="text-xl font-bold text-gradient">{% block page_title %}<span data-i18n="client_dashboard">Tableau de Bord Client</span>{% endblock %}</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <button class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                            <i class="fas fa-bell"></i>
+                            <span class="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <button class="flex items-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                            <i class="fas fa-shopping-cart mr-1"></i>
+                            <span class="text-xs">3</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto p-6 bg-gray-50 dark:bg-gray-900">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Mobile Cart Preview - Fixed Bottom -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg rounded-t-xl border-t md:hidden dark:bg-gray-800 dark:border-gray-700">
+        <div class="flex justify-between items-center">
+            <div>
+                <p class="text-sm text-gray-500 dark:text-gray-400" data-i18n="items_count">3 Articles</p>
+                <p class="font-bold text-green-600">7,500 FCFA</p>
+            </div>
+            <button class="px-4 py-2 bg-green-600 text-white rounded-lg flex items-center">
+                <i class="fas fa-shopping-cart mr-2"></i>
+                <span data-i18n="view_cart">Voir Panier</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Translation dictionary
+        const translations = {
+            'en': {
+                'home': 'Home',
+                'explore': 'Explore',
+                'my_cart': 'My Cart',
+                'my_orders': 'My Orders',
+                'favorites': 'Favorites',
+                'loyalty_program': 'Loyalty Program',
+                'settings': 'Settings',
+                'client_panel': 'Client Panel',
+                'client_name': 'Mary Smith',
+                'client_status': 'Premium Client',
+                'client_dashboard': 'Client Dashboard',
+                'dark_mode': 'Dark Mode',
+                'light_mode': 'Light Mode',
+                'language': 'Français',
+                'logout': 'Logout',
+                'see_all': 'See All',
+                'for_you': 'For You',
+                'popular': 'Popular',
+                'new': 'New',
+                'add': 'Add',
+                'delivery_in_progress': 'Delivery in Progress',
+                'delivered': 'Delivered',
+                'track': 'Track',
+                'reorder': 'Reorder',
+                'loyalty_card': 'Loyalty Card',
+                'accumulated_points': 'Accumulated Points',
+                'status': 'Status',
+                'current_offers': 'Current Offers',
+                'use': 'Use',
+                'special_offers': 'Special Offers',
+                'download_app': 'Download our mobile app',
+                'items_count': '3 Items',
+                'view_cart': 'View Cart',
+                'order_again': 'Order Again',
+                'payment': 'Payment',
+                'mobile_money': 'Mobile Money',
+                'cash_on_delivery': 'Cash on Delivery',
+                'discount': 'Discount',
+                'free_delivery': 'Free Delivery',
+                'weekend_offer': 'Weekend Offer',
+                'new_arrival': 'New Arrival'
+            },
+            'fr': {
+                'home': 'Accueil',
+                'explore': 'Explorer',
+                'my_cart': 'Mon Panier',
+                'my_orders': 'Mes Commandes',
+                'favorites': 'Favoris',
+                'loyalty_program': 'Programme Fidélité',
+                'settings': 'Paramètres',
+                'client_panel': 'Panel Client',
+                'client_name': 'Marie Nkeng',
+                'client_status': 'Client Premium',
+                'client_dashboard': 'Tableau de Bord Client',
+                'dark_mode': 'Mode Sombre',
+                'light_mode': 'Mode Clair',
+                'language': 'English',
+                'logout': 'Déconnexion',
+                'see_all': 'Voir Tout',
+                'for_you': 'Pour Vous',
+                'popular': 'Populaire',
+                'new': 'Nouveau',
+                'add': 'Ajouter',
+                'delivery_in_progress': 'En Cours de Livraison',
+                'delivered': 'Livré',
+                'track': 'Suivre',
+                'reorder': 'Commander à nouveau',
+                'loyalty_card': 'Carte de Fidélité',
+                'accumulated_points': 'Points accumulés',
+                'status': 'Statut',
+                'current_offers': 'Promotions en Cours',
+                'use': 'Utiliser',
+                'special_offers': 'Offres Spéciales',
+                'download_app': 'Téléchargez notre application mobile',
+                'items_count': '3 Articles',
+                'view_cart': 'Voir Panier',
+                'order_again': 'Commander à nouveau',
+                'payment': 'Paiement',
+                'mobile_money': 'Mobile Money',
+                'cash_on_delivery': 'À la livraison',
+                'discount': 'Réduction',
+                'free_delivery': 'Livraison gratuite',
+                'weekend_offer': 'Offre du weekend',
+                'new_arrival': 'Nouveauté'
+            }
+        };
+
+        // Apply translations
+        function applyTranslations(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+        }
+
+        // Toggle sidebar on mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('mobile-show');
+            document.getElementById('sidebarOverlay').classList.toggle('mobile-show');
+        });
+
+        // Close sidebar when clicking overlay
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.remove('mobile-show');
+            this.classList.remove('mobile-show');
+        });
+        
+        // Toggle dark mode
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            document.documentElement.classList.toggle('dark');
+            
+            // Save preference to localStorage
+            if (document.documentElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+                this.querySelector('span').setAttribute('data-i18n', 'light_mode');
+            } else {
+                localStorage.setItem('theme', 'light');
+                this.querySelector('span').setAttribute('data-i18n', 'dark_mode');
+            }
+            applyTranslations(currentLang);
+        });
+        
+        // Toggle language
+        let currentLang = localStorage.getItem('language') || 'fr';
+        document.getElementById('languageToggle').addEventListener('click', function() {
+            currentLang = currentLang === 'fr' ? 'en' : 'fr';
+            localStorage.setItem('language', currentLang);
+            applyTranslations(currentLang);
+        });
+
+        // Initialize theme and language
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check for saved theme preference
+            if (localStorage.getItem('theme') === 'dark') {
+                document.documentElement.classList.add('dark');
+                document.querySelector('#themeToggle span').setAttribute('data-i18n', 'light_mode');
+            } else {
+                document.querySelector('#themeToggle span').setAttribute('data-i18n', 'dark_mode');
+            }
+            
+            // Apply translations
+            applyTranslations(currentLang);
+            
+            // Set active sidebar item
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Category buttons
+            document.querySelectorAll('.category-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('.category-btn').forEach(btn => {
+                        btn.classList.remove('active', 'bg-green-600', 'text-white');
+                        btn.classList.add('bg-gray-200', 'text-gray-700', 'dark:bg-gray-700', 'dark:text-gray-300');
+                    });
+                    
+                    this.classList.remove('bg-gray-200', 'text-gray-700', 'dark:bg-gray-700', 'dark:text-gray-300');
+                    this.classList.add('active', 'bg-green-600', 'text-white');
+                });
+            });
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
