@@ -118,9 +118,9 @@
         
         <!-- User Profile -->
         <div class="p-4 border-b flex items-center space-x-3">
-            <img src="{% static 'avatars/admin-avatar.jpg' %}" alt="Admin" class="w-10 h-10 rounded-full border-2 border-green-500">
+            <img src="{% static 'avatars/avartar.jpeg' %}" alt="Admin" class="w-10 h-10 rounded-full border-2 border-green-500">
             <div>
-                <p class="font-medium" data-i18n="admin_user">Admin User</p>
+                <p class="font-medium" data-i18n="admin_user">Caroline Admin User</p>
                 <p class="text-xs text-gray-500" data-i18n="super_admin">Super Admin</p>
             </div>
         </div>
@@ -129,7 +129,7 @@
         <div class="flex-1 overflow-y-auto">
             <ul class="py-2">
                 <li>
-                    <a href="#" class="sidebar-item active flex items-center px-4 py-3 text-gray-700">
+                    <a href="{% url 'adminpanel' %}" class="sidebar-item active flex items-center px-4 py-3 text-gray-700">
                         <i class="fas fa-tachometer-alt mr-3 text-green-600"></i>
                         <span data-i18n="dashboard">Tableau de Bord</span>
                     </a>
@@ -190,7 +190,7 @@
                     <i class="fas fa-language mr-2"></i>
                     <span data-i18n="language">English</span>
                 </button>
-                <a href="#" class="flex items-center justify-center w-full py-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 ml-2">
+                <a href="{% url 'logout' %}" class="flex items-center justify-center w-full py-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 ml-2">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     <span data-i18n="logout">Déconnexion</span>
                 </a>

@@ -1,0 +1,61 @@
+<div class="flex flex-col md:flex-row gap-6">
+    <div class="w-full md:w-1/2">
+        <div class="bg-gray-100 rounded-lg overflow-hidden h-64 md:h-80 flex items-center justify-center">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover">
+            {% else %}
+            <i class="fas fa-cookie-bite text-4xl text-gray-400"></i>
+            {% endif %}
+        </div>
+    </div>
+    <div class="w-full md:w-1/2">
+        <h2 class="text-2xl font-bold text-gray-800 mb-2">{{ product.name }}</h2>
+        <div class="flex items-center mb-4">
+            <span class="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded-full mr-2">
+                {{ product.category.name }}
+            </span>
+            <span class="text-xs {% if product.stock_quantity <= 5 %}text-red-500{% elif product.stock_quantity <= 10 %}text-yellow-500{% else %}text-green-500{% endif %}">
+                {% if product.stock_quantity <= 0 %}
+                    Rupture de stock
+                {% elif product.stock_quantity <= 5 %}
+                    Dernier stock
+                {% else %}
+                    En stock
+                {% endif %}
+            </span>
+        </div>
+        
+        <p class="text-gray-600 mb-4">{{ product.description }}</p>
+        
+        {% if product.ingredients %}
+        <div class="mb-4">
+            <h3 class="font-semibold text-gray-800 mb-1">Ingrédients:</h3>
+            <p class="text-gray-600">{{ product.ingredients }}</p>
+        </div>
+        {% endif %}
+        
+        <div class="flex items-center justify-between mb-6">
+            <span class="text-2xl font-bold text-orange-500">{{ product.price }} XAF</span>
+        </div>
+        
+        <form class="add-to-cart-form" data-product-id="{{ product.id }}">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <div class="flex">
+                <div class="flex items-center border rounded-l-lg overflow-hidden">
+                    <button type="button" class="quantity-btn px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600" data-action="decrement">
+                        <i class="fas fa-minus text-xs"></i>
+                    </button>
+                    <input type="number" name="quantity" value="1" min="1" max="{{ product.stock_quantity }}" class="w-12 text-center border-0 focus:ring-0 focus:outline-none py-2">
+                    <button type="button" class="quantity-btn px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600" data-action="increment">
+                        <i class="fas fa-plus text-xs"></i>
+                    </button>
+                </div>
+                <button type="submit" class="flex-grow bg-orange-500 hover:bg-orange-600 text-white rounded-r-lg transition duration-300 flex items-center justify-center px-4">
+                    <i class="fas fa-cart-plus mr-2"></i>
+                    <span>Ajouter au panier</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

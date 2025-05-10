@@ -37,17 +37,30 @@ urlpatterns = [
 
 
 
-    ## product shopping
+    # Product listing
     path('product_list/', views.product_list, name='product_list'),
+    path('products/<int:product_id>/quick-view/', views.product_quick_view, name='product_quick_view'),
+    
+    # Cart operations
     path('cart/add/', views.add_to_cart, name='add_to_cart'),
     path('cart/update/', views.update_cart, name='update_cart'),
     path('cart/remove/', views.remove_from_cart, name='remove_from_cart'),
     path('cart/clear/', views.clear_cart, name='clear_cart'),
+    
+    # Checkout and ordering
     path('checkout/', views.checkout, name='checkout'),
     path('checkout/whatsapp/', views.generate_whatsapp_link, name='generate_whatsapp_link'),
+    
+    # Payment
     path('payment/initiate/', views.initiate_payment, name='initiate_payment'),
     path('payment/process/<str:transaction_id>/', views.payment_process, name='payment_process'),
-
+    path('payment/webhook/noupia/', views.noupia_webhook, name='noupia_webhook'),
+    path('receipt/download/<str:transaction_id>/', views.download_receipt, name='download_receipt'),
+    
+    # Order history
+    path('orders/', views.order_history, name='order_history'),
+    path('orders/<int:order_id>/', views.order_detail, name='order_detail'),
+    
 
 ]
 if settings.DEBUG:

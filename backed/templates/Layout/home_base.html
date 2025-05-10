@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BueaDelights - Premium Food Delivery{% endblock %}</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    
+    <!-- Custom CSS -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        
+        .product-card:hover {
+            transform: scale(1.03);
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .rotate-3d {
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .rotate-3d:hover {
+            transform: rotateY(15deg) rotateX(5deg);
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="{% url 'product_list' %}" class="flex-shrink-0 flex items-center">
+                        <img class="h-8 w-auto" src="https://via.placeholder.com/150" alt="BueaDelights Logo">
+                        <span class="ml-2 text-xl font-bold text-indigo-600">BueaDelights</span>
+                    </a>
+                </div>
+                
+                <div class="hidden md:ml-6 md:flex md:items-center md:space-x-8">
+                    <a href="{% url 'product_list' %}" class="text-gray-900 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Menu</a>
+                    <a href="#" class="text-gray-900 hover:text-indigo-600 px-3 py-2 text-sm font-medium">About</a>
+                    <a href="#" class="text-gray-900 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Contact</a>
+                    
+                    <div class="relative">
+                        <a href="#" class="text-gray-900 hover:text-indigo-600 px-3 py-2 text-sm font-medium flex items-center">
+                            <i class="fas fa-shopping-cart mr-1"></i>
+                            <span id="cart-count" class="ml-1">{% if cart_count %}{{ cart_count }}{% else %}0{% endif %}</span>
+                        </a>
+                        <div id="cart-dropdown" class="hidden absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg z-10">
+                            <div class="p-4">
+                                <div id="cart-items-container">
+                                    {% if cart_items %}
+                                        {% for item in cart_items %}
+                                            <div class="flex justify-between py-2 border-b">
+                                                <div>
+                                                    <p class="text-sm font-medium">{{ item.product.name }}</p>
+                                                    <p class="text-xs text-gray-500">{{ item.quantity }} x {{ item.product.price }} XAF</p>
+                                                </div>
+                                                <p class="text-sm font-medium">{{ item.total }} XAF</p>
+                                            </div>
+                                        {% endfor %}
+                                        <div class="flex justify-between py-2 font-bold">
+                                            <p>Total:</p>
+                                            <p>{{ cart_total }} XAF</p>
+                                        </div>
+                                        <a href="{% url 'checkout' %}" class="block w-full mt-2 bg-indigo-600 text-white text-center py-2 rounded-md hover:bg-indigo-700 transition">Checkout</a>
+                                    {% else %}
+                                        <p class="text-sm text-center py-4">Your cart is empty</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if user.is_authenticated %}
+                        <div class="relative">
+                            <button id="user-menu" class="flex items-center text-sm focus:outline-none">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="h-8 w-8 rounded-full" src="https://via.placeholder.com/32" alt="User profile">
+                            </button>
+                            <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                                <div class="py-1">
+                                    <a href="{% url 'order_history' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Orders</a>
+                                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Account Settings</a>
+                                    <a href="{% url 'logout' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign out</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-gray-900 hover:text-indigo-600 px-3 py-2 text-sm font-medium">Sign In</a>
+                    {% endif %}
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-900 hover:text-indigo-600 focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="{% url 'product_list' %}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-indigo-600">Menu</a>
+                <a href="#" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-indigo-600">About</a>
+                <a href="#" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-indigo-600">Contact</a>
+                <a href="#" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-indigo-600 flex items-center">
+                    <i class="fas fa-shopping-cart mr-2"></i>
+                    Cart (<span id="mobile-cart-count">{% if cart_count %}{{ cart_count }}{% else %}0{% endif %}</span>)
+                </a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'order_history' %}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-indigo-600">My Orders</a>
+                    <a href="{% url 'logout' %}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-indigo-600">Sign Out</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="block px-3 py-2 text-base font-medium text-gray-900 hover:text-indigo-600">Sign In</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4">BueaDelights</h3>
+                    <p class="text-gray-400">Premium food delivery service in Buea, Cameroon.</p>
+                    <div class="mt-4 flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'product_list' %}" class="text-gray-400 hover:text-white">Menu</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Contact</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">FAQs</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Contact Us</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-center text-gray-400"><i class="fas fa-map-marker-alt mr-2"></i> Buea, Cameroon</li>
+                        <li class="flex items-center text-gray-400"><i class="fas fa-phone-alt mr-2"></i> {{ site_settings.whatsapp_number }}</li>
+                        <li class="flex items-center text-gray-400"><i class="fas fa-envelope mr-2"></i> {{ site_settings.contact_email }}</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for updates and offers.</p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-md w-full focus:outline-none text-gray-900">
+                        <button type="submit" class="bg-indigo-600 px-4 py-2 rounded-r-md hover:bg-indigo-700 transition">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+                <p>&copy; 2023 BueaDelights. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+        
+        // User dropdown toggle
+        const userMenuButton = document.getElementById('user-menu');
+        if (userMenuButton) {
+            userMenuButton.addEventListener('click', function() {
+                const dropdown = document.getElementById('user-dropdown');
+                dropdown.classList.toggle('hidden');
+            });
+        }
+        
+        // Cart dropdown toggle
+        const cartButton = document.querySelector('a[href="#"]');
+        if (cartButton) {
+            cartButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                const dropdown = document.getElementById('cart-dropdown');
+                dropdown.classList.toggle('hidden');
+            });
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('#user-menu') && !e.target.closest('#user-dropdown')) {
+                const userDropdown = document.getElementById('user-dropdown');
+                if (userDropdown) userDropdown.classList.add('hidden');
+            }
+            
+            if (!e.target.closest('a[href="#"]') && !e.target.closest('#cart-dropdown')) {
+                const cartDropdown = document.getElementById('cart-dropdown');
+                if (cartDropdown) cartDropdown.classList.add('hidden');
+            }
+        });
+        
+        // Animation on scroll
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.animate-on-scroll');
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.2;
+                
+                if (elementPosition < screenPosition) {
+                    element.classList.add('animate__animated', 'animate__fadeInUp');
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', animateOnScroll);
+        document.addEventListener('DOMContentLoaded', animateOnScroll);
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

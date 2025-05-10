@@ -1,0 +1,95 @@
+{% extends 'Dashboards/Layout/home_base.html' %}
+
+{% block title %}Payment Processing - BueaDelights{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto text-center py-12 animate-on-scroll">
+    <div class="bg-white rounded-lg shadow-xl p-8">
+        <!-- Animated loading icon -->
+        <div class="mb-6">
+            <div class="w-20 h-20 mx-auto border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+        </div>
+        
+        <h1 class="text-2xl font-bold text-gray-800 mb-4">Payment Processing</h1>
+        <p class="text-gray-600 mb-6">We're processing your payment for order #{{ order.id }}. Please wait while we confirm your transaction.</p>
+        
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6 text-left">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-info-circle text-blue-500"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-blue-700">
+                        If you're not redirected automatically, please check back in a few minutes or contact our support.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex justify-center space-x-4">
+            <a href="{% url 'payment_process' transaction_id=transaction.transaction_id %}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-md font-medium transition flex items-center">
+                <i class="fas fa-sync-alt mr-2"></i> Refresh Status
+            </a>
+            <a href="{% url 'product_list' %}" class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 rounded-md font-medium transition">
+                Back to Menu
+            </a>
+        </div>
+    </div>
+    
+    <!-- Order Summary -->
+    <div class="bg-white rounded-lg shadow-xl p-6 mt-8 text-left">
+        <h2 class="text-lg font-bold mb-4">Order Summary</h2>
+        
+        <div class="space-y-4 mb-6">
+            {% for item in order.items.all %}
+            <div class="flex justify-between items-center border-b pb-4">
+                <div class="flex items-center">
+                    <div class="w-16 h-16 bg-gray-200 rounded-md mr-3 flex items-center justify-center">
+                        <i class="fas fa-utensils text-gray-400"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium">{{ item.product_name }}</h3>
+                        <p class="text-sm text-gray-600">{{ item.quantity }} x {{ item.price }} XAF</p>
+                    </div>
+                </div>
+                <p class="font-medium">{{ item.total_price }} XAF</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="space-y-2">
+            <div class="flex justify-between">
+                <span class="text-gray-600">Subtotal</span>
+                <span class="font-medium">{{ order.total_amount }} XAF</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-gray-600">Delivery Fee</span>
+                <span class="font-medium">{{ order.delivery_fee }} XAF</span>
+            </div>
+            <div class="flex justify-between border-t pt-2">
+                <span class="font-bold">Total</span>
+                <span class="font-bold text-lg">{{ order.total_amount|add:order.delivery_fee }} XAF</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+// Check payment status every 5 seconds
+function checkPaymentStatus() {
+    fetch("{% url 'payment_process' transaction_id=transaction.transaction_id %}?check_status=1")
+    .then(response => response.json())
+    .then(data => {
+        if (data.status !== 'pending') {
+            window.location.reload();
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+// Start checking status after 5 seconds
+setTimeout(checkPaymentStatus, 5000);
+</script>
+{% endblock %}
+{% endblock %}

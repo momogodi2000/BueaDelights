@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'theme',  # This is the app that will contain Tailwind CSS
     'django_browser_reload',  # Optional, for auto reload during development
     'backed',
+    'django_extensions',
+
 
 
 ]
@@ -183,6 +185,71 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 
+# Add these to your settings.py file
+
+# BueaDelights Application Settings
+WHATSAPP_NUMBER = '237699808260'  # Without leading + or 00
+ADMIN_EMAIL = 'folefacvivianekokobe@gmail.com'  # Change to actual admin email
+DEFAULT_FROM_EMAIL = 'noreply@bueadelights.com'
+ADMIN_SITE_URL = 'https://yoursite.com/admin/'  # Change to your actual admin URL
+
+
+
+# Noupia Payment Configuration
+NOUPIA_API_KEY = os.getenv('NOUPIA_API_KEY')
+NOUPIA_MERCHANT_ID = os.getenv('NOUPIA_MERCHANT_ID')
+NOUPIA_API_SECRET = os.getenv('NOUPIA_API_SECRET')  # Add this if you have an API secret
+NOUPIA_API_BASE_URL = os.getenv('NOUPIA_API_BASE_URL', 'https://api.noupia.com/v1')
+NOUPIA_CALLBACK_URL = os.getenv('NOUPIA_CALLBACK_URL', 'https://yoursite.com/payment/callback/')
+
+
+
+# Security settings for production
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
+os.makedirs(LOG_DIR, exist_ok=True)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'payment_file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'payments.log'),
+            'formatter': 'verbose'
+        },
+        'payment_errors': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(LOG_DIR, 'payment_errors.log'),
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'payment': {
+            'handlers': ['payment_file', 'payment_errors'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_TIMEZONE = 'Africa/Douala'
 
 
 # Internationalization
