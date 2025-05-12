@@ -60,6 +60,9 @@ urlpatterns = [
     # Order history
     path('orders/', views.order_history, name='order_history'),
     path('orders/<int:order_id>/', views.order_detail, name='order_detail'),
+
+
+    
     
 
 ]

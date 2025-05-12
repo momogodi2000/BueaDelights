@@ -1,0 +1,37 @@
+{% for item in cart_items %}
+<div class="cart-item">
+    <div class="row align-items-center">
+        <div class="col-3">
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-fluid">
+        </div>
+        <div class="col-6">
+            <h6>{{ item.product.name }}</h6>
+            <div class="d-flex justify-content-between">
+                <span>{{ item.product.price }} XAF x {{ item.quantity }}</span>
+                <strong>{{ item.total }} XAF</strong>
+            </div>
+        </div>
+        <div class="col-3 text-end">
+            <button class="btn btn-sm btn-danger remove-from-cart" data-product-id="{{ item.product.id }}">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<hr>
+{% endfor %}
+
+<div class="cart-summary">
+    <div class="d-flex justify-content-between">
+        <span>Sous-total:</span>
+        <span>{{ cart_total }} XAF</span>
+    </div>
+    <div class="d-flex justify-content-between">
+        <span>Frais de livraison:</span>
+        <span>{{ delivery_fee }} XAF</span>
+    </div>
+    <div class="d-flex justify-content-between fw-bold">
+        <span>Total:</span>
+        <span>{{ cart_total|add:delivery_fee }} XAF</span>
+    </div>
+</div>
